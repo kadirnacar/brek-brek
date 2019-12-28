@@ -1,0 +1,1 @@
+export { CustomNamingStrategy, TypeOrmManager } from "./typeormManager";

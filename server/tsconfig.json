@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "jsx": "react",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": false,
+    "resolveJsonModule": true,
+    "strict": true,
+    "outDir": "./dist",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "webpack-env"
+    ],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "paths": {
+      "@connectionManager": [ "./src/connectionManager" ],
+      "@dbReader": [ "src/dbReader" ],
+      "@models": [ "./src/models" ],
+      "@routes": [ "./src/routes" ],
+      "@services": [ "./src/services" ],
+      "@utils": [ "./src/utils.ts" ],
+      "@database": [ "./src/database/LowDb" ]
+    }
+  },
+  "exclude": [
+    "dist",
+    "bin",
+    "node_modules"
+  ],
+  "include": [
+    "src"
+  ]
+}

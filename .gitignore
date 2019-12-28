@@ -63,3 +63,4 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 brekbrek/yarn.lock
+/server/dist/
