@@ -34,11 +34,6 @@ class App {
 
     this.express.use(/\/((?!api).)*/, function (req, res) {
       res.send("App Server");
-      // res.sendFile('index.html', { root: path.resolve(".") }, function (err) {
-      //   if (err) {
-      //     res.status(500).send(err)
-      //   }
-      // })
     });
 
     this.express.use("/", router);

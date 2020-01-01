@@ -22,39 +22,31 @@ export class SocketService {
         var connection = request.accept();
         connection["id"] = shortid.generate();
 
-        let wstream: fs.WriteStream;
+        let mp3stream: fs.WriteStream;
         let closed: boolean = true;
-        connection.on('message', function (message) {
+        
+        connection.on('message', (message) => {
             console.log(message)
-            // const messageObject = JSON.parse(message.utf8Data);
-            // const type = messageObject.type;
-            // const buffer = messageObject.buffer;
-            // const codec = messageObject.codec;
-            // const compressCodec = messageObject.compressCodec;
-            // const compressBuffer = messageObject.compressBuffer;
-
-            // console.log({ type, buffer: buffer.length || 0, codec: codec.length || 0, compressCodec: compressCodec.length || 0, compressBuffer: compressBuffer.length || 0 })
-            // console.log({ type })
-            // if (type == "start" && closed) {
-            //     closed = false;
-            //     wstream = fs.createWriteStream('myBinaryFile.raw');
-            // }
-            // if (type == "buffer" && !closed) {
-            //     // wstream.write(new Buffer(codec));
-            //     wstream.write(Buffer.from(buffer));
-            // }
-            // if (type == "stop" && !closed) {
-            //     wstream.end();
-            //     wstream.close();
-            //     closed = true;
-            // }
+            if (message.type == "utf8") {
+                if (message.utf8Data == "start" && closed) {
+                    closed = false;
+                    mp3stream = fs.createWriteStream('myBinaryFile.mp3');
+                } else if (message.utf8Data == "stop" && !closed) {
+                    mp3stream.end();
+                    mp3stream.close();
+                    closed = true;
+                }
+            } else if (message.type == "binary") {
+                mp3stream.write(message.binaryData);
+            }
         });
 
         connection.on("close", (code, desc) => {
             var indx = SocketService.clients.findIndex(cln => cln["id"] == connection["id"]);
             if (indx > -1)
                 SocketService.clients.splice(indx, 1);
-        })
+        });
+
         SocketService.clients.push(connection);
     }
 

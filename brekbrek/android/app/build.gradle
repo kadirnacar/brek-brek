@@ -181,7 +181,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
+    implementation project(path: ':androidlame')  // From node_modules
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

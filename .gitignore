@@ -64,3 +64,8 @@ buck-out/
 /ios/Pods/
 brekbrek/yarn.lock
 /server/dist/
+brekbrek/android/androidlame/.cxx/
+brekbrek/android/androidlame/.externalNativeBuild/
+brekbrek/android/androidlame/.settings/
+server/myBinaryFile.mp3
+
