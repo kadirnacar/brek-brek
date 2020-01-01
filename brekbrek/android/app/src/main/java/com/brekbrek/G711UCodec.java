@@ -7,7 +7,7 @@ public class G711UCodec {
 
     static {
         // b13 --> b8
-        for (int p = 1, q = 0; p <= 0x80; p <<= 1, q+=0x10) {
+        for (int p = 1, q = 0; p <= 0x80; p <<= 1, q += 0x10) {
             for (int i = 0, j = (p << 4) - 0x10; i < 16; i++, j += p) {
                 int v = (i + q) ^ 0x7F;
                 byte value1 = (byte) v;
@@ -35,7 +35,21 @@ public class G711UCodec {
         return count;
     }
 
+    public int decodeByte(byte[] b16, byte[] b8, int count, int offset) {
+        for (int i = 0, j = offset; i < count; i++, j++) {
+            b16[i] = (byte) table8to16[b8[j] & 0xFF];
+        }
+        return count;
+    }
+
     public int encode(short[] b16, int count, byte[] b8, int offset) {
+        for (int i = 0, j = offset; i < count; i++, j++) {
+            b8[j] = table13to8[(b16[i] >> 4) & 0x1FFF];
+        }
+        return count;
+    }
+
+    public int encodeByte(byte[] b16, int count, byte[] b8, int offset) {
         for (int i = 0, j = offset; i < count; i++, j++) {
             b8[j] = table13to8[(b16[i] >> 4) & 0x1FFF];
         }

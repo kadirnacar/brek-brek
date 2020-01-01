@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.Deflater;
 
-public class PushTalkModule extends ReactContextBaseJavaModule {
+public class PushTalkModule_copy extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactContext;
     private AudioRecord audioRecord;
     private DeviceEventManagerModule.RCTDeviceEventEmitter eventEmitter;
@@ -27,7 +27,7 @@ public class PushTalkModule extends ReactContextBaseJavaModule {
     private int bufferSize;
     private Thread recordingThread;
 
-    PushTalkModule(ReactApplicationContext context) {
+    PushTalkModule_copy(ReactApplicationContext context) {
         super(context);
         reactContext = context;
     }

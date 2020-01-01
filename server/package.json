@@ -49,6 +49,7 @@
     "shortid": "^2.2.15",
     "source-map-support": "^0.5.13",
     "sqlite3": "^4.1.0",
+    "stream": "^0.0.2",
     "terser-webpack-plugin": "^2.1.2",
     "typeorm": "^0.2.19",
     "websocket": "^1.0.30",

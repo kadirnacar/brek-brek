@@ -4,6 +4,5 @@ export class ExposedToJava {
     }
 
     async checkLocation(params) {
-        console.log("call script", params)
     }
 }

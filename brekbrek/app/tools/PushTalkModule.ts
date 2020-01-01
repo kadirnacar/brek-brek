@@ -3,7 +3,6 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 
 const { pushtalk } = NativeModules;
 const emitter = new NativeEventEmitter(pushtalk);
-
 export default {
     // TODO: params check
     init: options => pushtalk.init(options),
