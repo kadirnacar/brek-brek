@@ -68,4 +68,5 @@ brekbrek/android/androidlame/.cxx/
 brekbrek/android/androidlame/.externalNativeBuild/
 brekbrek/android/androidlame/.settings/
 server/myBinaryFile.mp3
-
+server/myBinaryFile.raw
+server/myBinaryFile2.raw
