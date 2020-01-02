@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "jsx": "react",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": false,
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "redux",
+      "webpack-env"
+    ],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "paths": {
+      "@containers": ["./src/containers"],
+      "@components": ["./src/components"],
+      "@models": ["./src/models"],
+      "@reducers": ["./src/reducers"],
+      "@services": ["./src/services"],
+      "@store": ["./src/store"],
+      "@views": ["./src/views"],
+      "@utils": ["./src/utils.ts"],
+      "@config": ["./src/config.ts"],
+      "@routes": ["./src/routes.tsx"],
+      "@Ui": ["./src/Ui.ts"]
+    }
+  },
+  "exclude": [
+    "dist",
+    "bin",
+    "node_modules"
+  ],
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,37 @@
+// .page-enter {
+//     transition: all 0.5s;
+//     left: calc(100vh);
+//     opacity: 0;
+//     z-index: 999;
+// }
+
+// .page-enter.page-enter-active {
+//     transition: all 0.5s;
+//     opacity: 1;
+//     z-index: 0;
+//     left: 0px;
+// }
+
+// .page-exit {
+//     transition: all 0.5s;
+//     opacity: 1;
+//     z-index: 1;
+//     top: 0px;
+// }
+
+// .page-exit.page-exit-active {
+//     transition: all 0.5s;
+//     opacity: 0;
+//     top: calc(100vh);
+//     z-index: 0;
+// }
+
+// div.transition-group {
+//     position: relative;
+// }
+
+// section.route-section {
+//     white-space: nowrap;
+//     position: absolute;
+//     overflow: hidden;
+// }

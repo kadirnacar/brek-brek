@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/" />
+    <title>Atso Digital Rehber</title>
+    <style>
+        .spinner {
+            margin: 100px auto;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            font-size: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+        }
+
+        .spinner>div {
+            background-color: #fff;
+            height: 100%;
+            width: 6px;
+            display: inline-block;
+
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        }
+
+        .spinner .rect2 {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+
+        .spinner .rect3 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        .spinner .rect4 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        .spinner .rect5 {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+
+        @-webkit-keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                -webkit-transform: scaleY(0.4)
+            }
+
+            20% {
+                -webkit-transform: scaleY(1.0)
+            }
+        }
+
+        @keyframes sk-stretchdelay {
+
+            0%,
+            40%,
+            100% {
+                transform: scaleY(0.4);
+                -webkit-transform: scaleY(0.4);
+            }
+
+            20% {
+                transform: scaleY(1.0);
+                -webkit-transform: scaleY(1.0);
+            }
+        }
+    </style>
+</head>
+
+<body class="monaco-shell vs-dark vscode-theme-defaults-themes-dark_plus-json file-icons-enabled windows">
+
+    <div id="react-root" class="monaco-workbench windows nosidebar nopanel"
+        style="top: 0px; right: 0px; bottom: 0px; left: 0px; position: absolute; width: 100%; height: 100%;">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+</body>
+
+</html>

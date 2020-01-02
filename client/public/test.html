@@ -1,0 +1,433 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; img-src 'self' https: data: vscode-remote:; media-src 'none'; child-src 'self'; object-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' https:;">
+    <link rel="stylesheet" type="text/css" data-name="vs/workbench/workbench.main"
+        href="file:///c:/Users/kacar/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/workbench.main.css">
+    <style type="text/css" class="contributedColorTheme">
+       
+    </style>
+    <style type="text/css" class="contributedIconTheme"></style>
+    <style type="text/css" media="screen"></style>
+    <style type="text/css" media="screen" class="vscode-tokens-styles"></style>
+    <style type="text/css" media="screen"></style>
+    <style type="text/css" media="screen">
+        
+    </style>
+    <title>Visual Studio Code [Administrator]</title>
+    <style type="text/css" media="screen"></style>
+</head>
+
+<body class="monaco-shell vs-dark vscode-theme-defaults-themes-dark_plus-json file-icons-enabled windows" aria-label="">
+
+
+    <!-- Startup via workbench.js -->
+    <script src="workbench.js"></script>
+    <div id="monaco-parts-splash" style="display: none;">
+        <div
+            style="position: absolute; width: 100%; left: 0; top: 0; height: 30px; background-color: #3c3c3c; -webkit-app-region: drag;">
+        </div>
+        <div
+            style="position: absolute; height: calc(100% - 30px); top: 30px; left: 0; width: 50px; background-color: #333333;">
+        </div>
+        <div style="position: absolute; width: 100%; bottom: 0; left: 0; height: 22px; background-color: #68217a;">
+        </div>
+    </div>
+    <div class="monaco-aria-container">
+        <div class="monaco-alert" role="alert" aria-atomic="true"></div>
+        <div class="monaco-status" role="status" aria-atomic="true"></div>
+    </div>
+    <div class="monaco-workbench windows nosidebar nopanel"
+        style="top: 0px; right: 0px; bottom: 0px; left: 0px; position: relative; width: 1024px; height: 680px;">
+        <div class="part activitybar left" id="workbench.parts.activitybar" role="navigation"
+            style="background-color: rgb(51, 51, 51); height: 628px; top: 30px; bottom: 0px; left: 0px; position: absolute;">
+            <div class="content" style="width: 50px; height: 628px;">
+                <div class="composite-bar">
+                    <div class="monaco-action-bar vertical">
+                        <ul class="actions-container" role="toolbar" aria-label="Active View Switcher">
+                            <li class="action-item" role="button" draggable="true" tabindex="0"
+                                aria-label="Explorer (Ctrl+Shift+E)" title="Explorer (Ctrl+Shift+E)"><a
+                                    class="action-label explore" aria-label="Explorer (Ctrl+Shift+E)"
+                                    title="Explorer (Ctrl+Shift+E)"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Explorer (Ctrl+Shift+E)"
+                                    title="Explorer (Ctrl+Shift+E)" style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                            <li class="action-item" role="button" draggable="true" tabindex="0"
+                                aria-label="Search (Ctrl+Shift+F)" title="Search (Ctrl+Shift+F)"><a
+                                    class="action-label search" aria-label="Search (Ctrl+Shift+F)"
+                                    title="Search (Ctrl+Shift+F)"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Search (Ctrl+Shift+F)"
+                                    title="Search (Ctrl+Shift+F)" style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                            <li class="action-item" role="button" draggable="true" tabindex="0"
+                                aria-label="Source Control (Ctrl+Shift+G)" title="Source Control (Ctrl+Shift+G)"><a
+                                    class="action-label scm" aria-label="Source Control (Ctrl+Shift+G)"
+                                    title="Source Control (Ctrl+Shift+G)"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Source Control (Ctrl+Shift+G)"
+                                    title="Source Control (Ctrl+Shift+G)" style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                            <li class="action-item" role="button" draggable="true" tabindex="0"
+                                aria-label="Debug (Ctrl+Shift+D)" title="Debug (Ctrl+Shift+D)"><a
+                                    class="action-label debug" aria-label="Debug (Ctrl+Shift+D)"
+                                    title="Debug (Ctrl+Shift+D)"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Debug (Ctrl+Shift+D)"
+                                    title="Debug (Ctrl+Shift+D)" style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                            <li class="action-item" role="button" draggable="true" tabindex="0"
+                                aria-label="Extensions (Ctrl+Shift+X)" title="Extensions (Ctrl+Shift+X)"><a
+                                    class="action-label extensions" aria-label="Extensions (Ctrl+Shift+X)"
+                                    title="Extensions (Ctrl+Shift+X)"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Extensions (Ctrl+Shift+X)"
+                                    title="Extensions (Ctrl+Shift+X)" style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                            <li class="action-item" role="button" draggable="true" tabindex="0" aria-label="Docker"
+                                title="Docker"><a class="action-label extensionViewlet-dockerView" aria-label="Docker"
+                                    title="Docker" style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Docker" title="Docker"
+                                    style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="global-activity">
+                    <div class="monaco-action-bar vertical">
+                        <ul class="actions-container" role="toolbar" aria-label="Global Actions">
+                            <li class="action-item" role="button" tabindex="0" aria-label="Manage" title="Manage"><a
+                                    class="action-label update-activity" aria-label="Manage" title="Manage"
+                                    style="background-color: rgba(255, 255, 255, 0.6);"></a>
+                                <div class="badge" aria-hidden="true" aria-label="Manage" title="Manage"
+                                    style="display: none;">
+                                    <div class="badge-content"
+                                        style="color: rgb(255, 255, 255); background-color: rgb(0, 122, 204);"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="part sidebar left" id="workbench.parts.sidebar" role="complementary"
+            style="background-color: rgb(37, 37, 38); width: 0px; height: 628px; top: 30px; right: 974px; bottom: 22px; left: 50px; position: absolute;">
+            <div class="composite title">
+                <div class="title-label">
+                    <h2 style="color: rgb(187, 187, 187);"></h2>
+                </div>
+                <div class="title-actions">
+                    <div class="monaco-toolbar">
+                        <div class="monaco-action-bar animated">
+                            <ul class="actions-container" role="toolbar"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="monaco-progress-container" aria-hidden="true" style="display: none;">
+                    <div class="progress-bit" style="background-color: rgb(14, 112, 192);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="part editor has-watermark" id="workbench.parts.editor" role="main"
+            style="width: 974px; height: 628px; top: 30px; right: 0px; bottom: 22px; left: 50px; position: absolute;">
+            <div class="content empty"
+                style="overflow: hidden; background-color: rgb(30, 30, 30); width: 974px; height: 628px;">
+                <div class="watermark">
+                    <div class="watermark-box">
+                        <dl>
+                            <dt>Show All Commands</dt>
+                            <dd>
+                                <div class="monaco-keybinding" title="Control+Shift+P"><span
+                                        class="monaco-keybinding-key">Ctrl</span><span
+                                        class="monaco-keybinding-key-separator">+</span><span
+                                        class="monaco-keybinding-key">Shift</span><span
+                                        class="monaco-keybinding-key-separator">+</span><span
+                                        class="monaco-keybinding-key">P</span></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Open File</dt>
+                            <dd>
+                                <div class="monaco-keybinding" title="Control+O"><span
+                                        class="monaco-keybinding-key">Ctrl</span><span
+                                        class="monaco-keybinding-key-separator">+</span><span
+                                        class="monaco-keybinding-key">O</span></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Open Folder</dt>
+                            <dd>
+                                <div class="monaco-keybinding" title="Control+K Control+O"><span
+                                        class="monaco-keybinding-key">Ctrl</span><span
+                                        class="monaco-keybinding-key-separator">+</span><span
+                                        class="monaco-keybinding-key">K</span><span
+                                        class="monaco-keybinding-key-chord-separator"> </span><span
+                                        class="monaco-keybinding-key">Ctrl</span><span
+                                        class="monaco-keybinding-key-separator">+</span><span
+                                        class="monaco-keybinding-key">O</span></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>Open Recent</dt>
+                            <dd>
+                                <div class="monaco-keybinding"><span class="monaco-keybinding-key">Unbound</span></div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="grid-view-container">
+                    <div class="monaco-grid-view">
+                        <div class="monaco-grid-branch-node">
+                            <div class="monaco-split-view2 vertical separator-border"
+                                style="--separator-border:#444444;">
+                                <div class="sash-container"></div>
+                                <div class="split-view-container">
+                                    <div class="split-view-view" style="height: 628px;">
+                                        <div class="editor-group-container active empty" data-keybinding-context="1"
+                                            tabindex="0" aria-label="Group 1 (empty)">
+                                            <div class="editor-group-container-toolbar">
+                                                <div class="monaco-action-bar animated">
+                                                    <ul class="actions-container" role="toolbar"
+                                                        aria-label="Editor group actions">
+                                                        <li class="action-item" role="presentation"><a
+                                                                class="action-label icon close-editor-group"
+                                                                role="button" tabindex="0" title="Close (Ctrl+F4)"></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="editor-group-letterpress"></div>
+                                            <div class="monaco-progress-container" aria-hidden="true"
+                                                style="display: none;">
+                                                <div class="progress-bit" style="background-color: rgb(14, 112, 192);">
+                                                </div>
+                                            </div>
+                                            <div class="title tabs show-file-icons"
+                                                style="background-color: rgb(37, 37, 38);">
+                                                <div class="tabs-and-actions-container">
+                                                    <div class="monaco-scrollable-element " role="presentation"
+                                                        style="position: relative; overflow: hidden;">
+                                                        <div role="tablist" draggable="true" class="tabs-container"
+                                                            style="overflow: hidden;"></div>
+                                                        <div role="presentation" aria-hidden="true"
+                                                            class="invisible scrollbar horizontal"
+                                                            style="position: absolute; width: 874px; height: 3px; left: 0px; bottom: 0px;">
+                                                            <div class="slider"
+                                                                style="position: absolute; top: 0px; left: 0px; height: 3px; will-change: transform; width: 874px;">
+                                                            </div>
+                                                        </div>
+                                                        <div role="presentation" aria-hidden="true"
+                                                            class="invisible scrollbar vertical"
+                                                            style="position: absolute; width: 0px; height: 0px; right: 0px; top: 0px;">
+                                                            <div class="slider"
+                                                                style="position: absolute; top: 0px; left: 0px; width: 10px; will-change: transform; height: 0px;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="editor-actions">
+                                                        <div class="monaco-toolbar">
+                                                            <div class="monaco-action-bar animated">
+                                                                <ul class="actions-container" role="toolbar"
+                                                                    aria-label="Editor actions"></ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-breadcrumbs"></div>
+                                            </div>
+                                            <div class="editor-container"
+                                                style="background-color: rgb(30, 30, 30); height: calc(100% - 35px);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="part panel bottom" id="workbench.parts.panel" role="complementary"
+            style="background-color: rgb(30, 30, 30); border-left-color: rgba(128, 128, 128, 0.35); width: 0px; height: 0px; top: 658px; right: 0px; bottom: 22px; left: 50px; position: absolute;">
+            <div class="composite title" style="border-top-color: rgba(128, 128, 128, 0.35);">
+                <div class="composite-bar panel-switcher-container">
+                    <div class="monaco-action-bar">
+                        <ul class="actions-container" role="toolbar" aria-label="Active View Switcher"></ul>
+                    </div>
+                </div>
+                <div class="title-actions">
+                    <div class="monaco-toolbar">
+                        <div class="monaco-action-bar animated">
+                            <ul class="actions-container" role="toolbar"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="monaco-progress-container" aria-hidden="true" style="display: none;">
+                    <div class="progress-bit" style="background-color: rgb(14, 112, 192);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="part statusbar" id="workbench.parts.statusbar" role="contentinfo"
+            style="background-color: rgb(104, 33, 122); color: rgb(255, 255, 255); top: 658px; position: absolute;">
+            <div class="statusbar-item right statusbar-entry" statusbar-entry-priority="-1000"
+                statusbar-entry-alignment="1"><a title="No Notifications"><span
+                        class="octicon octicon-bell "></span></a></div>
+            <div class="statusbar-item right" statusbar-entry-priority="-100" statusbar-entry-alignment="1">
+                <div class="monaco-dropdown send-feedback" title="Tweet Feedback">
+                    <div class="dropdown-label send-feedback mask-icon" style="background-color: rgb(255, 255, 255);">
+                    </div>
+                </div>
+            </div>
+            <div class="statusbar-item right" statusbar-entry-priority="0" statusbar-entry-alignment="1">
+                <div class="profileExtHost-statusbar-item" title="Click to stop profiling." hidden=""><a>
+                        <div class="icon"></div><span class="label">Profiling Extension Host</span>
+                    </a></div>
+            </div>
+            <div class="statusbar-item right" statusbar-entry-priority="100" statusbar-entry-alignment="1">
+                <div class="editor-statusbar-item"><a class="editor-status-tabfocusmode status-bar-info"
+                        title="Disable Accessibility Mode" style="display: none;">Tab Moves Focus</a><a
+                        class="editor-status-screenreadermode status-bar-info"
+                        title="If you are not using a Screen Reader, please change the setting `editor.accessibilitySupport` to &quot;off&quot;."
+                        style="display: none;">Screen Reader Optimized</a><a class="editor-status-selection"
+                        title="Go to Line" style="display: none;"></a><a class="editor-status-indentation"
+                        title="Select Indentation" style="display: none;"></a><a class="editor-status-encoding"
+                        title="Select Encoding" style="display: none;"></a><a class="editor-status-eol"
+                        title="Select End of Line Sequence" style="display: none;"></a><a class="editor-status-mode"
+                        title="Select Language Mode" style="display: none;"></a><span class="editor-status-metadata"
+                        title="File Information" style="display: none;"></span></div>
+            </div>
+            <div class="statusbar-item right" statusbar-entry-priority="101" statusbar-entry-alignment="1"><a
+                    class="zoom-statusbar-item" role="button" style="display: none;"></a></div>
+            <div class="statusbar-item left" statusbar-entry-priority="50" statusbar-entry-alignment="0">
+                <div class="task-statusbar-item" title="Problems"><a class="task-statusbar-item-label">
+                        <div class="task-statusbar-item-label-error mask-icon" title="0 Errors"
+                            style="background-color: rgb(255, 255, 255);"></div>
+                        <div class="task-statusbar-item-label-counter" title="0 Errors">0</div>
+                        <div class="task-statusbar-item-label-warning mask-icon" title="0 Warnings"
+                            style="background-color: rgb(255, 255, 255);"></div>
+                        <div class="task-statusbar-item-label-counter" title="0 Warnings">0</div>
+                        <div class="task-statusbar-item-label-info mask-icon" aria-hidden="true"
+                            style="display: none; background-color: rgb(255, 255, 255);"></div>
+                        <div class="task-statusbar-item-label-counter" aria-hidden="true" style="display: none;"></div>
+                    </a>
+                    <div class="task-statusbar-item-building" aria-hidden="true" style="display: none;">Building...
+                    </div>
+                </div>
+            </div>
+            <div class="statusbar-item left" statusbar-entry-priority="50" statusbar-entry-alignment="0"><a
+                    class="task-statusbar-runningItem" aria-hidden="true" style="display: none;">
+                    <div class="task-statusbar-runningItem-label" title="Show Running Tasks"></div>
+                </a></div>
+            <div class="statusbar-item left" statusbar-entry-priority="30" statusbar-entry-alignment="0"></div>
+            <style type="text/css" media="screen">
+                
+            </style>
+            <style type="text/css" media="screen">
+               
+            </style>
+        </div>
+        <div class="part titlebar inactive" id="workbench.parts.titlebar" role="contentinfo"
+            style="background-color: rgba(60, 60, 60, 0.6); color: rgba(204, 204, 204, 0.6); width: 1024px; height: 30px;">
+            <div class="titlebar-drag-region" style=""></div>
+            <div class="window-appicon" style="-webkit-app-region: drag;"></div>
+            <div class="menubar inactive" role="menubar" style="height: 30px;">
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="File" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+f">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">F</mnemonic>ile
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Edit" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+e">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">E</mnemonic>dit
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Selection"
+                    aria-haspopup="true" aria-keyshortcuts="Alt+s">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">S</mnemonic>election
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="View" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+v">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">V</mnemonic>iew
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Go" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+g">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">G</mnemonic>o
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Debug" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+d">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">D</mnemonic>ebug
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Terminal"
+                    aria-haspopup="true" aria-keyshortcuts="Alt+t">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">T</mnemonic>erminal
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="Help" aria-haspopup="true"
+                    aria-keyshortcuts="Alt+h">
+                    <div class="menubar-menu-title" role="none" aria-hidden="true">
+                        <mnemonic aria-hidden="true">H</mnemonic>elp
+                    </div>
+                </div>
+                <div class="menubar-menu-button" role="menuitem" tabindex="-1" aria-label="..." aria-haspopup="true"
+                    style="visibility: hidden;">
+                    <div class="menubar-menu-title toolbar-toggle-more" role="none" aria-hidden="true"></div>
+                </div>
+            </div>
+            <div class="window-title" style="">Visual Studio Code [Administrator]</div>
+            <div class="window-controls-container">
+                <div class="window-icon-bg">
+                    <div class="window-icon window-minimize"></div>
+                </div>
+                <div class="window-icon-bg">
+                    <div class="window-icon window-max-restore window-maximize"></div>
+                </div>
+                <div class="window-icon-bg window-close-bg">
+                    <div class="window-icon window-close"></div>
+                </div>
+            </div>
+            <div class="resizer"></div>
+        </div>
+        <div class="monaco-sash vertical" style="left: 48px; top: 30px; height: 628px;"></div>
+        <div class="monaco-sash vertical" aria-hidden="true" style="display: none;"></div>
+        <div class="monaco-sash horizontal" aria-hidden="false" style="top: 658px; left: 50px; width: 974px;"></div>
+        <div class="context-view" aria-hidden="true" style="display: none;"></div>
+    </div>
+</body>
+
+</html>

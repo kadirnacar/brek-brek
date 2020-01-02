@@ -24,19 +24,22 @@ export class SocketService {
 
         let mp3stream: fs.WriteStream;
         let closed: boolean = true;
-        
+
         connection.on('message', (message) => {
             console.log(message)
             if (message.type == "utf8") {
                 if (message.utf8Data == "start" && closed) {
                     closed = false;
+                    this.sendMessageToClients(connection["id"], "start");
                     mp3stream = fs.createWriteStream('myBinaryFile.mp3');
                 } else if (message.utf8Data == "stop" && !closed) {
+                    this.sendMessageToClients(connection["id"], "stop");
                     mp3stream.end();
                     mp3stream.close();
                     closed = true;
                 }
             } else if (message.type == "binary") {
+                this.sendMessageToClients(connection["id"], message.binaryData);
                 mp3stream.write(message.binaryData);
             }
         });
@@ -48,11 +51,13 @@ export class SocketService {
         });
 
         SocketService.clients.push(connection);
+
+        console.log(SocketService.clients);
     }
 
-    public static sendMessageToClients(accountId: string, clientId: string, msg) {
-        SocketService.clients.forEach(client => {
-            client.send(JSON.stringify({ accountId, clientId, msg }));
+    public static sendMessageToClients(senderId, msg) {
+        SocketService.clients.filter(i => i["id"] != senderId).forEach(client => {
+            client.send(msg);
         })
     }
 }

@@ -70,3 +70,5 @@ brekbrek/android/androidlame/.settings/
 server/myBinaryFile.mp3
 server/myBinaryFile.raw
 server/myBinaryFile2.raw
+client/dist/
+client/yarn.lock
