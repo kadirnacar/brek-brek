@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { WebRtcConnection, socket } from '@tools';
+import Peer from 'peerjs';
 
 class Home extends React.Component<any, any> {
   constructor(props) {
@@ -19,23 +20,33 @@ class Home extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    this.rtcCon = new WebRtcConnection("1");
-
-    socket.addEvent("connect", (data) => {
-      this.rtcCon.doOffer().then(() => {
-        socket.sendMessage("info", this.rtcCon.getInfo());
-      })
+    var name = prompt("name?");
+    const peer = new Peer(name, { host: 'localhost', port: 3001, path: '/peerjs' });
+    const conn: Peer.DataConnection = peer.connect(name == "kadir" ? 'ozan' : 'kadir');
+    peer.on("open", (id) => {
+      console.log("open", id)
+      conn.send("lşlöşlöş")
     });
+    conn.on("data", (data) => {
+      console.log(data);
+    })
+    // this.rtcCon = new WebRtcConnection("1");
 
-    socket.addEvent("info", (data) => {
-      this.rtcCon.setAnswer(data);
-    });
+    // socket.addEvent("connect", (data) => {
+    //   this.rtcCon.doOffer().then(() => {
+    //     socket.sendMessage("info", this.rtcCon.getInfo());
+    //   })
+    // });
 
-    this.rtcCon.onReady = () => {
-      socket.sendMessage("ready", null);
-    }
+    // socket.addEvent("info", (data) => {
+    //   this.rtcCon.setAnswer(data);
+    // });
 
-    this.rtcCon.start();
+    // this.rtcCon.onReady = () => {
+    //   socket.sendMessage("ready", null);
+    // }
+
+    // this.rtcCon.start();
   }
 
   render() {

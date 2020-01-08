@@ -2,16 +2,18 @@ import { DatabaseType } from 'typeorm';
 import { LoggerService, SocketService } from '@services';
 import * as http from 'http';
 import App from './server';
+import { PeerServer, ExpressPeerServer } from 'peer';
 
 LoggerService.init();
-
 
 const port = process.env.PORT || 3001;
 App.set('port', port);
 
 const server = http.createServer(App);
 server.listen(port);
-SocketService.init(server);
+// SocketService.init(server);
+const peerserver = ExpressPeerServer(server, { debug: true });
+App.use('/peerjs', peerserver);
 
 // declare const module: any;
 // if (module.hot) {
