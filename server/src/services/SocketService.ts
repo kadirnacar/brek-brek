@@ -28,15 +28,11 @@ export class SocketService {
         connection.on('message', (message) => {
             console.log(message)
             if (message.type == "utf8") {
-                if (message.utf8Data == "start" && closed) {
-                    closed = false;
-                    this.sendMessageToClients(connection["id"], "start");
-                    mp3stream = fs.createWriteStream('myBinaryFile.mp3');
-                } else if (message.utf8Data == "stop" && !closed) {
-                    this.sendMessageToClients(connection["id"], "stop");
-                    mp3stream.end();
-                    mp3stream.close();
-                    closed = true;
+                const data = JSON.parse(message.utf8Data);
+                try {
+                    SocketService[data.type](connection["id"], data.data);
+                } catch (ex) {
+                    connection.send(JSON.stringify({ type: "error", msg: ex }));
                 }
             } else if (message.type == "binary") {
                 this.sendMessageToClients(connection["id"], message.binaryData);
@@ -54,6 +50,15 @@ export class SocketService {
 
         console.log(SocketService.clients);
     }
+
+    private static ready(senderId, data) {
+        SocketService.sendMessageToClients(senderId, JSON.stringify({ type: "connect" }));
+    }
+
+    private static info(senderId, data) {
+        SocketService.sendMessageToClients(senderId, JSON.stringify({ type: "info", data }));
+    }
+
 
     public static sendMessageToClients(senderId, msg) {
         SocketService.clients.filter(i => i["id"] != senderId).forEach(client => {

@@ -23,6 +23,7 @@
     ],
     "types": [
       "redux",
+      "global",
       "webpack-env"
     ],
     "typeRoots": ["./types", "./node_modules/@types"],
@@ -35,17 +36,20 @@
       "@store": ["./src/store"],
       "@views": ["./src/views"],
       "@utils": ["./src/utils.ts"],
+      "@tools": ["./src/tools"],
       "@config": ["./src/config.ts"],
       "@routes": ["./src/routes.tsx"],
       "@Ui": ["./src/Ui.ts"]
     }
   },
+  
   "exclude": [
     "dist",
     "bin",
     "node_modules"
   ],
   "include": [
-    "src"
+    "src",
+    "types"
   ]
 }
