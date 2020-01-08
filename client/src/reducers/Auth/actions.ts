@@ -17,9 +17,9 @@ export const actionCreators = {
             return result.errors;
         }
     },
-    checkAuth: (): AppThunkAction<KnownAction> => async (dispatch, getState: () => ApplicationState)=> {
+    checkAuth: (): AppThunkAction<KnownAction> => async (dispatch, getState: () => ApplicationState) => {
         const authInfo = localStorage.getItem('user');
-        const isLogin = authInfo == null;
+        const isLogin = false;// authInfo == null;
         if (isLogin) {
             return false;
         }

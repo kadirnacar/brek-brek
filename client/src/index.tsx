@@ -14,7 +14,6 @@ import "./assets/style.scss";
 const initialState = loadState();
 const store = StoreHelper.initStore(history, initialState);
 const authInfo = localStorage.getItem('user');
-const isLogin = authInfo == null;
 
 ReactDOM.render(
   <Provider store={store}>

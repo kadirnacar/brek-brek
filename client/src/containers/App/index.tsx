@@ -25,7 +25,7 @@ class App extends React.Component<any, any> {
       width: 0,
       height: 0,
       sideBarToggle: false,
-      isLogin: false
+      isLogin: true
     };
     this.onToggleMenu = this.onToggleMenu.bind(this);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -62,7 +62,7 @@ class App extends React.Component<any, any> {
       }
     });
     const authInfo = localStorage.getItem('user');
-    const isLogin = authInfo != null;
+    const isLogin = true;// authInfo != null;
     return (
       isLogin ?
         <React.Fragment>

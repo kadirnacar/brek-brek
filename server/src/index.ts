@@ -7,13 +7,19 @@ import { PeerServer, ExpressPeerServer } from 'peer';
 LoggerService.init();
 
 const port = process.env.PORT || 3001;
-App.set('port', port);
+App.express.set('port', port);
 
-const server = http.createServer(App);
+const server = http.createServer(App.express);
+const peerserver = ExpressPeerServer(server, { debug: true, allow_discovery: true });
+
+App.express.use('/api/peerjs', peerserver);
+peerserver.on("connection", (d) => {
+    console.log(d);
+})
 server.listen(port);
+
 // SocketService.init(server);
-const peerserver = ExpressPeerServer(server, { debug: true });
-App.use('/peerjs', peerserver);
+
 
 // declare const module: any;
 // if (module.hot) {

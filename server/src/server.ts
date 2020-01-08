@@ -5,6 +5,7 @@ import * as express from "express";
 import * as xmlparser from "express-xml-bodyparser";
 import * as helmet from "helmet";
 import corsPrefetch from "./cors";
+import { PeerServer, ExpressPeerServer } from 'peer';
 
 class App {
   public express;
@@ -39,7 +40,7 @@ class App {
     this.express.use("/", router);
     this.express.use("/api/auth", new AuthRouter().router);
     this.express.use("/api/user", new UserRouter().router);
-
+   
     this.express.use((err, req, res, next) => {
       logger.error(err);
       res.status(err.status || 500);
@@ -51,4 +52,4 @@ class App {
   }
 }
 
-export default new App().express;
+export default new App();

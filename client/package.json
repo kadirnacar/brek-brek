@@ -20,6 +20,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.6.0",
     "@types/dom-mediacapture-record": "^1.0.2",
+    "array-compression": "^1.0.3",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
     "font-awesome": "^4.7.0",
