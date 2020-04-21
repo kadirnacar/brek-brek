@@ -1,0 +1,53 @@
+{
+  "name": "brekbrek_server",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "scripts": {
+    "prod": "webpack --config webpack.config.js --env.prod",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch"
+  },
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.6",
+    "@types/lowdb": "^1.0.9",
+    "@types/node": "^13.13.1",
+    "@types/webpack-env": "^1.15.1",
+    "@types/websocket": "1.0.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors-prefetch-middleware": "^1.0.0",
+    "express": "^4.17.1",
+    "express-xml-bodyparser": "^0.3.0",
+    "helmet": "^3.22.0",
+    "jsonwebtoken": "^8.5.1",
+    "lowdb": "^1.0.0",
+    "mssql": "^6.2.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
+    "sharp": "^0.25.2",
+    "shortid": "^2.2.15",
+    "source-map-support": "^0.5.18",
+    "sqlite3": "^4.1.1",
+    "terser-webpack-plugin": "^2.3.5",
+    "typeorm": "^0.2.24",
+    "websocket": "^1.0.31",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.2"
+  }
+}
