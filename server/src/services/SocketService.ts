@@ -26,12 +26,7 @@ export class SocketService {
         delete SocketService.clients[connection["id"]];
       }
     });
-    connection.on("ping", (cancel, binaryPayload) => {
-      console.log("ping");
-    });
-    connection.on("drain", () => {
-      console.log("drain");
-    });
+    
     connection.on("message", this.onMessage.bind(this, connection["id"]));
     SocketService.clients[connection["id"]] = connection;
   }

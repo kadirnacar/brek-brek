@@ -16,7 +16,7 @@ export class App extends Component<any, AppState> {
     super(props);
     this.state = {messages: []};
   }
-  socket?: WebSocket;
+  socket!: WebSocket;
   componentDidMount() {
     console.log('load');
     this.socket = new WebSocket('ws://192.168.8.103:3001');
