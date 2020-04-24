@@ -5,7 +5,8 @@
   "scripts": {
     "prod": "webpack --config webpack.config.js --env.prod",
     "build": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch"
+    "watch": "webpack --config webpack.config.js --watch",
+    "run-node": "nodemon --inspect ./dist/main.js"
   },
   "license": "MIT",
   "private": true,
@@ -21,6 +22,7 @@
     "@types/webpack-env": "^1.15.1",
     "@types/websocket": "1.0.0",
     "awesome-typescript-loader": "^5.2.1",
+    "nodemon": "^2.0.3",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",

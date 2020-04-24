@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "${workspaceFolder}/data.sqlite",
+            "dialect": "SQLite",
+            "name": "demo"
+        }
+    ],
+    "git.ignoreLimitWarning": true,
+    "sqltools.useNodeRuntime": true
+}
