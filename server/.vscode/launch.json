@@ -1,24 +1,5 @@
 {
   "configurations": [{
-      "name": "Browse Server",
-      "type": "node",
-      "request": "launch",
-      "restart": true,
-      "cwd": "${workspaceRoot}",
-      "program": "${workspaceRoot}/src/index.ts",
-      "outFiles": [
-        "${workspaceRoot}/dist/main.js"
-      ],
-      "preLaunchTask": "webpack",
-      "sourceMaps": true,
-      "protocol": "inspector",
-      // "serverReadyAction": {
-      //   "pattern": "Listening on port ([0-9]+)",
-      //   "uriFormat": "http://localhost:%s",
-      //   "action": "openExternally"
-      // }
-    },
-    {
       "type": "node",
       "request": "launch",
       "name": "Node: Nodemon",

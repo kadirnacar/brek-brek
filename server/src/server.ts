@@ -1,4 +1,4 @@
-import {  } from "@routes";
+import { } from "@routes";
 import { logger } from "@services";
 import * as bodyParser from "body-parser";
 import * as express from "express";
