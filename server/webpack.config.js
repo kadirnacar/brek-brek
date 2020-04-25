@@ -6,7 +6,6 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = (env, cnf) => {
     const isDevBuild = !(env && env.prod);
-    console.log(cnf.watch)
     const config = {
         target: 'node',
         devtool: isDevBuild ? 'source-map' : 'source-map',
@@ -83,8 +82,7 @@ module.exports = (env, cnf) => {
         },
         plugins: [
                 new webpack.DefinePlugin({
-                    'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"',
-                    'process.env.FLUENTFFMPEG_COV': false
+                    'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'
                 })
             ]
             .concat(cnf.watch ? [new webpack.HotModuleReplacementPlugin()] : [])

@@ -1,3 +1,4 @@
 dist
 data.sqlite
 yarn.lock
+package-lock.json

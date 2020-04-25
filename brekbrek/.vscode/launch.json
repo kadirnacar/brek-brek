@@ -9,14 +9,9 @@
             "cwd": "${workspaceFolder}",
             "type": "reactnative",
             "request": "launch",
+            "sourceMaps": true,
             "platform": "android"
-        },
-        {
-            "name": "Debug iOS",
-            "cwd": "${workspaceFolder}",
-            "type": "reactnative",
-            "request": "launch",
-            "platform": "ios"
         }
+        
     ]
 }

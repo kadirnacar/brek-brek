@@ -11,14 +11,13 @@ interface AppState {
   messages?: IMassage[];
 }
 
-export class App extends Component<any, AppState> {
+export default class App extends Component<any, AppState> {
   constructor(props: any) {
     super(props);
     this.state = {messages: []};
   }
   socket!: WebSocket;
   componentDidMount() {
-    console.log('load');
     this.socket = new WebSocket('ws://192.168.8.103:3001');
     this.socket.onmessage = (event) => {
       const {messages} = this.state;
@@ -27,10 +26,9 @@ export class App extends Component<any, AppState> {
       console.log(event);
     };
     this.socket.onerror = (evt) => {
-      console.error('error', evt);
+      console.log('error', evt);
     };
     this.socket.onopen = () => {
-      console.log('open');
     };
   }
 
