@@ -1,4 +1,4 @@
-package com.brekbrek;
+package com.bengsoft.brekbrek;
 
 import com.facebook.react.ReactActivity;
 

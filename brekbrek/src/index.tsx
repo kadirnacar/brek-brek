@@ -1,90 +1,30 @@
-import React, {Component} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {SocketClient} from './tools/SocketClient';
-import config from '@config';
+import { AppNavigation } from '@navigation';
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import SafeAreaView, { SafeAreaProvider } from 'react-native-safe-area-view';
+import { Provider } from "react-redux";
+import store from './tools/store';
 
-interface IMassage {
-  date?: Date;
-  message?: string;
-  sender?: string;
-}
 interface AppState {
-  message?: string;
-  messages?: IMassage[];
+    isLoaded: boolean;
 }
-
 export default class App extends Component<any, AppState> {
-  constructor(props: any) {
-    super(props);
-    this.socketClient = new SocketClient(config.wsUrl);
-    this.state = {messages: []};
-  }
-  socketClient: SocketClient;
-  async componentDidMount() {
-    const result = await this.socketClient.connect();
-    console.log(result);
-    if (result == WebSocket.OPEN) {
-      this.socketClient.send({msg: 'deneme'});
-    } else {
-      // this.socketClient.dispose();
-      // this.socketClient = null;
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false
+        }
     }
-  }
-
-  render() {
-    return (
-      <View style={{flex: 1}}>
-        <View style={{flex: 1, borderWidth: 1}}>
-          {this.state.messages?.map((msg, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  borderRadius: 10,
-                  marginVertical: 5,
-                  borderWidth: 1,
-                  padding: 5,
-                  flexDirection: 'row',
-                }}>
-                <Text>{msg.message}</Text>
-              </View>
-            );
-          })}
-        </View>
-        <View style={{borderWidth: 1, height: 60, flexDirection: 'row'}}>
-          <TextInput
-            style={{borderWidth: 1, width: '80%'}}
-            value={this.state.message}
-            onChangeText={(text) => {
-              this.setState({message: text});
-            }}
-          />
-          <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              width: '20%',
-              height: 60,
-              borderRadius: 40,
-              alignContent: 'center',
-              alignItems: 'center',
-              alignSelf: 'center',
-            }}
-            onPress={() => {
-              // this.socket.send(this.state.message || '');
-              this.setState({message: ''});
-            }}>
-            <Text
-              style={{
-                alignSelf: 'center',
-                height: '100%',
-                fontSize: 32,
-                fontWeight: 'bold',
-              }}>
-              >
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+    async componentDidMount() {
+        this.setState({ isLoaded: true });
+    }
+    render() {
+        return <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1, flexDirection: "row" }} forceInset={{ top: "always", bottom: "never" }}>
+                {this.state.isLoaded ? <Provider store={store}>
+                    <AppNavigation />
+                </Provider> : <View></View>}
+            </SafeAreaView>
+        </SafeAreaProvider>
+    }
 }

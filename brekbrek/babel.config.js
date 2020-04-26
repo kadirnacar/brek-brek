@@ -22,15 +22,15 @@ module.exports = function (api) {
         'module-resolver',
         {
           alias: {
-            // "@screens": "./src/screens",
-            // "@navigation": "./src/navigation",
-            // "@components": "./src/components",
-            // "@models": "./src/models",
-            // "@reducers": "./src/reducers",
-            // "@services": "./src/services",
-            // "@store": "./src/store/",
+            "@screens": "./src/screens",
+            "@navigation": "./src/navigation",
+            "@components": "./src/components",
+            "@models": "./src/models",
+            "@reducers": "./src/reducers",
+            "@services": "./src/services",
+            "@store": "./src/store/",
             "@config": "./src/config.ts",
-            // "@utils": "./src/utils.ts",
+            "@utils": "./src/utils.ts",
             "@tools": "./src/tools",
           }
         }
