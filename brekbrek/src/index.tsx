@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {SocketClient} from './tools/SocketClient';
+import config from '@config';
 
 interface IMassage {
   date?: Date;
@@ -14,22 +16,19 @@ interface AppState {
 export default class App extends Component<any, AppState> {
   constructor(props: any) {
     super(props);
+    this.socketClient = new SocketClient(config.wsUrl);
     this.state = {messages: []};
   }
-  socket!: WebSocket;
-  componentDidMount() {
-    this.socket = new WebSocket('ws://192.168.8.103:3001');
-    this.socket.onmessage = (event) => {
-      const {messages} = this.state;
-      messages?.push({date: new Date(), message: event.data});
-      this.setState({messages});
-      console.log(event);
-    };
-    this.socket.onerror = (evt) => {
-      console.log('error', evt);
-    };
-    this.socket.onopen = () => {
-    };
+  socketClient: SocketClient;
+  async componentDidMount() {
+    const result = await this.socketClient.connect();
+    console.log(result);
+    if (result == WebSocket.OPEN) {
+      this.socketClient.send({msg: 'deneme'});
+    } else {
+      // this.socketClient.dispose();
+      // this.socketClient = null;
+    }
   }
 
   render() {
@@ -44,7 +43,7 @@ export default class App extends Component<any, AppState> {
                   borderRadius: 10,
                   marginVertical: 5,
                   borderWidth: 1,
-                  padding:5,
+                  padding: 5,
                   flexDirection: 'row',
                 }}>
                 <Text>{msg.message}</Text>
@@ -71,7 +70,7 @@ export default class App extends Component<any, AppState> {
               alignSelf: 'center',
             }}
             onPress={() => {
-              this.socket.send(this.state.message || '');
+              // this.socket.send(this.state.message || '');
               this.setState({message: ''});
             }}>
             <Text

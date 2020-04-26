@@ -17,7 +17,7 @@ export class SocketService {
 
   private static onRequest(request: WebSocket.request) {
     var address = request.socket.remoteAddress;
-    // logger.info(`${address} connected`);
+    logger.info(`${address} connected`);
     const connection = request.accept();
     connection["id"] = shortid.generate();
 
@@ -32,7 +32,8 @@ export class SocketService {
   }
 
   private static onMessage(id, data: WebSocket.IMessage) {
-    SocketService.clients[id].send(data.utf8Data);
+    console.log(data)
+    // SocketService.clients[id].send(data.utf8Data);
   }
 
   public static sendMessageToClients(
