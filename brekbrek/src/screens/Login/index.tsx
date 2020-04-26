@@ -3,6 +3,7 @@ import {NavigationProp} from '@react-navigation/native';
 import {UserActions} from '@reducers';
 import {ApplicationState} from '@store';
 import {colors, styles} from '@tools';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import React, {Component} from 'react';
 import {
   Alert,
@@ -34,13 +35,36 @@ export class LoginScreenComp extends Component<Props, LoginState> {
     super(props);
     this.state = {};
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
   }
   async componentDidMount() {
     await this.props.UserActions.clear();
   }
+
+  async handleGoogleLogin() {
+    this.setState({isRequest: true});
+    const result = await this.props.UserActions.loginWithGoogle();
+    if (!result) {
+      Alert.alert(
+        'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.',
+        null,
+        [
+          {
+            text: 'Tamam',
+            onPress: () => {
+              this.setState({isRequest: false});
+            },
+          },
+        ],
+      );
+    } else {
+      this.props.navigation.navigate('Home');
+      this.setState({isRequest: false});
+    }
+  }
   async handleLogin() {
     this.setState({isRequest: true});
-    const result = await this.props.UserActions.getItem(
+    const result = await this.props.UserActions.loginWithEmail(
       this.state.username,
       this.state.password,
     );
@@ -100,6 +124,43 @@ export class LoginScreenComp extends Component<Props, LoginState> {
               style={styles.primaryButton}
               onPress={this.handleLogin}>
               <Text style={styles.primaryButtonText}>Giriş</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                alignContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#ffffff',
+                marginBottom: 20,
+                borderRadius: 10,
+                padding: 10,
+                flexDirection: 'row',
+              }}
+              onPress={this.handleGoogleLogin}>
+              <FontAwesome5
+                name="google"
+                size={25}
+                style={{
+                  width: '30%',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  textAlign:"center"
+                }}
+              />
+              <Text
+                style={[
+                  styles.primaryButtonText,
+                  {
+                    color: '#000000',
+                    textAlign: 'left',
+                    width: '70%',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                  },
+                ]}>
+                Google Hesabı
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
