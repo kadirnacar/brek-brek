@@ -14,7 +14,7 @@ export class CoreRepository {
   entityName: string;
 
   getRepository() {
-    return getMongoManager("configConnection").getRepository(this.entityName);
+    return getMongoManager("configConnection").getMongoRepository(this.entityName);
   }
 
   async save(item: any): Promise<any> {
@@ -22,20 +22,20 @@ export class CoreRepository {
     //     item["CreateDate"] = new Date();
     // }
     // item["UpdateDate"] = new Date();
-    const repo = getMongoManager("configConnection").getRepository(
+    const repo = getMongoManager("configConnection").getMongoRepository(
       this.entityName
     );
     return await repo.save(item);
   }
   async update(id: number, item: any): Promise<UpdateResult> {
     return await getMongoManager("configConnection")
-      .getRepository(this.entityName)
+      .getMongoRepository(this.entityName)
       .update(id, item);
   }
   async delete(id: number, force: boolean = false): Promise<any> {
     // if (force) {
     return await getMongoManager("configConnection")
-      .getRepository(this.entityName)
+      .getMongoRepository(this.entityName)
       .softDelete(id);
     // }
     // const item = await this.get(id);
@@ -44,7 +44,7 @@ export class CoreRepository {
   }
   async all(options?: FindManyOptions<any>): Promise<any[]> {
     return await getMongoManager("configConnection")
-      .getRepository(this.entityName)
+      .getMongoRepository(this.entityName)
       .find(options);
   }
   async get(id: number, options?: FindOneOptions<any>): Promise<any> {
@@ -52,8 +52,8 @@ export class CoreRepository {
   }
   async findOne(id?: number, options?: FindOneOptions<any>): Promise<any> {
     return await getMongoManager("configConnection")
-      .getRepository(this.entityName)
-      .findOne(id, options);
+      .getMongoRepository(this.entityName)
+      .findOne(options);
   }
 }
 

@@ -14,6 +14,51 @@ export class AuthRouter {
     this.init();
   }
 
+  public async facebook(req: Request, res: Response, next: NextFunction) {
+    try {
+      const postUser: User = req.body;
+
+      if (!postUser || !postUser.Uid) {
+        res.status(400).send();
+      }
+
+      let user: User;
+      try {
+        user = await UserService.getItem({
+          where: { Uid: postUser.Uid },
+        });
+      } catch (error) {
+        res.status(401).send();
+      }
+      if (!user) {
+        user = new User();
+        user.DisplayName = postUser.DisplayName;
+        user.Email = postUser.Email;
+        user.Type = "Facebook";
+        user.Uid = postUser.Uid;
+        user = await UserService.save(user);
+      }
+
+      const token = jwt.sign(
+        {
+          userId: user.Id,
+          email: user.Email,
+          uid: user.Uid,
+          displayName: user.DisplayName,
+        },
+        config.jwtSecret,
+        { expiresIn: "20000 days" }
+      );
+
+      res.send({
+        user: user,
+        token: token,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   public async google(req: Request, res: Response, next: NextFunction) {
     try {
       const postUser: User = req.body;
@@ -61,5 +106,6 @@ export class AuthRouter {
 
   async init() {
     this.router.post("/google", this.google.bind(this));
+    this.router.post("/facebook", this.facebook.bind(this));
   }
 }

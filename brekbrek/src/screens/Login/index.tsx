@@ -34,7 +34,7 @@ export class LoginScreenComp extends Component<Props, LoginState> {
   constructor(props) {
     super(props);
     this.state = {};
-    this.handleLogin = this.handleLogin.bind(this);
+    this.handleFacebookLogin = this.handleFacebookLogin.bind(this);
     this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
   }
   async componentDidMount() {
@@ -62,12 +62,9 @@ export class LoginScreenComp extends Component<Props, LoginState> {
       this.setState({isRequest: false});
     }
   }
-  async handleLogin() {
+  async handleFacebookLogin() {
     this.setState({isRequest: true});
-    const result = await this.props.UserActions.loginWithEmail(
-      this.state.username,
-      this.state.password,
-    );
+    const result = await this.props.UserActions.loginWithFacebook();
     if (!result) {
       Alert.alert(
         'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.',
@@ -92,39 +89,9 @@ export class LoginScreenComp extends Component<Props, LoginState> {
         <LoaderSpinner showLoader={this.state.isRequest} />
         <View style={{flex: 1, justifyContent: 'center'}}>
           <KeyboardAvoidingView behavior="padding" style={style.container}>
-            {/* <Text
-              style={[
-                styles.text,
-                {
-                  padding: 5,
-                  marginBottom: 10,
-                  textAlign: 'center',
-                },
-              ]}>
-                  Giriş Bilgileri
-            </Text> */}
-            <TextInput
-              style={styles.input}
-              placeholder="E-Posta"
-              textContentType="emailAddress"
-              keyboardType="email-address"
-              placeholderTextColor="#ffffff"
-              value={this.state.username}
-              onChangeText={(text) => this.setState({username: text})}
-            />
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              placeholderTextColor="#ffffff"
-              placeholder="Şifre"
-              value={this.state.password}
-              onChangeText={(text) => this.setState({password: text})}
-            />
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={this.handleLogin}>
-              <Text style={styles.primaryButtonText}>Giriş</Text>
-            </TouchableOpacity>
+            <Text style={[styles.primaryButtonText, {marginBottom: 10,textAlign:"center"}]}>
+              Giriş Yapınız
+            </Text>
             <TouchableOpacity
               style={{
                 alignContent: 'center',
@@ -144,7 +111,7 @@ export class LoginScreenComp extends Component<Props, LoginState> {
                   alignContent: 'center',
                   alignItems: 'center',
                   alignSelf: 'center',
-                  textAlign:"center"
+                  textAlign: 'center',
                 }}
               />
               <Text
@@ -164,17 +131,42 @@ export class LoginScreenComp extends Component<Props, LoginState> {
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                marginBottom: 10,
                 alignContent: 'center',
                 alignItems: 'center',
+                backgroundColor: '#ffffff',
+                marginBottom: 20,
+                borderRadius: 10,
+                padding: 10,
+                flexDirection: 'row',
               }}
-              onPress={() => {
-                this.props.navigation.navigate('Register');
-              }}>
-              <Text style={[styles.text, {textDecorationLine: 'underline'}]}>
-                Kayıt ol
+              onPress={this.handleFacebookLogin}>
+              <FontAwesome5
+                name="facebook"
+                size={25}
+                style={{
+                  width: '30%',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  textAlign: 'center',
+                }}
+              />
+              <Text
+                style={[
+                  styles.primaryButtonText,
+                  {
+                    color: '#000000',
+                    textAlign: 'left',
+                    width: '70%',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                  },
+                ]}>
+                Facebook Hesabı
               </Text>
             </TouchableOpacity>
+         
           </KeyboardAvoidingView>
         </View>
       </BackImage>
