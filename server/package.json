@@ -20,6 +20,7 @@
     "@types/helmet": "0.0.45",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lowdb": "^1.0.9",
+    "@types/mongodb": "^3.5.14",
     "@types/node": "^13.13.1",
     "@types/webpack-env": "^1.15.1",
     "@types/websocket": "1.0.0",

@@ -1,11 +1,5 @@
 import { Models } from "@models";
-import * as path from "path";
-import {
-  Connection,
-  ConnectionOptions,
-  createConnection,
-  getConnection,
-} from "typeorm";
+import { Connection, ConnectionOptions, createConnection, getConnection } from "typeorm";
 import { CoreRepository } from "../repository";
 
 const typeConfig: ConnectionOptions = {

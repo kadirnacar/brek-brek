@@ -1,4 +1,4 @@
-import { AuthRouter } from "@routes";
+import { AuthRouter, GroupRouter } from "@routes";
 import { logger } from "@services";
 import * as bodyParser from "body-parser";
 import * as express from "express";
@@ -43,6 +43,7 @@ class App {
 
     this.express.use("/", router);
     this.express.use("/api/auth", new AuthRouter().router);
+    this.express.use("/api/group", new GroupRouter().router);
 
     this.express.use((err, req, res, next) => {
       logger.error(err);

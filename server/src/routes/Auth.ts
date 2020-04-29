@@ -1,10 +1,8 @@
+import config from "@config";
 import { User } from "@models";
 import { Services } from "@services";
 import { NextFunction, Request, Response, Router } from "express";
-import config from "@config";
 import * as jwt from "jsonwebtoken";
-import * as bcrypt from "bcryptjs";
-import { checkJwt } from "../middlewares/checkJwt";
 
 const UserService = Services.User;
 
