@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface brekbrekTests : XCTestCase
+@interface BrekBrekTests : XCTestCase
 
 @end
 
-@implementation brekbrekTests
+@implementation BrekBrekTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

@@ -1,10 +1,9 @@
-
 export { BaseActions } from "./BaseService";
-export { DefaultService } from './DefaultService';
+export { UserService } from "./UserService";
 export { logger, LoggerService } from "./LoggerService";
 export { SocketService } from "./SocketService";
-import { DefaultService } from './DefaultService';
+import { UserService } from "./UserService";
 
 export const Services = {
-    Default: new DefaultService()
-}
+  User: new UserService(),
+};

@@ -2,9 +2,9 @@ export { BaseModel } from './utils/BaseModel';
 export { Message, MessageType } from './utils/Message';
 export { Result } from './utils/Result';
 
-import { Default } from './Default';
-export { Default } from './Default';
+export { User } from './User';
+import { User } from './User';
 
 export const Models = {
-    Default
+    User
 };

@@ -13,7 +13,7 @@ export const actionCreators = {
             const user = result.value ? result.value : null;
             await dispatch({
                 type: Actions.ReceiveUserItem,
-                payload: user
+                payload: user.user
             });
 
             if (result.hasErrors()) {
@@ -26,68 +26,16 @@ export const actionCreators = {
 
             if (isSuccess) {
                 const state = await getState();
-                if (state.User)
+                if (state.User){
                     await LocalStorage.setItem("user", JSON.stringify(state.User.current));
-            }
-        });
-        return isSuccess;
-    },
-    loginWithEmail: (username: string, password: string) => async (dispatch, getState) => {
-        let isSuccess: boolean = false;
-        await batch(async () => {
-            await dispatch({ type: Actions.RequestUserItem });
-            var result = await UserService.loginWithEmail(username, password);
-            const user = result.value ? result.value : null;
-            await dispatch({
-                type: Actions.ReceiveUserItem,
-                payload: user
-            });
-
-            if (result.hasErrors()) {
-                // Alert.alert(result.errors[0]);
-                isSuccess = false;
-                return;
-            }
-
-            isSuccess = user != null;
-
-            if (isSuccess) {
-                const state = await getState();
-                if (state.User)
-                    await LocalStorage.setItem("user", JSON.stringify(state.User.current));
-            }
-        });
-        return isSuccess;
-    },
-    register: (username: string, password: string) => async (dispatch, getState) => {
-        let isSuccess: boolean = false;
-        await batch(async () => {
-            await dispatch({ type: Actions.RequestUserItem });
-            var result = await UserService.register(username, password);
-            const user = result.value ? result.value : null;
-            
-            await dispatch({
-                type: Actions.ReceiveUserItem,
-                payload: user
-            });
-
-            if (result.hasErrors()) {
-                Alert.alert(result.errors[0]);
-                isSuccess = false;
-                return;
-            }
-
-            isSuccess = user != null;
-
-            if (isSuccess) {
-                const state = await getState();
-                if (state.User)
-                    await LocalStorage.setItem("user", JSON.stringify(state.User.current));
+                    await LocalStorage.setItem("token", user.token);
+                }
             }
         });
         return isSuccess;
     },
     clear: () => async (dispatch, getState) => {
+        await LocalStorage.removeItem("user");
         await dispatch({ type: Actions.ClearItem });
     }
 }

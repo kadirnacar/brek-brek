@@ -4,6 +4,11 @@
             "database": "${workspaceFolder}/data.sqlite",
             "dialect": "SQLite",
             "name": "demo"
+        },
+        {
+            "database": "${workspaceFolder}/data.sqlite",
+            "dialect": "SQLite",
+            "name": "dd"
         }
     ],
     "git.ignoreLimitWarning": true,

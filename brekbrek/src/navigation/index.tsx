@@ -33,7 +33,7 @@ const TabNavigator = () => {
   );
 };
 
-export const AppNavigation = () => {
+export const AppNavigation = (props) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -63,14 +63,14 @@ export const AppNavigation = () => {
             headerStatusBarHeight: 0,
           };
         }}
-        initialRouteName="Login"
+        initialRouteName={props.isLogin ? 'Home' : 'Login'}
         mode="card">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{headerRight: null}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{headerRight: null}}

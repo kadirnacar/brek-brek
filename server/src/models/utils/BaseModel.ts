@@ -1,25 +1,30 @@
-import { Column, ColumnOptions, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import {
+  Column,
+  ColumnOptions,
+  CreateDateColumn,
+  DeleteDateColumn,
+  ObjectID,
+  ObjectIdColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 export class BaseModel {
-    @PrimaryGeneratedColumn()
-    Id: number = null;
+  @ObjectIdColumn()
+  Id: ObjectID;
 
-    @CreateDateColumn({ nullable: true })
-    CreateDate?: Date;
+  @CreateDateColumn({ nullable: true })
+  CreateDate?: Date;
 
-    @Column({ nullable: true, type: "int" })
-    UserId?: number;
+  @UpdateDateColumn({ nullable: true })
+  UpdateDate?: Date;
 
-    @UpdateDateColumn({ nullable: true })
-    UpdateDate?: Date;
+  @DeleteDateColumn({ nullable: true })
+  DeletedDate?: Date;
 
-    @DeleteDateColumn({ nullable: true })
-    DeletedDate?: Date;
-
-    @Column({ nullable: true, default: false })
-    Deleted?: boolean = false;
+  @Column({ nullable: true, default: false })
+  Deleted?: boolean = false;
 }
 
 export function NullColumn(options?: ColumnOptions) {
-    return Column({ nullable: true, ...options });
+  return Column({ nullable: true, ...options });
 }

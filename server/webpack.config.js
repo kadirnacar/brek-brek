@@ -34,6 +34,7 @@ module.exports = (env, cnf) => {
                 "@services": path.resolve(__dirname, "src/services"),
                 "@utils": path.resolve(__dirname, 'src/utils'),
                 "@tools": path.resolve(__dirname, 'src/tools'),
+                "@config": path.resolve(__dirname, 'src/config'),
                 "@database": path.resolve(__dirname, 'src/database/LowDb')
             }
         },

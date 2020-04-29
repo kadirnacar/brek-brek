@@ -1,7 +1,8 @@
 const config = {
-  restUrl: '',
+  restUrl: 'http://192.168.8.103:3001',
   wsUrl: 'ws://192.168.8.103:3001',
-  googleWebApiKey: 'AIzaSyADoNYziXvB2_O1lYjf-dvMQn4oWM7CHnI',
+  // googleWebApiKey: 'AIzaSyCXZY4NrDOtsqaSx4qDhbBwlTsAho228ps',
+  googleWebClientId: '902480885959-odod12envften05tg38bvnurbcdddqmi.apps.googleusercontent.com',
 };
 
 export default config;

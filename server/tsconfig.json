@@ -33,6 +33,7 @@
       "@services": [ "./src/services" ],
       "@repository": [ "./src/repository" ],
       "@utils": [ "./src/utils.ts" ],
+      "@config": [ "./src/config.ts" ],
       "@tools": [ "./src/tools" ],
       "@database": [ "./src/database/LowDb" ]
     }

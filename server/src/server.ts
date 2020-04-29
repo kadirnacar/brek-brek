@@ -1,4 +1,4 @@
-import { } from "@routes";
+import { AuthRouter } from "@routes";
 import { logger } from "@services";
 import * as bodyParser from "body-parser";
 import * as express from "express";
@@ -13,7 +13,6 @@ class App {
     this.express = express();
     this.middleware();
     this.routes();
-    
   }
 
   private middleware(): void {
@@ -43,13 +42,14 @@ class App {
     });
 
     this.express.use("/", router);
-    
+    this.express.use("/api/auth", new AuthRouter().router);
+
     this.express.use((err, req, res, next) => {
       logger.error(err);
       res.status(err.status || 500);
       res.json({
         message: err.message || err,
-        error: err
+        error: err,
       });
     });
   }
