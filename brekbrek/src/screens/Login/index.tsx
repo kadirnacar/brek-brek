@@ -44,9 +44,11 @@ export class LoginScreenComp extends Component<Props, LoginState> {
   async handleGoogleLogin() {
     this.setState({isRequest: true});
     const result = await this.props.UserActions.loginWithGoogle();
-    if (!result) {
+    if (!result || !result['success']) {
       Alert.alert(
-        'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.',
+        !result['message']
+          ? 'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.'
+          : result['message'],
         null,
         [
           {
@@ -65,9 +67,11 @@ export class LoginScreenComp extends Component<Props, LoginState> {
   async handleFacebookLogin() {
     this.setState({isRequest: true});
     const result = await this.props.UserActions.loginWithFacebook();
-    if (!result) {
+    if (!result || !result['success']) {
       Alert.alert(
-        'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.',
+        !result['message']
+          ? 'Giriş Başarısız. Lütfen bilgilerinizi kontrol ediniz.'
+          : result['message'],
         null,
         [
           {
@@ -89,7 +93,11 @@ export class LoginScreenComp extends Component<Props, LoginState> {
         <LoaderSpinner showLoader={this.state.isRequest} />
         <View style={{flex: 1, justifyContent: 'center'}}>
           <KeyboardAvoidingView behavior="padding" style={style.container}>
-            <Text style={[styles.primaryButtonText, {marginBottom: 10,textAlign:"center"}]}>
+            <Text
+              style={[
+                styles.primaryButtonText,
+                {marginBottom: 10, textAlign: 'center'},
+              ]}>
               Giriş Yapınız
             </Text>
             <TouchableOpacity
@@ -166,7 +174,6 @@ export class LoginScreenComp extends Component<Props, LoginState> {
                 Facebook Hesabı
               </Text>
             </TouchableOpacity>
-         
           </KeyboardAvoidingView>
         </View>
       </BackImage>

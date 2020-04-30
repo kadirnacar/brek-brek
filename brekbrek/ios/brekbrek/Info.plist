@@ -36,7 +36,17 @@
 				<string>com.googleusercontent.apps.902480885959-8oqoh8ci6sk9i3ii4p6ngcutn2q1d9d5</string>
 			</array>
 		</dict>
+    <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb327167771592767</string>
+    </array>
+    </dict>
 	</array>
+  <key>FacebookAppID</key>
+  <string>327167771592767</string>
+  <key>FacebookDisplayName</key>
+  <string>brekbrek</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
