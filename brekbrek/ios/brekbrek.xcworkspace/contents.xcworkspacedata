@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BrekBrek.xcodeproj">
+      location = "group:/Users/kadirnacar/github/brek-brek/brekbrek/ios/brekbrek.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:brekbrek.xcodeproj">
    </FileRef>
 </Workspace>

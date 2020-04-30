@@ -16,10 +16,14 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrekBrekTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrekBrekTests.m */; };
-		4111575F09D784BFE60FB0F4 /* libPods-BrekBrek-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBC8067609E415AD2CF05881 /* libPods-BrekBrek-tvOSTests.a */; };
-		BEB6FAA2BDC7328275B1F017 /* libPods-BrekBrek-BrekBrekTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3BA76682EDBC49A48F4BE75 /* libPods-BrekBrek-BrekBrekTests.a */; };
-		C241DF927999F74A4A7B4E10 /* libPods-BrekBrek.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9677DF66C3F6A5A2E94BBAA7 /* libPods-BrekBrek.a */; };
-		C2ED8BCD15CA2D7C038681A2 /* libPods-BrekBrek-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59E8FEB938FB24F68D16F9C4 /* libPods-BrekBrek-tvOS.a */; };
+		3B125B82245B547E0017D850 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B125B81245B547E0017D850 /* GoogleService-Info.plist */; };
+		3B125BC5245B5C3F0017D850 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BA9245B59AE0017D850 /* FontAwesome5_Brands.ttf */; };
+		3B125BC6245B5C470017D850 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BAE245B59AE0017D850 /* FontAwesome5_Solid.ttf */; };
+		3B125BC7245B5C4D0017D850 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BAF245B59AE0017D850 /* FontAwesome5_Regular.ttf */; };
+		9B61E3789EE50CBEB44E13B4 /* libPods-brekbrek-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC31BC97E5D10DDFCCA1966 /* libPods-brekbrek-tvOSTests.a */; };
+		D11680C4F7E2C5914412C0B5 /* libPods-brekbrek-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */; };
+		DDF5EE1FAAB87D5515BCB925 /* libPods-brekbrek-brekbrekTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C358CEC0383A6A62F647CA06 /* libPods-brekbrek-brekbrekTests.a */; };
+		FA42EC5D1DD6A0DDBB399B50 /* libPods-brekbrek.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A33AC23ACC78491E3FCE1E46 /* libPods-brekbrek.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,30 +45,55 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* BrekBrekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrekBrekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* brekbrekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = brekbrekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BrekBrekTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrekBrekTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* BrekBrek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrekBrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		06BD474757664E84692668AA /* Pods-brekbrek-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-brekbrek-tvOS/Pods-brekbrek-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* brekbrek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = brekbrek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = BrekBrek/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = BrekBrek/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BrekBrek/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = BrekBrek/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = BrekBrek/main.m; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* BrekBrek-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BrekBrek-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* BrekBrek-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BrekBrek-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CA3EB4B113D407E16D72F6F /* Pods-brekbrek-brekbrekTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-brekbrekTests.release.xcconfig"; path = "Target Support Files/Pods-brekbrek-brekbrekTests/Pods-brekbrek-brekbrekTests.release.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* brekbrek-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "brekbrek-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* brekbrek-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "brekbrek-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AC31BC97E5D10DDFCCA1966 /* libPods-brekbrek-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B125B81245B547E0017D850 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3B125BA5245B59AE0017D850 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
+		3B125BA6245B59AE0017D850 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		3B125BA7245B59AE0017D850 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		3B125BA8245B59AE0017D850 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		3B125BA9245B59AE0017D850 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		3B125BAA245B59AE0017D850 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		3B125BAB245B59AE0017D850 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		3B125BAC245B59AE0017D850 /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		3B125BAD245B59AE0017D850 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		3B125BAE245B59AE0017D850 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		3B125BAF245B59AE0017D850 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		3B125BB0245B59AE0017D850 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		3B125BB1245B59AE0017D850 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		3B125BB2245B59AE0017D850 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		3B125BB3245B59AE0017D850 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		3B125BB4245B59AE0017D850 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		3FE919ABD857A57D022800EA /* Pods-BrekBrek-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOS/Pods-BrekBrek-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46EFF41D574D64F4BEBC7C36 /* Pods-brekbrek-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-brekbrek-tvOSTests/Pods-brekbrek-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		504A6C0D19D9A06D6AAD8241 /* Pods-BrekBrek-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOSTests/Pods-BrekBrek-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		59E8FEB938FB24F68D16F9C4 /* libPods-BrekBrek-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrekBrek-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C21EA15441ECBACC6A6DD74 /* Pods-brekbrek-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-tvOS.release.xcconfig"; path = "Target Support Files/Pods-brekbrek-tvOS/Pods-brekbrek-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		73B16FAA9D3FBACB64B9DA61 /* Pods-brekbrek.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek.debug.xcconfig"; path = "Target Support Files/Pods-brekbrek/Pods-brekbrek.debug.xcconfig"; sourceTree = "<group>"; };
 		7BEDCDEA8DAF7D2AF49ACAB1 /* Pods-BrekBrek-BrekBrekTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-BrekBrekTests.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek-BrekBrekTests/Pods-BrekBrek-BrekBrekTests.release.xcconfig"; sourceTree = "<group>"; };
 		85C7C245903BCD18B09D7ECA /* Pods-BrekBrek-BrekBrekTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-BrekBrekTests.debug.xcconfig"; path = "Target Support Files/Pods-BrekBrek-BrekBrekTests/Pods-BrekBrek-BrekBrekTests.debug.xcconfig"; sourceTree = "<group>"; };
-		9677DF66C3F6A5A2E94BBAA7 /* libPods-BrekBrek.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrekBrek.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		977FD4E58A53EDC342F85F22 /* Pods-brekbrek.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek.release.xcconfig"; path = "Target Support Files/Pods-brekbrek/Pods-brekbrek.release.xcconfig"; sourceTree = "<group>"; };
 		9CCE2583AF4878ECF69DDA37 /* Pods-BrekBrek.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek/Pods-BrekBrek.release.xcconfig"; sourceTree = "<group>"; };
-		A3BA76682EDBC49A48F4BE75 /* libPods-BrekBrek-BrekBrekTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrekBrek-BrekBrekTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A33AC23ACC78491E3FCE1E46 /* libPods-brekbrek.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8C992F8070B2D39C6CE6358 /* Pods-BrekBrek-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOS/Pods-BrekBrek-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		BCA10892C20B3AE80AC5FA41 /* Pods-brekbrek-brekbrekTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-brekbrekTests.debug.xcconfig"; path = "Target Support Files/Pods-brekbrek-brekbrekTests/Pods-brekbrek-brekbrekTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BFF72BB59D476CBB8503F1D5 /* Pods-BrekBrek.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek.debug.xcconfig"; path = "Target Support Files/Pods-BrekBrek/Pods-BrekBrek.debug.xcconfig"; sourceTree = "<group>"; };
+		C1E72DD33FD8792AF31CFA06 /* Pods-brekbrek-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-brekbrek-tvOSTests/Pods-brekbrek-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C358CEC0383A6A62F647CA06 /* libPods-brekbrek-brekbrekTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek-brekbrekTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA103256AB1EC35918640271 /* Pods-BrekBrek-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOSTests/Pods-BrekBrek-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		EBC8067609E415AD2CF05881 /* libPods-BrekBrek-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BrekBrek-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -74,7 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEB6FAA2BDC7328275B1F017 /* libPods-BrekBrek-BrekBrekTests.a in Frameworks */,
+				DDF5EE1FAAB87D5515BCB925 /* libPods-brekbrek-brekbrekTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C241DF927999F74A4A7B4E10 /* libPods-BrekBrek.a in Frameworks */,
+				FA42EC5D1DD6A0DDBB399B50 /* libPods-brekbrek.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2ED8BCD15CA2D7C038681A2 /* libPods-BrekBrek-tvOS.a in Frameworks */,
+				D11680C4F7E2C5914412C0B5 /* libPods-brekbrek-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4111575F09D784BFE60FB0F4 /* libPods-BrekBrek-tvOSTests.a in Frameworks */,
+				9B61E3789EE50CBEB44E13B4 /* libPods-brekbrek-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,9 +151,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* BrekBrek */ = {
+		13B07FAE1A68108700A75B9A /* brekbrek */ = {
 			isa = PBXGroup;
 			children = (
+				3B125B81245B547E0017D850 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -133,7 +163,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = BrekBrek;
+			name = brekbrek;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -141,12 +171,35 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				9677DF66C3F6A5A2E94BBAA7 /* libPods-BrekBrek.a */,
-				A3BA76682EDBC49A48F4BE75 /* libPods-BrekBrek-BrekBrekTests.a */,
-				59E8FEB938FB24F68D16F9C4 /* libPods-BrekBrek-tvOS.a */,
-				EBC8067609E415AD2CF05881 /* libPods-BrekBrek-tvOSTests.a */,
+				A33AC23ACC78491E3FCE1E46 /* libPods-brekbrek.a */,
+				C358CEC0383A6A62F647CA06 /* libPods-brekbrek-brekbrekTests.a */,
+				43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */,
+				3AC31BC97E5D10DDFCCA1966 /* libPods-brekbrek-tvOSTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B125BA4245B59AE0017D850 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3B125BA5245B59AE0017D850 /* Fontisto.ttf */,
+				3B125BA6245B59AE0017D850 /* Octicons.ttf */,
+				3B125BA7245B59AE0017D850 /* Feather.ttf */,
+				3B125BA8245B59AE0017D850 /* Entypo.ttf */,
+				3B125BA9245B59AE0017D850 /* FontAwesome5_Brands.ttf */,
+				3B125BAA245B59AE0017D850 /* MaterialCommunityIcons.ttf */,
+				3B125BAB245B59AE0017D850 /* AntDesign.ttf */,
+				3B125BAC245B59AE0017D850 /* Foundation.ttf */,
+				3B125BAD245B59AE0017D850 /* Ionicons.ttf */,
+				3B125BAE245B59AE0017D850 /* FontAwesome5_Solid.ttf */,
+				3B125BAF245B59AE0017D850 /* FontAwesome5_Regular.ttf */,
+				3B125BB0245B59AE0017D850 /* FontAwesome.ttf */,
+				3B125BB1245B59AE0017D850 /* Zocial.ttf */,
+				3B125BB2245B59AE0017D850 /* EvilIcons.ttf */,
+				3B125BB3245B59AE0017D850 /* SimpleLineIcons.ttf */,
+				3B125BB4245B59AE0017D850 /* MaterialIcons.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		3B6B58985521D9BCF30DF6C1 /* Pods */ = {
@@ -160,14 +213,22 @@
 				3FE919ABD857A57D022800EA /* Pods-BrekBrek-tvOS.release.xcconfig */,
 				CA103256AB1EC35918640271 /* Pods-BrekBrek-tvOSTests.debug.xcconfig */,
 				504A6C0D19D9A06D6AAD8241 /* Pods-BrekBrek-tvOSTests.release.xcconfig */,
+				73B16FAA9D3FBACB64B9DA61 /* Pods-brekbrek.debug.xcconfig */,
+				977FD4E58A53EDC342F85F22 /* Pods-brekbrek.release.xcconfig */,
+				BCA10892C20B3AE80AC5FA41 /* Pods-brekbrek-brekbrekTests.debug.xcconfig */,
+				1CA3EB4B113D407E16D72F6F /* Pods-brekbrek-brekbrekTests.release.xcconfig */,
+				06BD474757664E84692668AA /* Pods-brekbrek-tvOS.debug.xcconfig */,
+				5C21EA15441ECBACC6A6DD74 /* Pods-brekbrek-tvOS.release.xcconfig */,
+				C1E72DD33FD8792AF31CFA06 /* Pods-brekbrek-tvOSTests.debug.xcconfig */,
+				46EFF41D574D64F4BEBC7C36 /* Pods-brekbrek-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3B125BA4245B59AE0017D850 /* Fonts */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -175,7 +236,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* BrekBrek */,
+				13B07FAE1A68108700A75B9A /* brekbrek */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BrekBrekTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -190,10 +251,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* BrekBrek.app */,
-				00E356EE1AD99517003FC87E /* BrekBrekTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* BrekBrek-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* BrekBrek-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* brekbrek.app */,
+				00E356EE1AD99517003FC87E /* brekbrekTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* brekbrek-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* brekbrek-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,28 +262,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* BrekBrekTests */ = {
+		00E356ED1AD99517003FC87E /* brekbrekTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BrekBrekTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "brekbrekTests" */;
 			buildPhases = (
 				BC4D8D90C58CC9E3D2C58CC4 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				68C1979229FA04600F506591 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = BrekBrekTests;
+			name = brekbrekTests;
 			productName = BrekBrekTests;
-			productReference = 00E356EE1AD99517003FC87E /* BrekBrekTests.xctest */;
+			productReference = 00E356EE1AD99517003FC87E /* brekbrekTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* BrekBrek */ = {
+		13B07F861A680F5B00A75B9A /* brekbrek */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrekBrek" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "brekbrek" */;
 			buildPhases = (
 				FB23F56DC1778145C6425B4E /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -230,19 +292,20 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				D0541D767DFE7028F43E69F2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = BrekBrek;
+			name = brekbrek;
 			productName = BrekBrek;
-			productReference = 13B07F961A680F5B00A75B9A /* BrekBrek.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* brekbrek.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* BrekBrek-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* brekbrek-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrekBrek-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "brekbrek-tvOS" */;
 			buildPhases = (
 				E5CDE48ABF8F57141EB957AF /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -255,14 +318,14 @@
 			);
 			dependencies = (
 			);
-			name = "BrekBrek-tvOS";
+			name = "brekbrek-tvOS";
 			productName = "BrekBrek-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* BrekBrek-tvOS.app */;
+			productReference = 2D02E47B1E0B4A5D006451C7 /* brekbrek-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* BrekBrek-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* brekbrek-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrekBrek-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "brekbrek-tvOSTests" */;
 			buildPhases = (
 				3E079B54164B666E1DE20DBF /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -274,9 +337,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "BrekBrek-tvOSTests";
+			name = "brekbrek-tvOSTests";
 			productName = "BrekBrek-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* BrekBrek-tvOSTests.xctest */;
+			productReference = 2D02E4901E0B4A5D006451C7 /* brekbrek-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -305,7 +368,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "BrekBrek" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "brekbrek" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -318,10 +381,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* BrekBrek */,
-				00E356ED1AD99517003FC87E /* BrekBrekTests */,
-				2D02E47A1E0B4A5D006451C7 /* BrekBrek-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* BrekBrek-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* brekbrek */,
+				00E356ED1AD99517003FC87E /* brekbrekTests */,
+				2D02E47A1E0B4A5D006451C7 /* brekbrek-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* brekbrek-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -338,8 +401,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B125BC7245B5C4D0017D850 /* FontAwesome5_Regular.ttf in Resources */,
+				3B125BC6245B5C470017D850 /* FontAwesome5_Solid.ttf in Resources */,
+				3B125BC5245B5C3F0017D850 /* FontAwesome5_Brands.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				3B125B82245B547E0017D850 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,11 +471,31 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrekBrek-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-brekbrek-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68C1979229FA04600F506591 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-brekbrek-brekbrekTests/Pods-brekbrek-brekbrekTests-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-brekbrek-brekbrekTests/Pods-brekbrek-brekbrekTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BC4D8D90C58CC9E3D2C58CC4 /* [CP] Check Pods Manifest.lock */ = {
@@ -426,11 +513,31 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrekBrek-BrekBrekTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-brekbrek-brekbrekTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D0541D767DFE7028F43E69F2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-brekbrek/Pods-brekbrek-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-brekbrek/Pods-brekbrek-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E5CDE48ABF8F57141EB957AF /* [CP] Check Pods Manifest.lock */ = {
@@ -448,7 +555,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrekBrek-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-brekbrek-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -470,7 +577,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BrekBrek-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-brekbrek-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -557,12 +664,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* BrekBrek */;
+			target = 13B07F861A680F5B00A75B9A /* brekbrek */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* BrekBrek-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* brekbrek-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -582,7 +689,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85C7C245903BCD18B09D7ECA /* Pods-BrekBrek-BrekBrekTests.debug.xcconfig */;
+			baseConfigurationReference = BCA10892C20B3AE80AC5FA41 /* Pods-brekbrek-brekbrekTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -597,15 +704,15 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrekBrek.app/BrekBrek";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek.app/brekbrek";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BEDCDEA8DAF7D2AF49ACAB1 /* Pods-BrekBrek-BrekBrekTests.release.xcconfig */;
+			baseConfigurationReference = 1CA3EB4B113D407E16D72F6F /* Pods-brekbrek-brekbrekTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -617,15 +724,15 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrekBrek.app/BrekBrek";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek.app/brekbrek";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BFF72BB59D476CBB8503F1D5 /* Pods-BrekBrek.debug.xcconfig */;
+			baseConfigurationReference = 73B16FAA9D3FBACB64B9DA61 /* Pods-brekbrek.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -642,8 +749,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BrekBrek;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = brekbrek;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -652,7 +759,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CCE2583AF4878ECF69DDA37 /* Pods-BrekBrek.release.xcconfig */;
+			baseConfigurationReference = 977FD4E58A53EDC342F85F22 /* Pods-brekbrek.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -664,8 +771,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = BrekBrek;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = brekbrek;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -673,7 +780,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8C992F8070B2D39C6CE6358 /* Pods-BrekBrek-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 06BD474757664E84692668AA /* Pods-brekbrek-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -691,7 +798,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrekBrek-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.BrekBrek-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -701,7 +808,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3FE919ABD857A57D022800EA /* Pods-BrekBrek-tvOS.release.xcconfig */;
+			baseConfigurationReference = 5C21EA15441ECBACC6A6DD74 /* Pods-brekbrek-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -719,7 +826,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrekBrek-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.BrekBrek-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -729,7 +836,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA103256AB1EC35918640271 /* Pods-BrekBrek-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = C1E72DD33FD8792AF31CFA06 /* Pods-brekbrek-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -746,17 +853,17 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrekBrek-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.BrekBrek-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrekBrek-tvOS.app/BrekBrek-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek-tvOS.app/brekbrek-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 504A6C0D19D9A06D6AAD8241 /* Pods-BrekBrek-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 46EFF41D574D64F4BEBC7C36 /* Pods-brekbrek-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -773,10 +880,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.BrekBrek-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.BrekBrek-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrekBrek-tvOS.app/BrekBrek-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek-tvOS.app/brekbrek-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -897,7 +1004,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BrekBrekTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "brekbrekTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -906,7 +1013,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "BrekBrek" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "brekbrek" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -915,7 +1022,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrekBrek-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "brekbrek-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -924,7 +1031,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "BrekBrek-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "brekbrek-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -933,7 +1040,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "BrekBrek" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "brekbrek" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
