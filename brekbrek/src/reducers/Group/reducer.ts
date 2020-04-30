@@ -30,6 +30,7 @@ export const reducer = (
     case Actions.ReceiveCreate:
       if (action.payload) {
         currentState.current = action.payload;
+        currentState.groups.push(action.payload);
       }
       currentState.isRequest = false;
       return {...currentState};

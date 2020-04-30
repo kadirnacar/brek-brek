@@ -3,8 +3,8 @@ import * as path from 'path';
 import * as RNFS from 'react-native-fs';
 
 class FileServiceHelper {
-    stateFile: string = path.join(RNFS.ExternalDirectoryPath, 'state.json');
-    configFile: string = path.join(RNFS.ExternalDirectoryPath, 'config.json');
+    stateFile: string = path.join(RNFS.DocumentDirectoryPath, 'state.json');
+    configFile: string = path.join(RNFS.DocumentDirectoryPath, 'config.json');
 
     public async readConfigFromFile(): Promise<any> {
         try {
