@@ -7,6 +7,10 @@ import {
   IRequestCreateAction,
   IReceiveListAction,
   IRequestListAction,
+  IReceiveUpdateAction,
+  IRequestUpdateAction,
+  IReceiveDeleteAction,
+  IRequestDeleteAction,
 } from './state';
 
 const unloadedState: GroupState = {
@@ -19,7 +23,11 @@ export type KnownAction =
   | IRequestCreateAction
   | IClearAction
   | IReceiveListAction
-  | IRequestListAction;
+  | IRequestListAction
+  | IReceiveUpdateAction
+  | IRequestUpdateAction
+  | IReceiveDeleteAction
+  | IRequestDeleteAction;
 
 export const reducer = (
   currentState: GroupState = unloadedState,
@@ -27,9 +35,33 @@ export const reducer = (
 ) => {
   const action = incomingAction as KnownAction;
   switch (action.type) {
+    case Actions.ReceiveDelete:
+      if (action.payload) {
+        const old = currentState.groups.findIndex(
+          (i) => i.Id == action.payload.GroupId,
+        );
+        if (old > -1) currentState.groups.splice(old, 1);
+      }
+      currentState.isRequest = false;
+      return {...currentState};
+    case Actions.RequestDelete:
+      currentState.isRequest = true;
+      return {...currentState};
+    case Actions.ReceiveUpdate:
+      if (action.payload) {
+        const old = currentState.groups.findIndex(
+          (i) => i.Id == action.payload.Id,
+        );
+        if (old > -1) currentState.groups.splice(old, 1);
+        currentState.groups.push(action.payload);
+      }
+      currentState.isRequest = false;
+      return {...currentState};
+    case Actions.RequestUpdate:
+      currentState.isRequest = true;
+      return {...currentState};
     case Actions.ReceiveCreate:
       if (action.payload) {
-        currentState.current = action.payload;
         currentState.groups.push(action.payload);
       }
       currentState.isRequest = false;

@@ -2,9 +2,9 @@ import {
   FindManyOptions,
   FindOneOptions,
   getMongoManager,
-  ObjectID,
   UpdateResult,
 } from "typeorm";
+import { ObjectId } from "mongodb";
 
 export class CoreRepository {
   constructor(entityName: string) {
@@ -14,7 +14,9 @@ export class CoreRepository {
   entityName: string;
 
   getRepository() {
-    return getMongoManager("configConnection").getMongoRepository(this.entityName);
+    return getMongoManager("configConnection").getMongoRepository(
+      this.entityName
+    );
   }
 
   async save(item: any): Promise<any> {
@@ -27,33 +29,33 @@ export class CoreRepository {
     );
     return await repo.save(item);
   }
-  async update(id: number, item: any): Promise<UpdateResult> {
+  async update(id: any, item: any): Promise<UpdateResult> {
     return await getMongoManager("configConnection")
       .getMongoRepository(this.entityName)
       .update(id, item);
   }
-  async delete(id: number, force: boolean = false): Promise<any> {
+  async delete(id: any, force: boolean = false): Promise<any> {
     // if (force) {
-    return await getMongoManager("configConnection")
-      .getMongoRepository(this.entityName)
-      .softDelete(id);
+    // return await getMongoManager("configConnection")
+    //   .getMongoRepository(this.entityName)
+    //   .softDelete(id);
     // }
-    // const item = await this.get(id);
-    // item["Deleted"] = true;
-    // return await this.save(item);
+    const item = await this.get(id);
+    item["Deleted"] = true;
+    return await this.save(item);
   }
   async all(options?: FindManyOptions<any>): Promise<any[]> {
     return await getMongoManager("configConnection")
       .getMongoRepository(this.entityName)
       .find(options);
   }
-  async get(id: number, options?: FindOneOptions<any>): Promise<any> {
+  async get(id: any, options?: FindOneOptions<any>): Promise<any> {
     return await this.findOne(id, options);
   }
-  async findOne(id?: number, options?: FindOneOptions<any>): Promise<any> {
+  async findOne(id?: any, options?: FindOneOptions<any>): Promise<any> {
     return await getMongoManager("configConnection")
       .getMongoRepository(this.entityName)
-      .findOne(options);
+      .findOne(id, options);
   }
 }
 

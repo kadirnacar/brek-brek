@@ -1,5 +1,5 @@
-import { Repository, CoreRepository } from "@repository";
-import { FindManyOptions, ObjectID, FindOneOptions } from "typeorm";
+import { CoreRepository } from "@repository";
+import { FindManyOptions, FindOneOptions } from "typeorm";
 import { getRepository } from "./ServiceHelper";
 
 export class CoreActions {
@@ -20,10 +20,13 @@ export class CoreActions {
 
   public async getList(findOptions?: FindManyOptions<any>): Promise<any[]> {
     await this.getRepository();
-    return await this.repository.all(findOptions)
+    return await this.repository.all(findOptions);
   }
 
-  public async getById(id: number, options?: FindOneOptions<any>): Promise<any> {
+  public async getById(
+    id: any,
+    options?: FindOneOptions<any>
+  ): Promise<any> {
     await this.getRepository();
     return await this.repository.get(id, options);
   }
@@ -43,7 +46,7 @@ export class CoreActions {
     return await this.repository.save(model);
   }
 
-  public async delete(id: number, force: boolean = false): Promise<any> {
+  public async delete(id: any, force: boolean = false): Promise<any> {
     await this.getRepository();
     return await this.repository.delete(id, force);
   }
@@ -55,10 +58,10 @@ export class BaseActions<T> extends CoreActions {
   }
 
   public async getList(findOptions?: FindManyOptions<T>): Promise<T[]> {
-    return await super.getList(findOptions)
+    return await super.getList(findOptions);
   }
 
-  public async getById(id: number): Promise<T> {
+  public async getById(id: any): Promise<T> {
     return await super.getById(id);
   }
 
@@ -74,7 +77,7 @@ export class BaseActions<T> extends CoreActions {
     return await super.save(model);
   }
 
-  public async delete(id: number, force: boolean = false): Promise<any> {
+  public async delete(id: any, force: boolean = false): Promise<any> {
     return await super.delete(id, force);
   }
 }

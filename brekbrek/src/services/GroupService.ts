@@ -14,6 +14,27 @@ export class GroupService extends ServiceBase {
     );
     return result;
   }
+  public static async update(item: IGroup): Promise<Result<IGroup>> {
+    var result = await this.requestJson<IGroup>(
+      {
+        url: `${config.restUrl}/api/group`,
+        method: 'PATCH',
+        data: item,
+      },
+      true,
+    );
+    return result;
+  }
+  public static async delete(item: IGroup): Promise<Result<IGroup>> {
+    var result = await this.requestJson<IGroup>(
+      {
+        url: `${config.restUrl}/api/group/${item.Id}`,
+        method: 'DELETE',
+      },
+      true,
+    );
+    return result;
+  }
   public static async getUserGroups(): Promise<Result<IGroup[]>> {
     var result = await this.requestJson<IGroup[]>(
       {

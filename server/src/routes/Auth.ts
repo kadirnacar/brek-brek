@@ -25,7 +25,7 @@ export class AuthRouter {
       let user: User;
       try {
         user = await UserService.getItem({
-          where: { Uid: postUser.Uid },
+          where: { Uid: postUser.Uid, Deleted: false },
         });
       } catch (error) {
         res.status(401).send();
@@ -70,7 +70,7 @@ export class AuthRouter {
       let user: User;
       try {
         user = await UserService.getItem({
-          where: { Uid: postUser.Uid },
+          where: { Uid: postUser.Uid, Deleted: false },
         });
       } catch (error) {
         res.status(401).send();
