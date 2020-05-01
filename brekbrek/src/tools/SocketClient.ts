@@ -45,14 +45,14 @@ export class SocketClient {
       this.socket = null;
     }
   }
-  public send(data) {
+  public send(command: string, data?: any) {
     if (this.socket.readyState == WebSocket.OPEN)
-      this.socket.send(JSON.stringify(data));
+      this.socket.send(JSON.stringify({command, data}));
   }
 
   public async connect() {
     const self = this;
-    const token = await LocalStorage.getItem('token');
+    const token = (await LocalStorage.getItem('token'));
 
     return new Promise((resolve, reject) => {
       if (self.isDisposed) {
@@ -64,7 +64,7 @@ export class SocketClient {
       });
       self.socket.onopen = () => {
         if (self.socket.readyState == WebSocket.OPEN) {
-          console.log("WebSocketClient: connected")
+          console.log('WebSocketClient: connected');
           resolve(WebSocket.OPEN);
         } else {
           resolve(self.socket.readyState);

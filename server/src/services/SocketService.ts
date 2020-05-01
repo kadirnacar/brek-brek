@@ -20,12 +20,23 @@ export class SocketService {
 
   private static onRequest(request: WebSocket.request) {
     var address = request.socket.remoteAddress;
-    logger.info(`${address} connected`);
-    const connection = request.accept();
     const token = request.httpRequest.headers.token;
-    const user = parseToken(token);
+    if (!token) {
+      request.reject(401, "Authantication Error");
+      return;
+    }
+    let user;
+    try {
+      user = parseToken(token);
+    } catch (err) {
+      console.log(err);
+      request.reject(401);
+      return;
+    }
+    logger.info(`${address} connected`);
     const groupId: string = request.httpRequest.headers.id.toString();
     const userId = user.userId;
+    const connection = request.accept();
     connection["id"] = userId;
 
     connection.on("close", (code, desc) => {
@@ -57,6 +68,7 @@ export class SocketService {
 
   private static onMessage(groupId, userId, data: WebSocket.IMessage) {
     console.log(groupId, userId, data);
+    
     SocketService.clients[groupId][userId].send(data.utf8Data);
     // SocketService.clients[id].send(data.utf8Data);
   }

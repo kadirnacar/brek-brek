@@ -37,7 +37,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         Id: this.props.Group.current.Id,
       });
       await this.socketClient.connect();
-      this.socketClient.send('deneme');
+      this.socketClient.send('test', 'deneme');
       this.socketClient.onMessageEvent = (e) => {
         console.log(e);
       };
@@ -59,11 +59,14 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             borderBottomWidth: 1,
             borderBottomColor: '#cccccc',
             minHeight: 50,
+            justifyContent: 'center',
           }}>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 22,
               color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
             }}>
             {this.props.Group && this.props.Group.current
               ? this.props.Group.current.Name
