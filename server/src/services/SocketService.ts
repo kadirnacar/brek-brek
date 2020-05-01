@@ -64,6 +64,7 @@ export class SocketService {
       SocketService.clients[groupId] = {};
     }
     SocketService.clients[groupId][userId] = connection;
+    console.log(SocketService.clients)
   }
 
   private static onMessage(groupId, userId, data: WebSocket.IMessage) {

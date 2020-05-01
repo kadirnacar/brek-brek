@@ -37,7 +37,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         Id: this.props.Group.current.Id,
       });
       await this.socketClient.connect();
-      this.socketClient.send('test', 'deneme');
+      this.socketClient.send('test', {dd:'deneme'});
       this.socketClient.onMessageEvent = (e) => {
         console.log(e);
       };
