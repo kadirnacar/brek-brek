@@ -61,13 +61,19 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 borderBottomColor: '#cccccc',
                 minHeight: 50,
               }}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: '#000',
+              <TouchableOpacity
+                onPress={async () => {
+                  await this.props.GroupActions.setCurrent(group);
+                  this.props.navigation.navigate('Group');
                 }}>
-                {group.Name}
-              </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: '#000',
+                  }}>
+                  {group.Name}
+                </Text>
+              </TouchableOpacity>
               <View
                 style={{
                   position: 'absolute',

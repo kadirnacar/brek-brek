@@ -3,7 +3,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen, LoginScreen} from '@screens';
+import {HomeScreen, LoginScreen, GroupScreen} from '@screens';
 import {colors} from '@tools';
 import * as React from 'react';
 
@@ -74,6 +74,7 @@ export const AppNavigation = (props) => {
                     options={{ headerLeft: null }}
                     component={DepartmentScreen} /> */}
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Group" component={GroupScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

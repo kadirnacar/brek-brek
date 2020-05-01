@@ -1,17 +1,26 @@
-export class SocketClient {
-  constructor(url: string) {
-    this.url = url;
-  }
-  url: string;
-  socket: WebSocket;
-  isDisposed: boolean = false;
-  autoReconnectInterval = 5 * 1000;
+import {LocalStorage} from '../store';
 
-  onMessage = (e) => {
-    console.log('socket message', e.data);
+export class SocketClient {
+  constructor(url: string, options?: any) {
+    this.url = url;
+    this.options = options;
+  }
+  private url: string;
+  private options: any;
+  private socket: WebSocket;
+  private isDisposed: boolean = false;
+  private autoReconnectInterval = 5 * 1000;
+
+  public onMessageEvent: ((event: WebSocketMessageEvent) => void) | null;
+  public onErrorEvent: ((event: WebSocketErrorEvent) => void) | null;
+
+  private onMessage = (e: WebSocketMessageEvent) => {
+    if (this.onMessageEvent) {
+      this.onMessageEvent(e);
+    }
   };
 
-  onClose = (e) => {
+  private onClose = (e) => {
     setTimeout(() => {
       if (!this.isDisposed) {
         console.log('WebSocketClient: reconnecting...');
@@ -43,14 +52,19 @@ export class SocketClient {
 
   public async connect() {
     const self = this;
+    const token = await LocalStorage.getItem('token');
+
     return new Promise((resolve, reject) => {
       if (self.isDisposed) {
         resolve(WebSocket.CLOSED);
         return;
       }
-      self.socket = new WebSocket(self.url);
+      self.socket = new WebSocket(self.url, null, {
+        headers: {...this.options, ...{token}},
+      });
       self.socket.onopen = () => {
         if (self.socket.readyState == WebSocket.OPEN) {
+          console.log("WebSocketClient: connected")
           resolve(WebSocket.OPEN);
         } else {
           resolve(self.socket.readyState);
@@ -59,7 +73,10 @@ export class SocketClient {
       self.socket.onclose = self.onClose.bind(self);
       self.socket.onmessage = self.onMessage.bind(self);
       self.socket.onerror = (e) => {
-          console.log(e.message)
+        console.log(e.message);
+        if (self.onErrorEvent) {
+          self.onErrorEvent(e);
+        }
         resolve(self.socket.readyState);
       };
     });

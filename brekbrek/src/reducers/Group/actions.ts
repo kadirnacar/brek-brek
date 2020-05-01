@@ -1,8 +1,8 @@
-import { IGroup, Result } from '@models';
-import { GroupService } from '@services';
-import { batch } from 'react-redux';
-import { Actions } from './state';
-import { AsyncAlert } from '../../tools/AsyncAlert';
+import {IGroup, Result} from '@models';
+import {GroupService} from '@services';
+import {batch} from 'react-redux';
+import {Actions} from './state';
+import {AsyncAlert} from '../../tools/AsyncAlert';
 
 export const actionCreators = {
   createItem: (item: IGroup) => async (dispatch, getState) => {
@@ -68,6 +68,9 @@ export const actionCreators = {
     return result;
   },
   clear: () => async (dispatch, getState) => {
-    await dispatch({type: Actions.ClearItem});
+    dispatch({type: Actions.ClearItem});
+  },
+  setCurrent: (item: IGroup) => async (dispatch, getState) => {
+    dispatch({type: Actions.SetCurrent, payload: item});
   },
 };

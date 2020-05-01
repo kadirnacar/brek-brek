@@ -11,6 +11,7 @@ import {
   IRequestUpdateAction,
   IReceiveDeleteAction,
   IRequestDeleteAction,
+  ISetCurrent,
 } from './state';
 
 const unloadedState: GroupState = {
@@ -28,7 +29,8 @@ export type KnownAction =
   | IReceiveUpdateAction
   | IRequestUpdateAction
   | IReceiveDeleteAction
-  | IRequestDeleteAction;
+  | IRequestDeleteAction
+  | ISetCurrent;
 
 export const reducer = (
   currentState: GroupState = unloadedState,
@@ -84,6 +86,10 @@ export const reducer = (
     case Actions.ClearItem:
       currentState.isRequest = false;
       currentState.current = null;
+      return {...currentState};
+    case Actions.SetCurrent:
+      currentState.isRequest = false;
+      currentState.current = action.payload;
       return {...currentState};
     default:
       break;

@@ -10,6 +10,7 @@ export enum Actions {
   ReceiveDelete = 'RECEIVE_DELETE_GROUP',
   RequestList = 'REQUEST_LIST_GROUP',
   ReceiveList = 'RECEIVE_LIST_GROUP',
+  SetCurrent = 'SET_CURRENT',
   ClearItem = 'CLEAR_USER',
 }
 
@@ -20,6 +21,11 @@ export interface GroupState extends IBaseReducer {
 
 export interface IClearAction {
   type: Actions.ClearItem;
+}
+
+export interface ISetCurrent {
+  type: Actions.SetCurrent;
+  payload: IGroup;
 }
 
 export interface IRequestUpdateAction {
