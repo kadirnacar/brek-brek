@@ -28,7 +28,7 @@ export interface IRequestUpdateAction {
 
 export interface IReceiveUpdateAction {
   type: Actions.ReceiveUpdate;
-  payload: IGroup;
+  payload: {Id: any; item: IGroup};
 }
 
 export interface IRequestDeleteAction {

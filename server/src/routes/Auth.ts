@@ -28,7 +28,7 @@ export class AuthRouter {
           where: { Uid: postUser.Uid, Deleted: false },
         });
       } catch (error) {
-        res.status(401).send();
+        res.status(501).send(error && error.message ? error.message : error);
       }
       if (!user) {
         user = new User();
@@ -55,7 +55,7 @@ export class AuthRouter {
         token: token,
       });
     } catch (err) {
-      next(err);
+      next(err && err.message ? err.message : err);
     }
   }
 
@@ -73,7 +73,7 @@ export class AuthRouter {
           where: { Uid: postUser.Uid, Deleted: false },
         });
       } catch (error) {
-        res.status(401).send();
+        res.status(501).send(error && error.message ? error.message : error);
       }
       if (!user) {
         user = new User();
@@ -100,7 +100,7 @@ export class AuthRouter {
         token: token,
       });
     } catch (err) {
-      next(err);
+      next(err && err.message ? err.message : err);
     }
   }
 

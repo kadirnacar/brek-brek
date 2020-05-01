@@ -46,7 +46,7 @@ export abstract class ServiceBase {
       const token = await LocalStorage.getItem('token');
       axiosRequestConfig = {
         headers: {
-          auth: token
+          auth: token,
         },
       };
     }
@@ -89,12 +89,12 @@ export abstract class ServiceBase {
 
       result = new Result<T>(axiosResult.data, null);
     } catch (error) {
+      console.log(error);
       result = new Result<T>(
         null,
-        opts.url +
-          (error.response && error.response.data
-            ? error.response.data
-            : error.message),
+        error.response && error.response.data
+          ? error.response.data
+          : error.message,
       );
     }
 

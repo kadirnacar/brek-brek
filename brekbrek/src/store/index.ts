@@ -1,6 +1,6 @@
-import {GroupReducer, GroupState, UserReducer, UserState} from '@reducers';
+import { GroupReducer, GroupState, UserReducer, UserState } from '@reducers';
 import * as LocalStorage from './localStorage';
-export {LocalStorage};
+export { LocalStorage };
 
 export interface ApplicationState {
   User: UserState;

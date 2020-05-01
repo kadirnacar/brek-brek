@@ -24,19 +24,18 @@ export class CoreActions {
   }
 
   public async getById(
-    id: any,
-    options?: FindOneOptions<any>
+    id: any
   ): Promise<any> {
     await this.getRepository();
-    return await this.repository.get(id, options);
+    return await this.repository.get(id);
   }
 
   public async getItem(options?: FindOneOptions<any>): Promise<any> {
     await this.getRepository();
-    return await this.repository.findOne(null, options);
+    return await this.repository.findOne(options);
   }
 
-  public async update(id: number, model: Partial<any>): Promise<any> {
+  public async update(id: any, model: Partial<any>): Promise<any> {
     await this.getRepository();
     return await this.repository.update(id, model);
   }
@@ -69,7 +68,7 @@ export class BaseActions<T> extends CoreActions {
     return await super.getItem(options);
   }
 
-  public async update(id: number, model: Partial<T>): Promise<T> {
+  public async update(id: any, model: Partial<T>): Promise<T> {
     return await super.update(id, model);
   }
 

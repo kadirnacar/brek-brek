@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -135,6 +136,30 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           </TouchableHighlight>
         </View>
         <FormModal
+          show={this.state.showAddGroup}
+          title={`Grup Oluştur`}
+          onCancelPress={() => {
+            this.setState({showAddGroup: false});
+          }}
+          onOkPress={async () => {
+            await this.setState({showAddGroup: false}, async () => {
+              if (this.state.newGroupName)
+                await this.props.GroupActions.createItem({
+                  Name: this.state.newGroupName,
+                });
+            });
+          }}>
+          <TextInput
+            placeholder="Grup Adı"
+            value={this.state.newGroupName}
+            style={{borderWidth: 1, flex: 1, padding: 5, borderRadius: 5}}
+            onChangeText={(text) => {
+              this.setState({newGroupName: text});
+            }}
+          />
+        </FormModal>
+
+        <FormModal
           show={this.state.showEditGroup && !!this.state.currentGroup}
           title={`Düzenle - ${
             this.state.currentGroup ? this.state.currentGroup.Name : ''
@@ -143,12 +168,13 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             this.setState({showEditGroup: false});
           }}
           onOkPress={async () => {
-            await this.setState({showEditGroup: false}, async () => {
-              if (this.state.newGroupName)
+            if (this.state.currentGroup) {
+              await this.setState({showEditGroup: false}, async () => {
                 await this.props.GroupActions.updateItem(
                   this.state.currentGroup,
                 );
-            });
+              });
+            }
           }}>
           <TextInput
             placeholder="Grup Adı"
@@ -171,16 +197,11 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           }}
           onOkPress={async () => {
             await this.setState({showDeleteGroup: false}, async () => {
-                await this.props.GroupActions.deleteItem(
-                  this.state.currentGroup,
-                );
+              await this.props.GroupActions.deleteItem(this.state.currentGroup);
             });
           }}>
-          <Text>
-            Grupdan ayrılmak istediğinize eminmisiniz?
-          </Text>
+          <Text>Grupdan ayrılmak istediğinize eminmisiniz?</Text>
         </FormModal>
-      
       </SafeAreaView>
     );
   }

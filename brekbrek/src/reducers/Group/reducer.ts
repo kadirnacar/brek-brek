@@ -16,6 +16,7 @@ import {
 const unloadedState: GroupState = {
   current: null,
   groups: [],
+  isRequest: false,
 };
 
 export type KnownAction =
@@ -52,8 +53,10 @@ export const reducer = (
         const old = currentState.groups.findIndex(
           (i) => i.Id == action.payload.Id,
         );
-        if (old > -1) currentState.groups.splice(old, 1);
-        currentState.groups.push(action.payload);
+        if (old > -1) {
+          currentState.groups.splice(old, 1);
+        }
+        currentState.groups.push(action.payload.item);
       }
       currentState.isRequest = false;
       return {...currentState};

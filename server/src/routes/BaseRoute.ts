@@ -46,7 +46,7 @@ export class BaseRouter<T> {
     public async updateItem(req: Request, res: Response, next) {
         try {
             const values = req.body;
-            const data = await this.service.save(values);
+            const data = await this.service.update(values.Id, values);
             res.status(200).send(data);
         } catch (err) {
             next(err);
@@ -63,7 +63,7 @@ export class BaseRouter<T> {
         }
     }
 
-    async init() {
+    init() {
         this.router.get('/', this.getList.bind(this));
         this.router.get('/:id', this.getItem.bind(this));
         this.router.delete('/:id', [checkJwt], this.deleteItem.bind(this));

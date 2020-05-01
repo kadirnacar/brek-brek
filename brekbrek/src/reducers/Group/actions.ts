@@ -1,92 +1,70 @@
-import {IGroup, Result} from '@models';
-import {batch} from 'react-redux';
-import {Actions} from './state';
-import {GroupService} from '@services';
-import { Alert } from 'react-native';
+import { IGroup, Result } from '@models';
+import { GroupService } from '@services';
+import { batch } from 'react-redux';
+import { Actions } from './state';
+import { AsyncAlert } from '../../tools/AsyncAlert';
 
 export const actionCreators = {
   createItem: (item: IGroup) => async (dispatch, getState) => {
     let result: Result<IGroup>;
     await batch(async () => {
-      await dispatch({type: Actions.RequestCreate});
-
+      dispatch({type: Actions.RequestCreate});
       result = await GroupService.create(item);
-      if (!result.hasErrors()) {
-        await dispatch({
-          type: Actions.ReceiveCreate,
-          payload: result.value,
-        });
-      } else {
-        await dispatch({
-          type: Actions.ReceiveCreate,
-          payload: null,
-        });
-        Alert.alert(result.errors[0]);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
       }
+      dispatch({
+        type: Actions.ReceiveCreate,
+        payload: result.value,
+      });
     });
     return result;
   },
   updateItem: (item: IGroup) => async (dispatch, getState) => {
     let result: Result<IGroup>;
     await batch(async () => {
-      await dispatch({type: Actions.RequestUpdate});
-
+      dispatch({type: Actions.RequestUpdate});
       result = await GroupService.update(item);
-      if (!result.hasErrors()) {
-        await dispatch({
-          type: Actions.ReceiveUpdate,
-          payload: result.value,
-        });
-      } else {
-        await dispatch({
-          type: Actions.ReceiveUpdate,
-          payload: null,
-        });
-        Alert.alert(result.errors[0]);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
       }
+      dispatch({
+        type: Actions.ReceiveUpdate,
+        payload: {Id: item.Id, item},
+      });
     });
-    return result;
+    return await result;
   },
   deleteItem: (item: IGroup) => async (dispatch, getState) => {
     let result: Result<IGroup>;
     await batch(async () => {
-      await dispatch({type: Actions.RequestDelete});
-
+      dispatch({type: Actions.RequestDelete});
       result = await GroupService.delete(item);
-      if (!result.hasErrors()) {
-        await dispatch({
-          type: Actions.ReceiveDelete,
-          payload: result.value,
-        });
-      } else {
-        await dispatch({
-          type: Actions.ReceiveDelete,
-          payload: null,
-        });
-        Alert.alert(result.errors[0]);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
       }
+      dispatch({
+        type: Actions.ReceiveDelete,
+        payload: result.value,
+      });
     });
     return result;
   },
   getUserGroups: () => async (dispatch, getState) => {
     let result: Result<IGroup[]>;
     await batch(async () => {
-      await dispatch({type: Actions.RequestList});
-
+      dispatch({type: Actions.RequestList});
       result = await GroupService.getUserGroups();
-      if (!result.hasErrors()) {
-        await dispatch({
-          type: Actions.ReceiveList,
-          payload: result.value,
-        });
-      } else {
-        await dispatch({
-          type: Actions.ReceiveList,
-          payload: null,
-        });
-        Alert.alert(result.errors[0]);
+      console.log(result);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
       }
+      dispatch({
+        type: Actions.ReceiveList,
+        payload: result.value,
+      });
     });
+
     return result;
   },
   clear: () => async (dispatch, getState) => {

@@ -13,6 +13,10 @@ export class GroupRouter extends BaseRouter<Group> {
 
   public async getList(req: Request, res: Response, next) {
     try {
+      if (!res.locals.jwtPayload) {
+        res.sendStatus(401);
+        return;
+      }
       const userId = res.locals.jwtPayload.userId;
       const groupIds = (
         await Services.UserGroup.getList({
@@ -24,7 +28,7 @@ export class GroupRouter extends BaseRouter<Group> {
       });
       res.status(200).send(data);
     } catch (err) {
-      next(err);
+      next(err && err.message ? err.message : err);
     }
   }
 
@@ -46,7 +50,7 @@ export class GroupRouter extends BaseRouter<Group> {
       });
       res.status(200).send(data);
     } catch (err) {
-      next(err);
+      next(err && err.message ? err.message : err);
     }
   }
 
@@ -65,15 +69,15 @@ export class GroupRouter extends BaseRouter<Group> {
       }
       res.status(200).send(data);
     } catch (err) {
-      next(err);
+      next(err && err.message ? err.message : err);
     }
   }
 
-  async init() {
+  init() {
     this.router.get("/", [checkJwt], this.getList.bind(this));
     // this.router.get('/:id', this.getItem.bind(this));
     this.router.delete("/:id", [checkJwt], this.deleteItem.bind(this));
-    // this.router.patch('/', [checkJwt], this.updateItem.bind(this));
+    this.router.patch("/", [checkJwt], this.updateItem.bind(this));
     this.router.post("/", [checkJwt], this.createItem.bind(this));
   }
 }

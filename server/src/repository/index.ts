@@ -42,6 +42,7 @@ export class CoreRepository {
     // }
     const item = await this.get(id);
     item["Deleted"] = true;
+    item["DeletedDate"] = new Date();
     return await this.save(item);
   }
   async all(options?: FindManyOptions<any>): Promise<any[]> {
@@ -49,13 +50,15 @@ export class CoreRepository {
       .getMongoRepository(this.entityName)
       .find(options);
   }
-  async get(id: any, options?: FindOneOptions<any>): Promise<any> {
-    return await this.findOne(id, options);
-  }
-  async findOne(id?: any, options?: FindOneOptions<any>): Promise<any> {
+  async get(id: any): Promise<any> {
     return await getMongoManager("configConnection")
       .getMongoRepository(this.entityName)
-      .findOne(id, options);
+      .findOne(id);
+  }
+  async findOne(options?: FindOneOptions<any>): Promise<any> {
+    return await getMongoManager("configConnection")
+      .getMongoRepository(this.entityName)
+      .findOne(options);
   }
 }
 
@@ -67,19 +70,19 @@ export class Repository<T> extends CoreRepository {
   async save(item: Partial<T>): Promise<any> {
     return await super.save(item);
   }
-  async update(id: number, item: Partial<T>): Promise<UpdateResult> {
+  async update(id: any, item: Partial<T>): Promise<UpdateResult> {
     return await super.update(id, item);
   }
-  async delete(id: number, force: boolean = false): Promise<any> {
+  async delete(id: any, force: boolean = false): Promise<any> {
     return await super.delete(id, force);
   }
   async all(options?: FindManyOptions<T>): Promise<T[]> {
     return await super.all(options);
   }
-  async get(id: number): Promise<T> {
+  async get(id: any): Promise<T> {
     return await super.get(id);
   }
-  async findOne(id?: number, options?: FindOneOptions<T>): Promise<T> {
-    return await super.findOne(id, options);
+  async findOne(options?: FindOneOptions<T>): Promise<T> {
+    return await super.findOne(options);
   }
 }

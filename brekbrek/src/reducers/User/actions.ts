@@ -9,11 +9,11 @@ export const actionCreators = {
     let isSuccess: boolean = false;
     let message: string = null;
     await batch(async () => {
-      await dispatch({type: Actions.RequestUserItem});
+      dispatch({type: Actions.RequestUserItem});
       var result = await UserService.loginWithGoogle();
       const user = result.value ? result.value : null;
       if (user)
-        await dispatch({
+        dispatch({
           type: Actions.ReceiveUserItem,
           payload: user.user,
         });
