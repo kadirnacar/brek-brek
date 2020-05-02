@@ -1,15 +1,15 @@
 import {LoaderSpinner} from '@components';
-import {IGroup} from '@models';
+import config from '@config';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions} from '@reducers';
 import {ApplicationState} from '@store';
+import {SocketClient} from '@tools';
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
+import {mediaDevices} from 'react-native-webrtc';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {SocketClient} from '@tools';
-import config from '@config';
 
 interface GroupScreenState {}
 
@@ -37,11 +37,23 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         Id: this.props.Group.current.Id,
       });
       await this.socketClient.connect();
-      this.socketClient.send('test', {dd:'deneme'});
+      this.socketClient.send('test', {dd: 'deneme'});
       this.socketClient.onMessageEvent = (e) => {
         console.log(e);
       };
     }
+    mediaDevices
+      .getUserMedia({
+        audio: true,
+        video: false,
+      })
+      .then((stream) => {
+        console.log(stream);
+        // Got stream!
+      })
+      .catch((error) => {
+        // Log error
+      });
   }
 
   componentWillUnmount() {
