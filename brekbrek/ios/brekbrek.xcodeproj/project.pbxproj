@@ -17,9 +17,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BrekBrekTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BrekBrekTests.m */; };
 		3B125B82245B547E0017D850 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B125B81245B547E0017D850 /* GoogleService-Info.plist */; };
-		3B125BC5245B5C3F0017D850 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BA9245B59AE0017D850 /* FontAwesome5_Brands.ttf */; };
-		3B125BC6245B5C470017D850 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BAE245B59AE0017D850 /* FontAwesome5_Solid.ttf */; };
-		3B125BC7245B5C4D0017D850 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B125BAF245B59AE0017D850 /* FontAwesome5_Regular.ttf */; };
+		3B9A967D245EC5F8006E0ED0 /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9A967C245EC5F8006E0ED0 /* WebRTC.framework */; };
 		9B61E3789EE50CBEB44E13B4 /* libPods-brekbrek-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC31BC97E5D10DDFCCA1966 /* libPods-brekbrek-tvOSTests.a */; };
 		D11680C4F7E2C5914412C0B5 /* libPods-brekbrek-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */; };
 		DDF5EE1FAAB87D5515BCB925 /* libPods-brekbrek-brekbrekTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C358CEC0383A6A62F647CA06 /* libPods-brekbrek-brekbrekTests.a */; };
@@ -40,6 +38,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "BrekBrek-tvOS";
+		};
+		3B9A967A245EC5E1006E0ED0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 35A2221F1CB493700015FD5C;
+			remoteInfo = RCTWebRTC;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -77,6 +82,8 @@
 		3B125BB2245B59AE0017D850 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		3B125BB3245B59AE0017D850 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		3B125BB4245B59AE0017D850 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebRTC.xcodeproj; path = "../node_modules/react-native-webrtc/ios/RCTWebRTC.xcodeproj"; sourceTree = "<group>"; };
+		3B9A967C245EC5F8006E0ED0 /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../node_modules/react-native-webrtc/ios/WebRTC.framework"; sourceTree = "<group>"; };
 		3FE919ABD857A57D022800EA /* Pods-BrekBrek-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOS/Pods-BrekBrek-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		46EFF41D574D64F4BEBC7C36 /* Pods-brekbrek-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-brekbrek-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-brekbrek-tvOSTests/Pods-brekbrek-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -112,6 +119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA42EC5D1DD6A0DDBB399B50 /* libPods-brekbrek.a in Frameworks */,
+				3B9A967D245EC5F8006E0ED0 /* WebRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,9 +233,18 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		3B9A9677245EC5E1006E0ED0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B9A967B245EC5E1006E0ED0 /* libRCTWebRTC.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */,
 				3B125BA4245B59AE0017D850 /* Fonts */,
 			);
 			name = Libraries;
@@ -236,6 +253,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				3B9A967C245EC5F8006E0ED0 /* WebRTC.framework */,
 				13B07FAE1A68108700A75B9A /* brekbrek */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BrekBrekTests */,
@@ -381,6 +399,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3B9A9677245EC5E1006E0ED0 /* Products */;
+					ProjectRef = 3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* brekbrek */,
@@ -390,6 +414,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3B9A967B245EC5E1006E0ED0 /* libRCTWebRTC.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTWebRTC.a;
+			remoteRef = 3B9A967A245EC5E1006E0ED0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {

@@ -8,6 +8,10 @@
 		<string>FontAwesome5_Solid.ttf</string>
 		<string>FontAwesome5_Brands.ttf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+<string>Camera Permission</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Microphone Permission</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
