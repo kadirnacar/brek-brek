@@ -39,13 +39,6 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "BrekBrek-tvOS";
 		};
-		3B9A967A245EC5E1006E0ED0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 35A2221F1CB493700015FD5C;
-			remoteInfo = RCTWebRTC;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -82,7 +75,6 @@
 		3B125BB2245B59AE0017D850 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		3B125BB3245B59AE0017D850 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		3B125BB4245B59AE0017D850 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebRTC.xcodeproj; path = "../node_modules/react-native-webrtc/ios/RCTWebRTC.xcodeproj"; sourceTree = "<group>"; };
 		3B9A967C245EC5F8006E0ED0 /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../node_modules/react-native-webrtc/ios/WebRTC.framework"; sourceTree = "<group>"; };
 		3FE919ABD857A57D022800EA /* Pods-BrekBrek-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BrekBrek-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BrekBrek-tvOS/Pods-BrekBrek-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		43963F1455027F35591AAA2B /* libPods-brekbrek-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-brekbrek-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,18 +225,9 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		3B9A9677245EC5E1006E0ED0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3B9A967B245EC5E1006E0ED0 /* libRCTWebRTC.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */,
 				3B125BA4245B59AE0017D850 /* Fonts */,
 			);
 			name = Libraries;
@@ -400,10 +383,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 3B9A9677245EC5E1006E0ED0 /* Products */;
-					ProjectRef = 3B9A9676245EC5E1006E0ED0 /* RCTWebRTC.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -416,13 +395,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		3B9A967B245EC5E1006E0ED0 /* libRCTWebRTC.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTWebRTC.a;
-			remoteRef = 3B9A967A245EC5E1006E0ED0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -840,6 +812,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek.app/brekbrek";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Debug;
 		};
@@ -860,6 +835,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.bengsoft.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek.app/brekbrek";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Release;
 		};
@@ -887,6 +865,9 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Debug;
 		};
@@ -908,6 +889,9 @@
 				PRODUCT_NAME = brekbrek;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Release;
 		};
@@ -936,6 +920,9 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Debug;
 		};
@@ -964,6 +951,9 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Release;
 		};
@@ -991,6 +981,9 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek-tvOS.app/brekbrek-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Debug;
 		};
@@ -1018,6 +1011,9 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/brekbrek-tvOS.app/brekbrek-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 			};
 			name = Release;
 		};

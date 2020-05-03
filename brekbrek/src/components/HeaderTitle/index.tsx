@@ -1,33 +1,48 @@
-import React, { Component } from 'react';
-import { StyleProp, Text, TextStyle } from 'react-native';
-import { connect } from 'react-redux';
-import { ApplicationState } from '../../store';
+import React, {Component} from 'react';
+import {StyleProp, Text, TextStyle} from 'react-native';
+import {connect} from 'react-redux';
+import {ApplicationState, LocalStorage} from '../../store';
+import {IUser} from '@models';
 
 interface HeaderTitleState {
+  user?: IUser;
 }
 
 interface HeaderTitleProps {
-    style?: StyleProp<TextStyle>;
+  style?: StyleProp<TextStyle>;
 }
 
 type Props = HeaderTitleProps & ApplicationState;
 
-
 class HeaderTitleComp extends Component<Props, HeaderTitleState> {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+    };
+  }
+  async componentDidMount() {
+    const user = await LocalStorage.getItem('user');
+    if (user) {
+      this.setState({user: JSON.parse(user)});
     }
-    render() {
-        return (
-            <Text style={[this.props.style, { color: "#fff", fontWeight: "bold", fontSize: 20 }]}>Brek Brek</Text>
-        )
-    }
+  }
+  render() {
+    return (
+      <Text
+        style={[
+          this.props.style,
+          {color: '#fff', fontWeight: 'bold', fontSize: 20},
+        ]}>
+        {this.state.user ? this.state.user.DisplayName : 'Brek Brek'}
+      </Text>
+    );
+  }
 }
 
 export const HeaderTitle = connect(
-    (state: ApplicationState) => state,
-    dispatch => {
-        return {
-        };
-    }
+  (state: ApplicationState) => state,
+  (dispatch) => {
+    return {};
+  },
 )(HeaderTitleComp);
