@@ -3,6 +3,7 @@ import { User } from "@models";
 import { Services } from "@services";
 import { NextFunction, Request, Response, Router } from "express";
 import * as jwt from "jsonwebtoken";
+import { checkJwt } from "../middlewares/checkJwt";
 
 const UserService = Services.User;
 
@@ -104,7 +105,22 @@ export class AuthRouter {
     }
   }
 
+  public async check(req: Request, res: Response, next) {
+    try {
+      if (!res.locals.jwtPayload) {
+        res.sendStatus(401);
+        return;
+      }
+      const userId = res.locals.jwtPayload.userId;
+      const data = await Services.User.getById(userId);
+      res.status(200).send({ success: !!data });
+    } catch (err) {
+      next(err && err.message ? err.message : err);
+    }
+  }
+
   async init() {
+    this.router.post("/check", [checkJwt], this.check.bind(this));
     this.router.post("/google", this.google.bind(this));
     this.router.post("/facebook", this.facebook.bind(this));
   }

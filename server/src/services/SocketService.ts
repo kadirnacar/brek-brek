@@ -45,6 +45,14 @@ export class SocketService {
         SocketService.clients[groupId] &&
         SocketService.clients[groupId][userId]
       ) {
+        SocketService.sendMessageToGroup(
+          groupId,
+          userId,
+          JSON.stringify({
+            command: "leave",
+            userId: userId,
+          })
+        );
         delete SocketService.clients[groupId][userId];
       }
     });
@@ -55,6 +63,14 @@ export class SocketService {
         SocketService.clients[groupId] &&
         SocketService.clients[groupId][userId]
       ) {
+        SocketService.sendMessageToGroup(
+          groupId,
+          userId,
+          JSON.stringify({
+            command: "leave",
+            userId: userId,
+          })
+        );
         delete SocketService.clients[groupId][userId];
       }
     });
@@ -64,19 +80,54 @@ export class SocketService {
       SocketService.clients[groupId] = {};
     }
     SocketService.clients[groupId][userId] = connection;
-    console.log(SocketService.clients)
   }
 
   private static onMessage(groupId, userId, data: WebSocket.IMessage) {
-    console.log(groupId, userId, data);
-    
-    SocketService.clients[groupId][userId].send(data.utf8Data);
-    // SocketService.clients[id].send(data.utf8Data);
-  }
+    console.log(data);
+    const command = JSON.parse(data.utf8Data);
 
-  public static sendMessageToClients(
-    accountId: string,
-    clientId: string,
-    msg: Message
-  ) {}
+    switch (command.command) {
+      case "join":
+        SocketService.sendMessageToGroup(
+          groupId,
+          userId,
+          JSON.stringify({
+            command: command.command,
+            peers: Object.keys(SocketService.clients[groupId]),
+          })
+        );
+        break;
+      case "exchange":
+        SocketService.sendMessageToPeer(
+          groupId,
+          command.data.to,
+          JSON.stringify({
+            command: command.command,
+            from: userId,
+            candidate: command.data.candidate,
+            sdp: command.data.sdp,
+          })
+        );
+        break;
+    }
+  }
+  private static sendMessageToPeer(groupId, userId, message) {
+    if (
+      userId in SocketService.clients[groupId] &&
+      SocketService.clients[groupId][userId].connected
+    )
+      SocketService.clients[groupId][userId].send(message);
+  }
+  private static sendMessageToGroup(groupId, userId, message) {
+    const groupMemeberIds = Object.keys(SocketService.clients[groupId]).filter(
+      (i) => i != userId
+    );
+    for (var i = 0; i < groupMemeberIds.length; i++) {
+      if (
+        groupMemeberIds[i] in SocketService.clients[groupId] &&
+        SocketService.clients[groupId][groupMemeberIds[i]].connected
+      )
+        SocketService.clients[groupId][groupMemeberIds[i]].send(message);
+    }
+  }
 }

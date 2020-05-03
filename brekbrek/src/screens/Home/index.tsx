@@ -1,21 +1,20 @@
+import {FormModal, LoaderSpinner} from '@components';
+import {IGroup} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions} from '@reducers';
 import {ApplicationState} from '@store';
 import React, {Component} from 'react';
 import {
-  View,
   Text,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
-  Alert,
+  View,
 } from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import SafeAreaView from 'react-native-safe-area-view';
-import {LoaderSpinner, FormModal} from '@components';
-import {IGroup} from '@models';
 
 interface HomeScreenState {
   showAddGroup?: boolean;

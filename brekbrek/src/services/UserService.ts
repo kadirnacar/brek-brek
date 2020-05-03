@@ -93,4 +93,19 @@ export class UserService extends ServiceBase {
       return new Result<IUser>(null, ex.message);
     }
   }
+  public static async checkUser() {
+    try {
+      var result = await this.requestJson<any>(
+        {
+          url: `${config.restUrl}/api/auth/check`,
+          method: 'POST',
+        },
+        true,
+      );
+      return result;
+    } catch (ex) {
+      console.log(ex);
+      return new Result<IUser>(null, ex.message);
+    }
+  }
 }

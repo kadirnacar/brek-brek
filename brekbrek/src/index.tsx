@@ -1,11 +1,14 @@
 import {AppNavigation} from '@navigation';
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 import SafeAreaView, {SafeAreaProvider} from 'react-native-safe-area-view';
 import {Provider} from 'react-redux';
 import store from './tools/store';
 import {LocalStorage} from '@store';
 import {UserActionTypes} from '@reducers';
+import {UserService} from './services/UserService';
+import {AsyncAlert} from './tools/AsyncAlert';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface AppState {
   isLoaded: boolean;
@@ -22,13 +25,23 @@ export default class App extends Component<any, AppState> {
   async componentDidMount() {
     const user = await LocalStorage.getItem('user');
     const token = await LocalStorage.getItem('token');
-    if (user) {
-      store.dispatch({
-        type: UserActionTypes.ReceiveUserItem,
-        payload: JSON.parse(user),
-      });
+    if (token) {
+      const checkUser = await UserService.checkUser();
+      if (checkUser.hasErrors()) {
+        await AsyncAlert(checkUser.errors[0]);
+        this.setState({isLoaded: true, isLogin: false});
+      } else if (!checkUser.value.success) {
+        this.setState({isLoaded: true, isLogin: false});
+      } else {
+        store.dispatch({
+          type: UserActionTypes.ReceiveUserItem,
+          payload: JSON.parse(user),
+        });
+        this.setState({isLoaded: true, isLogin: true});
+      }
+    } else {
+      this.setState({isLoaded: true, isLogin: false});
     }
-    this.setState({isLoaded: true, isLogin: !!token});
   }
   render() {
     return (
@@ -41,7 +54,30 @@ export default class App extends Component<any, AppState> {
               <AppNavigation isLogin={this.state.isLogin} />
             </Provider>
           ) : (
-            <View></View>
+            <View
+              style={{
+                flex: 1,
+                alignContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+              }}>
+              <FontAwesome5Icon
+                name="users"
+                size={95}
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 80,
+                  width: 160,
+                  height: 160,
+                  paddingTop: Platform.OS == 'ios' ? 30 : 0,
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  alignContent: 'center',
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                }}
+              />
+            </View>
           )}
         </SafeAreaView>
       </SafeAreaProvider>

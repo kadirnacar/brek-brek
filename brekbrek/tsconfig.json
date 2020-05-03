@@ -67,6 +67,7 @@
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "types": ["./types","./node_modules/@types"],
     "paths": {
       "@screens": ["./src/screens"],
       "@navigation": ["./src/navigation"],
@@ -80,6 +81,7 @@
       "@tools": ["./src/tools"]
     }
   },
+  
   "exclude": [
     "node_modules", "babel.config.js", "metro.config.js", "jest.config.js"
   ]

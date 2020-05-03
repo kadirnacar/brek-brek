@@ -3,15 +3,19 @@ import config from '@config';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions} from '@reducers';
 import {ApplicationState} from '@store';
-import {SocketClient} from '@tools';
+import {SocketClient, WebRtcConnection} from '@tools';
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, TouchableHighlight, View, TextInput} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import {mediaDevices} from 'react-native-webrtc';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-interface GroupScreenState {}
+interface GroupScreenState {
+  userId?: string;
+  data?: string;
+  message?: string;
+}
 
 interface GroupProps {
   navigation: NavigationProp<any>;
@@ -23,37 +27,31 @@ type Props = GroupProps & ApplicationState;
 export class GroupScreenComp extends Component<Props, GroupScreenState> {
   constructor(props) {
     super(props);
-    this.state = {
-      showAddGroup: false,
-    };
+    this.state = {};
     this.props.navigation.setOptions({
       // canGoBack: true,
     });
   }
   socketClient: SocketClient;
+  webRtcConnection: WebRtcConnection;
   async componentDidMount() {
     if (!this.socketClient) {
       this.socketClient = new SocketClient(config.wsUrl, {
         Id: this.props.Group.current.Id,
       });
-      await this.socketClient.connect();
-      this.socketClient.send('test', {dd: 'deneme'});
-      this.socketClient.onMessageEvent = (e) => {
-        console.log(e);
-      };
+      const result = await this.socketClient.connect();
+      if (result == WebSocket.OPEN) {
+        this.webRtcConnection = new WebRtcConnection(
+          this.socketClient,
+          this.props.Group.current.Id,
+          this.props.User.current.Id,
+        );
+        this.webRtcConnection.connect();
+        this.webRtcConnection.onData = (id, data) => {
+          this.setState({userId: id, data: JSON.stringify(data.data)});
+        };
+      }
     }
-    mediaDevices
-      .getUserMedia({
-        audio: true,
-        video: false,
-      })
-      .then((stream) => {
-        console.log(stream);
-        // Got stream!
-      })
-      .catch((error) => {
-        // Log error
-      });
   }
 
   componentWillUnmount() {
@@ -84,6 +82,76 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ? this.props.Group.current.Name
               : ''}
           </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: '#cccccc',
+            minHeight: 50,
+            justifyContent: 'center',
+          }}>
+          <TextInput
+            value={this.state.message}
+            onChangeText={(text) => {
+              this.setState({message: text});
+            }}
+          />
+        </View>
+        <View
+          style={{
+            padding: 10,
+            borderBottomWidth: 1,
+            borderBottomColor: '#cccccc',
+            minHeight: 50,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 22,
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}>
+            {this.state.userId ? this.state.userId : ''}
+          </Text>
+          <Text
+            style={{
+              fontSize: 22,
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}>
+            {this.state.data ? this.state.data : ''}
+          </Text>
+        </View>
+        <View
+          style={{
+            backgroundColor: '#ff5722',
+            width: 70,
+            height: 70,
+            borderRadius: 35,
+            position: 'absolute',
+            right: 10,
+            bottom: 40,
+          }}>
+          <TouchableHighlight
+            onPress={async () => {
+              console.log('okk');
+              // await this.webRtcConnection.startStream();
+              this.webRtcConnection.sendData(this.state.message);
+            }}
+            style={{
+              width: 70,
+              borderRadius: 35,
+              alignItems: 'center',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignSelf: 'center',
+              height: 70,
+            }}>
+            <FontAwesome5Icon name="plus" size={30} color="#ffffff" />
+          </TouchableHighlight>
         </View>
       </SafeAreaView>
     );
