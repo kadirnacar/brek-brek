@@ -1,9 +1,8 @@
 import {
+  RTCDataChannel,
+  RTCIceCandidate,
   RTCPeerConnection,
   RTCSessionDescription,
-  RTCIceCandidate,
-  RTCDataChannel,
-  mediaDevices,
 } from 'react-native-webrtc';
 import {SocketClient} from './SocketClient';
 
@@ -27,16 +26,15 @@ export class WebRtcConnection {
   private configuration = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
   private peers: {[key: string]: {pc?: RTCPeerConnection; dc?: RTCDataChannel}};
   public onData: (userId, data) => void;
-  public onChannelOpen: () => void;
-  public onChannelClose: () => void;
+  public onChannelOpen: (users: string[]) => void;
+  public onChannelClose: (users: string[]) => void;
+  public onConnectionChange: (users: string[]) => void;
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
-    console.log(data)
     switch (data.command) {
       case 'join':
         for (var i = 0; i < data.peers.length; i++) {
-          console.log(i)
           const peer = data.peers[i];
           if (peer != this.userId) {
             await this.createPeer(peer, true);
@@ -71,6 +69,13 @@ export class WebRtcConnection {
       pc.pc.close();
       pc.dc.close();
       delete this.peers[userId];
+      this.onConnectionChange(Object.keys(this.peers));
+    }
+  }
+
+  public close() {
+    for (const key in this.peers) {
+      this.leave(key);
     }
   }
 
@@ -84,15 +89,21 @@ export class WebRtcConnection {
         this.socket.send('exchange', {to: id, candidate: event.candidate});
       }
     };
-    // peer.onnegotiationneeded = async () => {
-    //   if (isOffer) {
-    //     const offer = await peer.createOffer();
-    //     await peer.setLocalDescription(offer);
-    //     this.socket.send('exchange', {to: id, sdp: peer.localDescription});
-    //   }
-    // };
+    peer.onnegotiationneeded = async () => {
+      if (isOffer) {
+        const offer = await peer.createOffer();
+        await peer.setLocalDescription(offer);
+        this.socket.send('exchange', {to: id, sdp: peer.localDescription});
+      }
+    };
     peer.oniceconnectionstatechange = (event) => {
-      if (event.target.iceConnectionState === 'connected') {
+      if (
+        event.target.iceConnectionState === 'connected' ||
+        event.target.iceConnectionState === 'disconnected'
+      ) {
+        if (this.onConnectionChange) {
+          this.onConnectionChange(Object.keys(this.peers));
+        }
       }
     };
 
@@ -107,14 +118,15 @@ export class WebRtcConnection {
     };
 
     dataChannel.onopen = () => {
+      this.sendData('bengeldim');
       if (this.onChannelOpen) {
-        this.onChannelOpen();
+        this.onChannelOpen(Object.keys(this.peers));
       }
     };
 
     dataChannel.onclose = () => {
       if (this.onChannelClose) {
-        this.onChannelClose();
+        this.onChannelClose(Object.keys(this.peers));
       }
     };
     if (!this.peers[id]) {
@@ -124,12 +136,11 @@ export class WebRtcConnection {
     if (!this.peers[id]) {
       this.peers[id] = {};
     }
-    if (isOffer) {
-      const offer = await peer.createOffer();
-      console.log(offer);
-      await peer.setLocalDescription(offer);
-      this.socket.send('exchange', {to: id, sdp: peer.localDescription});
-    }
+    // if (isOffer) {
+    //   const offer = await peer.createOffer();
+    //   await peer.setLocalDescription(offer);
+    //   this.socket.send('exchange', {to: id, sdp: peer.localDescription});
+    // }
     this.peers[id].pc = peer;
     return this.peers[id];
   }

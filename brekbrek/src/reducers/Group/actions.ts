@@ -1,4 +1,4 @@
-import {IGroup, Result} from '@models';
+import {IGroup, Result, IGroupUser} from '@models';
 import {GroupService} from '@services';
 import {batch} from 'react-redux';
 import {Actions} from './state';
@@ -50,12 +50,28 @@ export const actionCreators = {
     });
     return result;
   },
+  getGroupUsers: (groupId) => async (dispatch, getState) => {
+    let result: Result<IGroupUser>;
+    await batch(async () => {
+      dispatch({type: Actions.RequestUserList});
+      result = await GroupService.getGroupUsers(groupId);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
+      }
+      dispatch({
+        type: Actions.ReceiveUserList,
+        payload: result.value,
+        groupId: groupId,
+      });
+    });
+
+    return result;
+  },
   getUserGroups: () => async (dispatch, getState) => {
     let result: Result<IGroup[]>;
     await batch(async () => {
       dispatch({type: Actions.RequestList});
       result = await GroupService.getUserGroups();
-      console.log(result);
       if (result.hasErrors()) {
         await AsyncAlert(result.errors[0]);
       }

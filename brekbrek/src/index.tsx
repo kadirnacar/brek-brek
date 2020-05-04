@@ -26,13 +26,15 @@ export default class App extends Component<any, AppState> {
     const user = await LocalStorage.getItem('user');
     const token = await LocalStorage.getItem('token');
     if (token) {
-      const checkUser = await UserService.checkUser();
-      if (checkUser.hasErrors()) {
-        await AsyncAlert(checkUser.errors[0]);
-        this.setState({isLoaded: true, isLogin: false});
-      } else if (!checkUser.value.success) {
-        this.setState({isLoaded: true, isLogin: false});
-      } else {
+      // const checkUser = await UserService.checkUser();
+      // if (checkUser.hasErrors()) {
+      //   await AsyncAlert(checkUser.errors[0]);
+      //   this.setState({isLoaded: true, isLogin: false});
+      // } else 
+      // if (!checkUser.value.success) {
+      //   this.setState({isLoaded: true, isLogin: false});
+      // } else 
+      {
         store.dispatch({
           type: UserActionTypes.ReceiveUserItem,
           payload: JSON.parse(user),

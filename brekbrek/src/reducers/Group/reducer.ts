@@ -11,6 +11,8 @@ import {
   IRequestUpdateAction,
   IReceiveDeleteAction,
   IRequestDeleteAction,
+  IReceiveUserListAction,
+  IRequestUserListAction,
   ISetCurrent,
 } from './state';
 
@@ -30,7 +32,9 @@ export type KnownAction =
   | IRequestUpdateAction
   | IReceiveDeleteAction
   | IRequestDeleteAction
-  | ISetCurrent;
+  | ISetCurrent
+  | IReceiveUserListAction
+  | IRequestUserListAction;
 
 export const reducer = (
   currentState: GroupState = unloadedState,
@@ -72,6 +76,18 @@ export const reducer = (
       currentState.isRequest = false;
       return {...currentState};
     case Actions.RequestCreate:
+      currentState.isRequest = true;
+      return {...currentState};
+    case Actions.ReceiveUserList:
+      if (action.payload && action.groupId && currentState.groups) {
+        const group = currentState.groups.find((g) => g.Id == action.groupId);
+        if (group) {
+          group.Users = action.payload;
+        }
+      }
+      currentState.isRequest = false;
+      return {...currentState};
+    case Actions.RequestUserList:
       currentState.isRequest = true;
       return {...currentState};
     case Actions.ReceiveList:

@@ -7,4 +7,8 @@ export interface IGroup {
   Name?: string;
   Description?: string;
   CreateUserId?: string;
+  Users?: IGroupUser;
+}
+export interface IGroupUser {
+  [key: string]: string;
 }

@@ -1,4 +1,4 @@
-import {IGroup} from '@models';
+import {IGroup, IGroupUser} from '@models';
 import {IBaseReducer} from '../BaseReducer';
 
 export enum Actions {
@@ -10,6 +10,8 @@ export enum Actions {
   ReceiveDelete = 'RECEIVE_DELETE_GROUP',
   RequestList = 'REQUEST_LIST_GROUP',
   ReceiveList = 'RECEIVE_LIST_GROUP',
+  RequestUserList = 'REQUEST_LIST_USERS',
+  ReceiveUserList = 'RECEIVE_LIST_USERS',
   SetCurrent = 'SET_CURRENT',
   ClearItem = 'CLEAR_USER',
 }
@@ -62,4 +64,14 @@ export interface IRequestListAction {
 export interface IReceiveListAction {
   type: Actions.ReceiveList;
   payload: IGroup[];
+}
+
+export interface IRequestUserListAction {
+  type: Actions.RequestUserList;
+}
+
+export interface IReceiveUserListAction {
+  type: Actions.ReceiveUserList;
+  groupId: string;
+  payload: IGroupUser;
 }

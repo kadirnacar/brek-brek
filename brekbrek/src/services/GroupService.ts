@@ -1,6 +1,6 @@
 import config from '@config';
-import { IGroup, Result } from '@models';
-import { ServiceBase } from './ServiceBase';
+import {IGroup, Result, IGroupUser} from '@models';
+import {ServiceBase} from './ServiceBase';
 
 export class GroupService extends ServiceBase {
   public static async create(item: IGroup): Promise<Result<IGroup>> {
@@ -39,6 +39,16 @@ export class GroupService extends ServiceBase {
     var result = await this.requestJson<IGroup[]>(
       {
         url: `${config.restUrl}/api/group`,
+        method: 'GET',
+      },
+      true,
+    );
+    return result;
+  }
+  public static async getGroupUsers(groupId): Promise<Result<IGroupUser>> {
+    var result = await this.requestJson<IGroupUser>(
+      {
+        url: `${config.restUrl}/api/group/users/${groupId}`,
         method: 'GET',
       },
       true,

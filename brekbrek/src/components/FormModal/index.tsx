@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
-import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  BackHandler,
+} from 'react-native';
 
-interface IFormModalState {}
+interface IFormModalState {
+  show?: boolean;
+}
 
 interface IFormModalProps {
   show?: boolean;
@@ -12,12 +21,31 @@ interface IFormModalProps {
 }
 
 export class FormModal extends Component<IFormModalProps, IFormModalState> {
+  constructor(props) {
+    super(props);
+    this.state = {show: false};
+  }
+
+  componentDidMount() {
+    this.setState({show: this.props.show});
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.show != prevProps.show) {
+      this.setState({show: this.props.show});
+    }
+    // if (
+    //   this.state.show != prevState.show
+    // ) {
+    //   this.setState({show: this.props.show});
+    // }
+  }
   render() {
     return (
       <Modal
-        visible={this.props.show || false}
+        visible={this.state.show || false}
         transparent={true}
         onRequestClose={() => {
+          this.setState({show: false});
           if (this.props.onCloseModal) {
             this.props.onCloseModal();
           }
@@ -101,7 +129,7 @@ const styles = StyleSheet.create({
   formContent: {
     width: '100%',
     padding: 5,
-    paddingTop:15,
+    paddingTop: 15,
     flexDirection: 'row',
   },
   formActionBar: {
