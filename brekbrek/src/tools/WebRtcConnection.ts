@@ -28,7 +28,10 @@ export class WebRtcConnection {
   public onData: (userId, data) => void;
   public onChannelOpen: (users: string[]) => void;
   public onChannelClose: (users: string[]) => void;
-  public onConnectionChange: (users: string[]) => void;
+  public onConnectionChange: (
+    status: 'connected' | 'disconnected',
+    userId: string,
+  ) => void;
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
@@ -58,7 +61,7 @@ export class WebRtcConnection {
     for (const key in this.peers) {
       const pc = this.peers[key];
       if (pc.dc) {
-        pc.dc.send(data);
+        pc.dc.send(JSON.stringify(data));
       }
     }
   }
@@ -69,7 +72,7 @@ export class WebRtcConnection {
       pc.pc.close();
       pc.dc.close();
       delete this.peers[userId];
-      this.onConnectionChange(Object.keys(this.peers));
+      this.onConnectionChange('disconnected', userId);
     }
   }
 
@@ -102,7 +105,10 @@ export class WebRtcConnection {
         event.target.iceConnectionState === 'disconnected'
       ) {
         if (this.onConnectionChange) {
-          this.onConnectionChange(Object.keys(this.peers));
+          this.onConnectionChange(
+            event.target.iceConnectionState,
+            id,
+          );
         }
       }
     };
@@ -118,7 +124,6 @@ export class WebRtcConnection {
     };
 
     dataChannel.onopen = () => {
-      this.sendData('bengeldim');
       if (this.onChannelOpen) {
         this.onChannelOpen(Object.keys(this.peers));
       }

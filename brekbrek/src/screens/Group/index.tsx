@@ -16,6 +16,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {UserStatus} from '@models';
 
 const {width} = Dimensions.get('window');
 
@@ -61,11 +62,46 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
 
         this.webRtcConnection.connect();
         this.webRtcConnection.onData = (id, data) => {
-          this.setState({userId: id, data: JSON.stringify(data.data)});
+          const message = JSON.parse(data.data);
+
+          switch (message.command) {
+            // case 'online':
+            //   if (
+            //     this.props.Group.current.Users &&
+            //     id in this.props.Group.current.Users
+            //   ) {
+            //     this.props.Group.current.Users[id].status = UserStatus.Online;
+            //   }
+            //   break;
+            case 'start':
+              if (
+                this.props.Group.current.Users &&
+                id in this.props.Group.current.Users
+              ) {
+                this.props.Group.current.Users[id].status = UserStatus.Talking;
+              }
+              break;
+            case 'end':
+              if (
+                this.props.Group.current.Users &&
+                id in this.props.Group.current.Users
+              ) {
+                this.props.Group.current.Users[id].status = UserStatus.Online;
+              }
+              break;
+          }
         };
 
-        this.webRtcConnection.onConnectionChange = (peers) => {
-          this.setState({peers});
+        this.webRtcConnection.onConnectionChange = (status, userId) => {
+          switch (status) {
+            case 'connected':
+              this.props.Group.current.Users[userId].status = UserStatus.Online;
+              break;
+            case 'disconnected':
+              this.props.Group.current.Users[userId].status = UserStatus.Offline;
+              break;
+          }
+          this.setState({});
         };
       }
     }
@@ -122,13 +158,19 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                 : []
             }
             renderItem={(item) => {
-              console.log(item.item,this.state.userId)
+              // console.log(item.item, this.state.userId);
               return (
                 <View
                   key={item.index}
                   style={{
                     backgroundColor:
-                      this.state.userId == item.item ? '#3bb33f' : '#9332a8',
+                      this.props.Group.current.Users[item.item].status ==
+                      UserStatus.Online
+                        ? '#3bb33f'
+                        : this.props.Group.current.Users[item.item].status ==
+                          UserStatus.Talking
+                        ? '#9332a8'
+                        : '#cccccc',
                     borderWidth: 5,
                     borderColor: '#d3d3d3',
                     width: width / 3 - 20,
@@ -147,7 +189,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                       fontWeight: 'bold',
                       color: '#fff',
                     }}>
-                    {this.props.Group.current.Users[item.item]}
+                    {this.props.Group.current.Users[item.item].DisplayName}
                   </Text>
                 </View>
               );
@@ -163,11 +205,19 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             bottom: 40,
           }}>
           <TouchableHighlight
-            onPress={async () => {
-              this.setState({userId:this.props.User.current.Id},()=>{
-                this.webRtcConnection.sendData("ss");
-
-              })
+            onPressIn={async () => {
+              this.setState({userId: this.props.User.current.Id}, () => {
+                this.webRtcConnection.sendData({
+                  command: 'start',
+                });
+              });
+            }}
+            onPressOut={async () => {
+              this.setState({userId: this.props.User.current.Id}, () => {
+                this.webRtcConnection.sendData({
+                  command: 'end',
+                });
+              });
             }}
             style={{
               backgroundColor: '#ff5722',

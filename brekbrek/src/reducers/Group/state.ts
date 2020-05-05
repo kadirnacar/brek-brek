@@ -73,5 +73,5 @@ export interface IRequestUserListAction {
 export interface IReceiveUserListAction {
   type: Actions.ReceiveUserList;
   groupId: string;
-  payload: IGroupUser;
+  payload: any;
 }

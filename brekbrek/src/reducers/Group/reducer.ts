@@ -15,6 +15,7 @@ import {
   IRequestUserListAction,
   ISetCurrent,
 } from './state';
+import {IGroupUser, UserStatus} from '@models';
 
 const unloadedState: GroupState = {
   current: null,
@@ -82,7 +83,14 @@ export const reducer = (
       if (action.payload && action.groupId && currentState.groups) {
         const group = currentState.groups.find((g) => g.Id == action.groupId);
         if (group) {
-          group.Users = action.payload;
+          const users: IGroupUser = {};
+          Object.keys(action.payload).forEach((userId) => {
+            users[userId] = {
+              DisplayName: action.payload[userId],
+              status: UserStatus.Offline,
+            };
+          });
+          group.Users = users;
         }
       }
       currentState.isRequest = false;

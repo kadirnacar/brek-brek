@@ -9,6 +9,11 @@ export interface IGroup {
   CreateUserId?: string;
   Users?: IGroupUser;
 }
+export enum UserStatus {
+  Online,
+  Offline,
+  Talking
+}
 export interface IGroupUser {
-  [key: string]: string;
+  [key: string]: {DisplayName: string; status: UserStatus};
 }
