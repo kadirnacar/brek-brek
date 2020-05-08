@@ -24,6 +24,8 @@ interface GroupScreenState {
   userId?: string;
   data?: string;
   peers?: string[];
+  activeUser?: string;
+  speakerOn?: boolean;
 }
 
 interface GroupProps {
@@ -36,7 +38,13 @@ type Props = GroupProps & ApplicationState;
 export class GroupScreenComp extends Component<Props, GroupScreenState> {
   constructor(props) {
     super(props);
-    this.state = {peers: []};
+    this.state = {
+      peers: [],
+      userId: null,
+      data: null,
+      activeUser: null,
+      speakerOn: true,
+    };
     this.props.navigation.setOptions({
       // canGoBack: true,
     });
@@ -44,6 +52,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   socketClient: SocketClient;
   webRtcConnection: WebRtcConnection;
   async componentDidMount() {
+    
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
@@ -62,7 +71,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
 
         this.webRtcConnection.onData = (id, data) => {
           const message = JSON.parse(data.data);
-          console.log(message);
           switch (message.command) {
             case 'start':
               if (
@@ -71,7 +79,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Talking;
               }
-              this.setState({});
+              this.setState({activeUser: id});
               break;
             case 'end':
               if (
@@ -80,7 +88,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Online;
               }
-              this.setState({});
+              this.setState({activeUser: null});
               break;
           }
         };
@@ -97,7 +105,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           this.setState({});
         };
       }
-      this.webRtcConnection.connect();
+      await this.webRtcConnection.connect();
     }
   }
 
@@ -192,7 +200,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             }}
             keyExtractor={(item) => item}
           />
-         
         </View>
         <View
           style={{
@@ -202,6 +209,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             bottom: 40,
           }}>
           <TouchableHighlight
+            disabled={!!this.state.activeUser}
             onPressIn={async () => {
               this.setState({userId: this.props.User.current.Id}, () => {
                 this.webRtcConnection.sendData({
@@ -219,7 +227,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               });
             }}
             style={{
-              backgroundColor: '#ff5722',
+              backgroundColor: this.state.activeUser ? '#cccccc' : '#ff5722',
               width: 100,
               borderRadius: 50,
               alignItems: 'center',
@@ -229,6 +237,36 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               height: 100,
             }}>
             <FontAwesome5Icon name="microphone" size={30} color="#ffffff" />
+          </TouchableHighlight>
+        </View>
+
+        <View
+          style={{
+            position: 'absolute',
+            right: 10,
+            left: 0,
+            bottom: 40,
+          }}>
+          <TouchableHighlight
+            onPress={async () => {
+              this.webRtcConnection.speakerOnOff(!this.state.speakerOn);
+              this.setState({speakerOn: !this.state.speakerOn});
+            }}
+            style={{
+              backgroundColor: !this.state.speakerOn ? '#cccccc' : '#4287f5',
+              width: 50,
+              borderRadius: 25,
+              alignItems: 'center',
+              justifyContent: 'center',
+              alignContent: 'flex-end',
+              alignSelf: 'flex-end',
+              height: 50,
+            }}>
+            <FontAwesome5Icon
+              name={this.state.speakerOn ? 'volume-up' : 'volume-mute'}
+              size={20}
+              color="#ffffff"
+            />
           </TouchableHighlight>
         </View>
       </SafeAreaView>

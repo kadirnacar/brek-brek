@@ -46,7 +46,7 @@ export class SocketClient {
     }
   }
   public send(command: string, data?: any) {
-    if (this.socket.readyState == WebSocket.OPEN)
+    if (this.socket && this.socket.readyState == WebSocket.OPEN)
       this.socket.send(JSON.stringify({command, data}));
   }
 

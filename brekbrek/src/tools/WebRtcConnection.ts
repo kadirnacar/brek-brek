@@ -1,13 +1,13 @@
+import InCallManager from 'react-native-incall-manager';
 import {
-  RTCDataChannel,
-  RTCIceCandidate,
-  RTCPeerConnection,
-  RTCSessionDescription,
-  MediaStream,
   mediaDevices,
+  MediaStream,
+  RTCDataChannel,
+  RTCPeerConnection,
+  MediaStreamTrack,
 } from 'react-native-webrtc';
 import {SocketClient} from './SocketClient';
-import InCallManager from 'react-native-incall-manager';
+
 export class WebRtcConnection {
   constructor(
     socket: SocketClient,
@@ -56,13 +56,12 @@ export class WebRtcConnection {
     }
   }
 
-  public connect() {
+  public async connect() {
+    const stream = await mediaDevices.getUserMedia({audio: true, video: false});
+    this.stream = <any>stream;
+    InCallManager.setSpeakerphoneOn(true);
+
     this.socket.send('join');
-    
-    mediaDevices.getUserMedia({audio: true, video: false}).then((stream) => {
-      this.stream = <any>stream;
-      InCallManager.setSpeakerphoneOn(true);
-    });
   }
 
   public sendData(data) {
@@ -93,64 +92,30 @@ export class WebRtcConnection {
       this.leave(key);
     }
   }
+
+  public speakerOnOff(value: boolean) {
+    InCallManager.setSpeakerphoneOn(value);
+  }
   public async startMediaStream() {
+    this.stream.getTracks().forEach((t) => {
+      if (t.kind === 'audio') t.enabled = true;
+    });
     InCallManager.setMicrophoneMute(false);
-    for (const key in this.peers) {
-      const pc = this.peers[key];
-      if (pc.pc && this.stream) {
-        pc.pc.addStream(this.stream);
-        console.log(pc.pc.localDescription.type);
-        if (pc.pc.localDescription.type != 'offer') {
-          const offer = await pc.pc.createOffer();
-          await pc.pc.setLocalDescription(offer);
-          this.socket.send('exchange', {to: key, sdp: pc.pc.localDescription});
-        }
-      }
-    }
   }
+
   public stopMediaStream() {
+    this.stream.getTracks().forEach((t) => {
+      if (t.kind === 'audio') t.enabled = false;
+    });
     InCallManager.setMicrophoneMute(true);
-
-    for (const key in this.peers) {
-      const pc = this.peers[key];
-      if (pc.pc && this.stream) {
-        pc.pc.removeStream(this.stream);
-      }
-    }
   }
-  private async createPeer(id, isOffer) {
-    if (id in this.peers) {
-      return;
-    }
 
-    const peer: RTCPeerConnection = new RTCPeerConnection(this.configuration);
-    peer.onnegotiationneeded = async () => {
-      if (isOffer) {
-        const offer = await peer.createOffer();
-        await peer.setLocalDescription(offer);
-        this.socket.send('exchange', {to: id, sdp: peer.localDescription});
-      }
-    };
-    peer.onicecandidate = (event) => {
-      if (event.candidate) {
-        this.socket.send('exchange', {to: id, candidate: event.candidate});
-      }
-    };
-
-    peer.oniceconnectionstatechange = (event) => {
-      if (
-        event.target.iceConnectionState === 'connected' ||
-        event.target.iceConnectionState === 'disconnected'
-      ) {
-        if (this.onConnectionChange) {
-          this.onConnectionChange(event.target.iceConnectionState, id);
-        }
-      }
-    };
-
+  private createChannel(peer: RTCPeerConnection, id) {
     const dataChannel = peer.createDataChannel(this.groupId);
 
-    dataChannel.onerror = (error) => {};
+    dataChannel.onerror = (error) => {
+      console.warn(error);
+    };
 
     dataChannel.onmessage = (event) => {
       if (this.onData) {
@@ -174,6 +139,53 @@ export class WebRtcConnection {
     }
 
     this.peers[id].dc = dataChannel;
+  }
+
+  private async createOffer(peer, id) {
+    const offer = await peer.createOffer();
+    await peer.setLocalDescription(offer);
+    this.socket.send('exchange', {to: id, sdp: peer.localDescription});
+  }
+
+  private async createPeer(id, isOffer) {
+    if (id in this.peers) {
+      return;
+    }
+
+    const peer: RTCPeerConnection = new RTCPeerConnection(this.configuration);
+    peer.onnegotiationneeded = async () => {
+      if (isOffer) {
+        await this.createOffer(peer, id);
+      }
+    };
+    peer.onicecandidate = (event) => {
+      if (event.candidate) {
+        this.socket.send('exchange', {to: id, candidate: event.candidate});
+      }
+    };
+
+    peer.oniceconnectionstatechange = (event) => {
+      if (
+        event.target.iceConnectionState === 'connected' ||
+        event.target.iceConnectionState === 'disconnected'
+      ) {
+        if (event.target.iceConnectionState === 'connected') {
+          this.createChannel(peer, id);
+        }
+        if (this.onConnectionChange) {
+          this.onConnectionChange(event.target.iceConnectionState, id);
+        }
+      }
+    };
+    peer.addStream(this.stream);
+    InCallManager.setMicrophoneMute(true);
+    this.stream.getTracks().forEach((t) => {
+      if (t.kind === 'audio') t.enabled = false;
+    });
+    if (!this.peers[id]) {
+      this.peers[id] = {};
+    }
+
     this.peers[id].pc = peer;
     return peer;
   }
