@@ -15,6 +15,7 @@ GoogleSignin.configure({
 });
 export class UserService extends ServiceBase {
   public static async loginWithGoogle() {
+    console.log(config.restUrl)
     try {
       const user = await GoogleSignin.signIn();
       let result: Result<any>;
@@ -38,7 +39,7 @@ export class UserService extends ServiceBase {
       }
       return result;
     } catch (ex) {
-      console.log(ex.message);
+      console.log(ex);
       return new Result<IUser>(null, ex.message);
     }
   }

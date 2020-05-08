@@ -1,22 +1,22 @@
 import {LoaderSpinner} from '@components';
 import config from '@config';
+import {UserStatus} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions} from '@reducers';
 import {ApplicationState} from '@store';
 import {SocketClient, WebRtcConnection} from '@tools';
 import React, {Component} from 'react';
 import {
+  Dimensions,
   FlatList,
   Text,
   TouchableHighlight,
   View,
-  Dimensions,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {UserStatus} from '@models';
 
 const {width} = Dimensions.get('window');
 
@@ -60,19 +60,10 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           this.props.User.current.Id,
         );
 
-        this.webRtcConnection.connect();
         this.webRtcConnection.onData = (id, data) => {
           const message = JSON.parse(data.data);
-
+          console.log(message);
           switch (message.command) {
-            // case 'online':
-            //   if (
-            //     this.props.Group.current.Users &&
-            //     id in this.props.Group.current.Users
-            //   ) {
-            //     this.props.Group.current.Users[id].status = UserStatus.Online;
-            //   }
-            //   break;
             case 'start':
               if (
                 this.props.Group.current.Users &&
@@ -80,6 +71,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Talking;
               }
+              this.setState({});
               break;
             case 'end':
               if (
@@ -88,29 +80,33 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Online;
               }
+              this.setState({});
               break;
           }
         };
-
         this.webRtcConnection.onConnectionChange = (status, userId) => {
           switch (status) {
             case 'connected':
               this.props.Group.current.Users[userId].status = UserStatus.Online;
               break;
             case 'disconnected':
-              this.props.Group.current.Users[userId].status = UserStatus.Offline;
+              this.props.Group.current.Users[userId].status =
+                UserStatus.Offline;
               break;
           }
           this.setState({});
         };
       }
+      this.webRtcConnection.connect();
     }
   }
 
   componentWillUnmount() {
     if (this.socketClient) {
       this.socketClient.dispose();
-      this.webRtcConnection.close();
+      if (this.webRtcConnection) {
+        this.webRtcConnection.close();
+      }
     }
   }
   render() {
@@ -196,6 +192,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             }}
             keyExtractor={(item) => item}
           />
+         
         </View>
         <View
           style={{
@@ -210,6 +207,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                 this.webRtcConnection.sendData({
                   command: 'start',
                 });
+                this.webRtcConnection.startMediaStream();
               });
             }}
             onPressOut={async () => {
@@ -217,6 +215,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                 this.webRtcConnection.sendData({
                   command: 'end',
                 });
+                this.webRtcConnection.stopMediaStream();
               });
             }}
             style={{
