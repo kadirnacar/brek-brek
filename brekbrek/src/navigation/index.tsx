@@ -1,37 +1,11 @@
-import {HeaderRight, HeaderTitle} from '@components';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen, LoginScreen, GroupScreen} from '@screens';
-import {colors} from '@tools';
+import { HeaderRight, HeaderTitle } from '@components';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { GroupScreen, HomeScreen, LoginScreen } from '@screens';
+import { colors } from '@tools';
 import * as React from 'react';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeBackgroundColor: colors.color3,
-        inactiveBackgroundColor: colors.color1,
-        activeTintColor: colors.color2,
-      }}
-      lazy={false}
-      screenOptions={{unmountOnBlur: true}}>
-      <Tab.Screen
-        name="HomeTab"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <FontAwesome5 name="home" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
 
 export const AppNavigation = (props) => {
   return (

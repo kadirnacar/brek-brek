@@ -67,7 +67,7 @@
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "types": ["./types", "./node_modules/@types/*"],
+    "types": ["types", "node_modules/@types"],
     "paths": {
       "@screens": ["./src/screens"],
       "@navigation": ["./src/navigation"],
