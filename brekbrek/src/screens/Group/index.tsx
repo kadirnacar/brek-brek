@@ -17,11 +17,12 @@ import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import SystemSetting from 'react-native-system-setting';
 
 const {width} = Dimensions.get('window');
 
 interface GroupScreenState {
-  userId?: string;
+  isStart?: boolean;
   data?: string;
   peers?: string[];
   activeUser?: string;
@@ -38,9 +39,11 @@ type Props = GroupProps & ApplicationState;
 export class GroupScreenComp extends Component<Props, GroupScreenState> {
   constructor(props) {
     super(props);
+    this.handleStart = this.handleStart.bind(this);
+    this.handleStop = this.handleStop.bind(this);
     this.state = {
       peers: [],
-      userId: null,
+      isStart: false,
       data: null,
       activeUser: null,
       speakerOn: true,
@@ -51,8 +54,22 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
   socketClient: SocketClient;
   webRtcConnection: WebRtcConnection;
+  startInterval;
+  volumeListener;
+
   async componentDidMount() {
-    
+    this.volumeListener = SystemSetting.addVolumeListener((data) => {
+      if (!this.state.isStart && !this.state.activeUser) {
+        this.setState({isStart: true}, () => {
+          this.handleStart();
+        });
+      } else {
+        clearInterval(this.startInterval);
+        this.startInterval = setInterval(() => {
+          this.handleStop();
+        }, 500);
+      }
+    });
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
@@ -108,8 +125,20 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       await this.webRtcConnection.connect();
     }
   }
-
+  handleStart() {
+    this.webRtcConnection.sendData({
+      command: 'start',
+    });
+    this.webRtcConnection.startMediaStream();
+  }
+  handleStop() {
+    this.webRtcConnection.sendData({
+      command: 'end',
+    });
+    this.webRtcConnection.stopMediaStream();
+  }
   componentWillUnmount() {
+    SystemSetting.removeVolumeListener(this.volumeListener);
     if (this.socketClient) {
       this.socketClient.dispose();
       if (this.webRtcConnection) {
@@ -210,22 +239,8 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           }}>
           <TouchableHighlight
             disabled={!!this.state.activeUser}
-            onPressIn={async () => {
-              this.setState({userId: this.props.User.current.Id}, () => {
-                this.webRtcConnection.sendData({
-                  command: 'start',
-                });
-                this.webRtcConnection.startMediaStream();
-              });
-            }}
-            onPressOut={async () => {
-              this.setState({userId: this.props.User.current.Id}, () => {
-                this.webRtcConnection.sendData({
-                  command: 'end',
-                });
-                this.webRtcConnection.stopMediaStream();
-              });
-            }}
+            onPressIn={this.handleStart}
+            onPressOut={this.handleStop}
             style={{
               backgroundColor: this.state.activeUser ? '#cccccc' : '#ff5722',
               width: 100,
