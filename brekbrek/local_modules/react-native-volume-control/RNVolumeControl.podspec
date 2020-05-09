@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.author              = package['author']
 
   s.platforms      = { :ios => "10.0"}
-  s.source              = { :git => package['repository']['url'], :tag => "v#{s.version}" }
+  s.source              = { :path => "file://../../react-native-volume-control" }
   s.preserve_paths      = "**/*.js"
   s.source_files   = 'RNVolumeControl/**/*.{h,m}'
   s.dependency "React"
