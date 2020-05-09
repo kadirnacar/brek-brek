@@ -18,6 +18,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import SystemSetting from 'react-native-system-setting';
+import {VolumeControlEvents} from 'react-native-volume-control';
 
 const {width} = Dimensions.get('window');
 
@@ -58,18 +59,27 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   volumeListener;
 
   async componentDidMount() {
-    this.volumeListener = SystemSetting.addVolumeListener((data) => {
-      if (!this.state.isStart && !this.state.activeUser) {
-        this.setState({isStart: true}, () => {
-          this.handleStart();
-        });
-      } else {
-        clearInterval(this.startInterval);
-        this.startInterval = setInterval(() => {
-          this.handleStop();
-        }, 500);
-      }
-    });
+    this.volumeListener = VolumeControlEvents.addListener(
+      'VolumeChanged',
+      (event) => {
+        console.log(event);
+      },
+    );
+    // this.volumeListener = SystemSetting.addVolumeListener((data) => {
+    //   console.log(data);
+    //   if (!this.state.isStart && !this.state.activeUser) {
+    //     this.setState({isStart: true}, () => {
+    //       this.handleStart();
+    //     });
+    //   } else {
+    //     clearInterval(this.startInterval);
+    //     this.startInterval = setInterval(() => {
+    //       this.setState({isStart: false}, () => {
+    //         this.handleStop();
+    //       });
+    //     }, 500);
+    //   }
+    // });
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
@@ -138,7 +148,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     this.webRtcConnection.stopMediaStream();
   }
   componentWillUnmount() {
-    SystemSetting.removeVolumeListener(this.volumeListener);
+    console.log('unmount');
+    this.volumeListener.remove();
+    // SystemSetting.removeVolumeListener(this.volumeListener);
     if (this.socketClient) {
       this.socketClient.dispose();
       if (this.webRtcConnection) {

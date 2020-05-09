@@ -27,6 +27,7 @@
     "react-native-screens": "^2.7.0",
     "react-native-system-setting": "^1.7.4",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-volume-control": "^1.0.1",
     "react-native-webrtc": "^1.75.3",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
