@@ -76,6 +76,7 @@ target 'brekbrek' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'RNVolumeControl', :podspec => '../local_modules/react-native-volume-control'
   pod 'GoogleSignIn', '~> 5.0.2'
 
   use_native_modules!

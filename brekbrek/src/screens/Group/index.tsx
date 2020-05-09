@@ -12,13 +12,14 @@ import {
   Text,
   TouchableHighlight,
   View,
+  Platform,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {VolumeControlEvents} from 'react-native-volume-control';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import SystemSetting from 'react-native-system-setting';
-import {VolumeControlEvents} from 'react-native-volume-control';
+import BackgroundTimer from 'react-native-background-timer';
 
 const {width} = Dimensions.get('window');
 
@@ -62,7 +63,29 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     this.volumeListener = VolumeControlEvents.addListener(
       'VolumeChanged',
       (event) => {
-        console.log(event);
+        if (!this.state.isStart && !this.state.activeUser) {
+          this.setState({isStart: true}, () => {
+            this.handleStart();
+          });
+        } else {
+          if (this.startInterval) {
+            console.log(this.startInterval);
+            BackgroundTimer.clearInterval(this.startInterval);
+            if (Platform.OS == 'ios') {
+              BackgroundTimer.stop();
+            }
+          }
+
+          if (Platform.OS == 'ios') {
+            BackgroundTimer.start();
+          }
+
+          this.startInterval = BackgroundTimer.setInterval(() => {
+            this.setState({isStart: false}, () => {
+              this.handleStop();
+            });
+          }, 500);
+        }
       },
     );
     // this.volumeListener = SystemSetting.addVolumeListener((data) => {
