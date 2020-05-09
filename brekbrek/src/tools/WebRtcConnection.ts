@@ -111,6 +111,8 @@ export class WebRtcConnection {
   }
 
   private createChannel(peer: RTCPeerConnection, id) {
+    if (!peer) return;
+
     const dataChannel = peer.createDataChannel(this.groupId);
 
     dataChannel.onerror = (error) => {
@@ -142,6 +144,7 @@ export class WebRtcConnection {
   }
 
   private async createOffer(peer, id) {
+    if (!peer) return;
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     this.socket.send('exchange', {to: id, sdp: peer.localDescription});

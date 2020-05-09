@@ -9,17 +9,18 @@ import React, {Component} from 'react';
 import {
   Dimensions,
   FlatList,
+  Platform,
   Text,
   TouchableHighlight,
   View,
-  Platform,
 } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {VolumeControlEvents} from 'react-native-volume-control';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import BackgroundTimer from 'react-native-background-timer';
+import HeadphoneDetection from 'react-native-headphone-detection';
 
 const {width} = Dimensions.get('window');
 
@@ -59,50 +60,16 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   startInterval;
   volumeListener;
 
+  handleHeadPhone(e) {
+    if (e.audioJack || e.bluetooth) {
+      this.webRtcConnection.speakerOnOff(false);
+      this.setState({speakerOn: false});
+    } else {
+      this.webRtcConnection.speakerOnOff(true);
+      this.setState({speakerOn: true});
+    }
+  }
   async componentDidMount() {
-    this.volumeListener = VolumeControlEvents.addListener(
-      'VolumeChanged',
-      (event) => {
-        if (!this.state.isStart && !this.state.activeUser) {
-          this.setState({isStart: true}, () => {
-            this.handleStart();
-          });
-        } else {
-          if (this.startInterval) {
-            console.log(this.startInterval);
-            BackgroundTimer.clearInterval(this.startInterval);
-            if (Platform.OS == 'ios') {
-              BackgroundTimer.stop();
-            }
-          }
-
-          if (Platform.OS == 'ios') {
-            BackgroundTimer.start();
-          }
-
-          this.startInterval = BackgroundTimer.setInterval(() => {
-            this.setState({isStart: false}, () => {
-              this.handleStop();
-            });
-          }, 500);
-        }
-      },
-    );
-    // this.volumeListener = SystemSetting.addVolumeListener((data) => {
-    //   console.log(data);
-    //   if (!this.state.isStart && !this.state.activeUser) {
-    //     this.setState({isStart: true}, () => {
-    //       this.handleStart();
-    //     });
-    //   } else {
-    //     clearInterval(this.startInterval);
-    //     this.startInterval = setInterval(() => {
-    //       this.setState({isStart: false}, () => {
-    //         this.handleStop();
-    //       });
-    //     }, 500);
-    //   }
-    // });
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
@@ -157,22 +124,61 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       }
       await this.webRtcConnection.connect();
     }
+    const headPhone = await HeadphoneDetection.isAudioDeviceConnected();
+    this.handleHeadPhone(headPhone);
+    HeadphoneDetection.addListener((e) => {
+      this.handleHeadPhone(e);
+    });
+    this.volumeListener = VolumeControlEvents.addListener(
+      'VolumeChanged',
+      (event) => {
+        if (!this.state.isStart && !this.state.activeUser) {
+          this.setState({isStart: true}, () => {
+            this.handleStart();
+          });
+          BackgroundTimer.clearInterval(this.startInterval);
+        } else {
+          if (this.startInterval) {
+            BackgroundTimer.clearInterval(this.startInterval);
+            if (Platform.OS == 'ios') {
+              BackgroundTimer.stop();
+            }
+          }
+
+          if (Platform.OS == 'ios') {
+            BackgroundTimer.start();
+          }
+
+          this.startInterval = BackgroundTimer.setInterval(() => {
+            this.setState({isStart: false}, () => {
+              this.handleStop();
+              BackgroundTimer.clearInterval(this.startInterval);
+            });
+          }, 500);
+        }
+      },
+    );
   }
   handleStart() {
     this.webRtcConnection.sendData({
       command: 'start',
     });
     this.webRtcConnection.startMediaStream();
+    this.setState({});
   }
   handleStop() {
     this.webRtcConnection.sendData({
       command: 'end',
     });
     this.webRtcConnection.stopMediaStream();
+    this.setState({});
   }
   componentWillUnmount() {
-    console.log('unmount');
     this.volumeListener.remove();
+    if (HeadphoneDetection.remove) {
+      // The remove is not necessary on Android
+      HeadphoneDetection.remove();
+    }
     // SystemSetting.removeVolumeListener(this.volumeListener);
     if (this.socketClient) {
       this.socketClient.dispose();
@@ -226,7 +232,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                 : []
             }
             renderItem={(item) => {
-              // console.log(item.item, this.state.userId);
               return (
                 <View
                   key={item.index}
@@ -293,8 +298,8 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         <View
           style={{
             position: 'absolute',
+            zIndex:99,
             right: 10,
-            left: 0,
             bottom: 40,
           }}>
           <TouchableHighlight

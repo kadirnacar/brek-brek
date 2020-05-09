@@ -9,11 +9,8 @@
 #import "RNVolumeControl.h"
 
 #import <AVFoundation/AVFoundation.h>
-#import <MediaPlayer/MediaPlayer.h>
 
 @implementation RNVolumeControl {
-    MPVolumeView *volumeView;
-    UISlider *volumeViewSlider;
     AVAudioSession *audioSession;
     bool hasListeners;
 }
