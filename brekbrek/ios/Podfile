@@ -77,11 +77,6 @@ target 'brekbrek' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'GoogleSignIn', '~> 5.0.2'
-  
-  target 'brekbrekTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   use_native_modules!
 
@@ -92,14 +87,5 @@ target 'brekbrek' do
   add_flipper_pods!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'brekbrek-tvOS' do
-  # Pods for brekbrek-tvOS
-
-  target 'brekbrek-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end
