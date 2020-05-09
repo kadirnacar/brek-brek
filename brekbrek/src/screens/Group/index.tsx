@@ -228,7 +228,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             }}
             data={
               this.props.Group.current && this.props.Group.current.Users
-                ? Object.keys(this.props.Group.current.Users)
+                ? Object.keys(this.props.Group.current.Users).filter(
+                    (x) => x != this.props.User.current.Id,
+                  )
                 : []
             }
             renderItem={(item) => {
@@ -298,7 +300,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         <View
           style={{
             position: 'absolute',
-            zIndex:99,
+            zIndex: 99,
             right: 10,
             bottom: 40,
           }}>
