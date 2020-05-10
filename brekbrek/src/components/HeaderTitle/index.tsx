@@ -31,10 +31,9 @@ class HeaderTitleComp extends Component<Props, HeaderTitleState> {
     return (
       <Text
         style={[
-          this.props.style,
-          {color: '#fff', fontWeight: 'bold', fontSize: 20},
+          this.props.style
         ]}>
-        {this.state.user ? this.state.user.DisplayName : 'Brek Brek'}
+        {'BrekBrek'}
       </Text>
     );
   }

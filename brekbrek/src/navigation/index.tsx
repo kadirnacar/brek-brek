@@ -1,8 +1,8 @@
-import { HeaderRight, HeaderTitle } from '@components';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { GroupScreen, HomeScreen, LoginScreen } from '@screens';
-import { colors } from '@tools';
+import {HeaderRight, HeaderTitle} from '@components';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {GroupScreen, HomeScreen, LoginScreen} from '@screens';
+import {colors} from '@tools';
 import * as React from 'react';
 
 const Stack = createStackNavigator();
@@ -17,13 +17,17 @@ export const AppNavigation = (props) => {
             headerStyle: {backgroundColor: colors.color1},
             headerTintColor: '#fff',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitle: (props) => {
               return (
                 <HeaderTitle
                   style={[
                     props.style,
-                    {color: '#fff', fontWeight: 'bold', fontSize: 20},
+                    {
+                      color: colors.headerTextColor,
+                      fontWeight: 'bold',
+                      fontSize: 20,
+                    },
                   ]}
                 />
               );
@@ -31,9 +35,9 @@ export const AppNavigation = (props) => {
             headerLeft: null,
             safeAreaInsets: {bottom: 0, left: 0, right: 0, top: 0},
             animationTypeForReplace: 'pop',
-            headerRight: (props) => {
-              return <HeaderRight navigation={navigation.navigation} />;
-            },
+            // headerRight: (props) => {
+            //   return <HeaderRight navigation={navigation.navigation} />;
+            // },
             headerStatusBarHeight: 0,
           };
         }}

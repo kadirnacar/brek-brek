@@ -29,23 +29,23 @@ export class FormModal extends Component<IFormModalProps, IFormModalState> {
   componentDidMount() {
     this.setState({show: this.props.show});
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.show != prevProps.show) {
-      this.setState({show: this.props.show});
-    }
-    // if (
-    //   this.state.show != prevState.show
-    // ) {
-    //   this.setState({show: this.props.show});
-    // }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.props.show != prevProps.show) {
+  //     this.setState({show: this.props.show});
+  //   }
+  //   // if (
+  //   //   this.state.show != prevState.show
+  //   // ) {
+  //   //   this.setState({show: this.state.show});
+  //   // }
+  // }
   render() {
     return (
       <Modal
-        visible={this.state.show || false}
+        visible={this.props.show || false}
         transparent={true}
         onRequestClose={() => {
-          this.setState({show: false});
+          // this.setState({show: false});
           if (this.props.onCloseModal) {
             this.props.onCloseModal();
           }

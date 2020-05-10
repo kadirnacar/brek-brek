@@ -15,6 +15,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {colors} from '@tools';
 
 interface HomeScreenState {
   showAddGroup?: boolean;
@@ -39,7 +40,42 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
     };
     this.props.navigation.setOptions({
       // headerLeft: () => { },
-      // headerRight: () => { },
+      headerRight: (props) => {
+        return (
+          <View style={{flexDirection: 'row', marginHorizontal: 5}}>
+            <TouchableOpacity
+              style={{
+                padding: 10,
+                width: 40,
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={async () => {}}>
+              <FontAwesome5Icon
+                name="search"
+                size={20}
+                color={colors.headerTextColor}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                padding: 10,
+                width: 30,
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={async () => {}}>
+              <FontAwesome5Icon
+                name="ellipsis-v"
+                size={20}
+                color={colors.headerTextColor}
+              />
+            </TouchableOpacity>
+          </View>
+        );
+      },
       canGoBack: true,
     });
   }
@@ -48,7 +84,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
   }
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
         <LoaderSpinner showLoader={this.props.Group.isRequest} />
         {this.props.Group.groups.map((group, index) => {
           return (
@@ -57,65 +93,46 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
               style={{
                 padding: 10,
                 borderBottomWidth: 1,
-                borderBottomColor: '#cccccc',
-                minHeight: 50,
+                borderBottomColor: colors.borderColor,
               }}>
               <TouchableOpacity
+                style={{flexDirection: 'row'}}
                 onPress={async () => {
                   await this.props.GroupActions.setCurrent(group);
                   this.props.navigation.navigate('Group');
                 }}>
+                <FontAwesome5Icon
+                  name="users"
+                  size={30}
+                  color={colors.color3}
+                  style={{
+                    backgroundColor: colors.color2,
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    borderRadius: 30,
+                    width: 60,
+                    height: 60,
+                    marginRight: 10,
+                  }}
+                />
+
                 <Text
                   style={{
                     fontSize: 16,
-                    color: '#000',
+                    fontWeight: 'bold',
+                    alignItems:"center",
+                    alignSelf:"center",
+                    color: colors.color3,
                   }}>
                   {group.Name}
                 </Text>
               </TouchableOpacity>
-              <View
-                style={{
-                  position: 'absolute',
-                  height: 40,
-                  flexDirection: 'row',
-                  right: 10,
-                  top: 3,
-                }}>
-                <TouchableOpacity
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#aaa',
-                    padding: 7,
-                    borderRadius: 24,
-                    flexDirection: 'column',
-                    marginRight: 10,
-                  }}
-                  onPress={() => {
-                    this.setState({currentGroup: group, showEditGroup: true});
-                  }}>
-                  <FontAwesome5Icon name="pen" size={24} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#aaa',
-                    padding: 7,
-                    borderRadius: 24,
-                    backgroundColor: '#f24979',
-                    flexDirection: 'column',
-                  }}
-                  onPress={() => {
-                    this.setState({currentGroup: group, showDeleteGroup: true});
-                  }}>
-                  <FontAwesome5Icon name="trash" size={24} color={'#ffffff'} />
-                </TouchableOpacity>
-              </View>
             </View>
           );
         })}
         <View
           style={{
-            backgroundColor: '#ff5722',
+            backgroundColor: colors.primaryButtonColor,
             width: 70,
             height: 70,
             borderRadius: 35,
@@ -137,12 +154,19 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
               alignSelf: 'center',
               height: 70,
             }}>
-            <FontAwesome5Icon name="plus" size={30} color="#ffffff" />
+            <FontAwesome5Icon
+              name="plus"
+              size={30}
+              color={colors.primaryButtonTextColor}
+            />
           </TouchableHighlight>
         </View>
         <FormModal
           show={this.state.showAddGroup}
-          title={`Grup Oluştur`}
+          title={`Kanal Oluştur`}
+          onCloseModal={() => {
+            this.setState({showAddGroup: false});
+          }}
           onCancelPress={() => {
             this.setState({showAddGroup: false});
           }}
@@ -155,7 +179,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             });
           }}>
           <TextInput
-            placeholder="Grup Adı"
+            placeholder="Kanal Adı"
+            autoFocus={true}
+            selectTextOnFocus={true}
             value={this.state.newGroupName}
             style={{borderWidth: 1, flex: 1, padding: 5, borderRadius: 5}}
             onChangeText={(text) => {
@@ -166,9 +192,10 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
 
         <FormModal
           show={this.state.showEditGroup && !!this.state.currentGroup}
-          title={`Düzenle - ${
-            this.state.currentGroup ? this.state.currentGroup.Name : ''
-          }`}
+          title={`Kanal Düzenle`}
+          onCloseModal={() => {
+            this.setState({showEditGroup: false});
+          }}
           onCancelPress={() => {
             this.setState({showEditGroup: false});
           }}
@@ -182,7 +209,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             }
           }}>
           <TextInput
-            placeholder="Grup Adı"
+            placeholder="Kanal Adı"
             value={this.state.currentGroup ? this.state.currentGroup.Name : ''}
             style={{borderWidth: 1, flex: 1, padding: 5, borderRadius: 5}}
             onChangeText={(text) => {
@@ -194,9 +221,12 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
         </FormModal>
         <FormModal
           show={this.state.showDeleteGroup && !!this.state.currentGroup}
-          title={`${
+          title={`Kanaldan Ayrıl: ${
             this.state.currentGroup ? this.state.currentGroup.Name : ''
           }`}
+          onCloseModal={() => {
+            this.setState({showDeleteGroup: false});
+          }}
           onCancelPress={() => {
             this.setState({showDeleteGroup: false});
           }}
