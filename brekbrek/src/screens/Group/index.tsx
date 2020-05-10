@@ -285,7 +285,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                       fontWeight: 'bold',
                       alignItems: 'center',
                       alignSelf: 'center',
-                      color: colors.color3,
+                      color: item.status == UserStatus.Offline
+                      ? colors.color1
+                      : colors.color3,
                     }}>
                     {item.DisplayName}
                   </Text>

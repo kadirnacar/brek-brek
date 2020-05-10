@@ -6,6 +6,7 @@ import {
   View,
   BackHandler,
 } from 'react-native';
+import { colors } from '@tools';
 
 interface ILaderSpinnerState {
   showLoader?: boolean;
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#ffffff88',
+    backgroundColor: colors.bodyBackground + '60',
   },
   horizontal: {
     flexDirection: 'row',
