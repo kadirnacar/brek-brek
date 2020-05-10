@@ -1,12 +1,6 @@
+import {colors} from '@tools';
 import React, {Component} from 'react';
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  BackHandler,
-} from 'react-native';
+import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 interface IFormModalState {
   show?: boolean;
@@ -29,23 +23,14 @@ export class FormModal extends Component<IFormModalProps, IFormModalState> {
   componentDidMount() {
     this.setState({show: this.props.show});
   }
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.props.show != prevProps.show) {
-  //     this.setState({show: this.props.show});
-  //   }
-  //   // if (
-  //   //   this.state.show != prevState.show
-  //   // ) {
-  //   //   this.setState({show: this.state.show});
-  //   // }
-  // }
+  
   render() {
     return (
       <Modal
         visible={this.props.show || false}
         transparent={true}
+        animationType="slide"
         onRequestClose={() => {
-          // this.setState({show: false});
           if (this.props.onCloseModal) {
             this.props.onCloseModal();
           }
@@ -56,10 +41,9 @@ export class FormModal extends Component<IFormModalProps, IFormModalState> {
               <View style={{flexDirection: 'column', flex: 1}}>
                 <Text
                   style={{
-                    backgroundColor: '#bbb',
+                    backgroundColor: colors.color1,
+                    color: colors.headerTextColor,
                     marginTop: -10,
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
                     padding: 10,
                     justifyContent: 'center',
                     textAlign: 'center',
@@ -109,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#ffffff88',
+    backgroundColor: colors.bodyBackground + '60',
     alignContent: 'center',
     alignItems: 'center',
   },
@@ -119,10 +103,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   formContainer: {
-    backgroundColor: '#f6f6f6',
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#aaa',
+    backgroundColor: colors.color1,
     width: '100%',
     padding: 10,
   },
@@ -133,35 +114,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   formActionBar: {
-    borderRadius: 10,
     marginBottom: -10,
     marginRight: -10,
     marginLeft: -10,
     flexDirection: 'row',
-    backgroundColor: '#f6f6f6',
+    backgroundColor: colors.color1,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.primaryButtonColor,
     fontSize: 16,
     fontWeight: 'bold',
   },
   cancelAction: {
-    borderBottomLeftRadius: 10,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    borderColor: '#fff',
-    borderTopWidth: 1,
-    backgroundColor: '#40cca2',
+    backgroundColor: colors.color1,
     width: '100%',
   },
   okAction: {
-    borderBottomRightRadius: 10,
-    borderColor: '#fff',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    backgroundColor: '#40cca2',
+    backgroundColor: colors.color1,
     padding: 10,
     flexDirection: 'column',
     alignItems: 'center',

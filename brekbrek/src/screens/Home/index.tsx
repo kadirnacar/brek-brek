@@ -101,27 +101,29 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                   await this.props.GroupActions.setCurrent(group);
                   this.props.navigation.navigate('Group');
                 }}>
-                <FontAwesome5Icon
-                  name="users"
-                  size={30}
-                  color={colors.color3}
+                <View
                   style={{
                     backgroundColor: colors.color2,
-                    textAlign: 'center',
-                    textAlignVertical: 'center',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     borderRadius: 30,
                     width: 60,
                     height: 60,
                     marginRight: 10,
-                  }}
-                />
-
+                  }}>
+                  <FontAwesome5Icon
+                    name="users"
+                    size={30}
+                    color={colors.color3}
+                  />
+                </View>
                 <Text
                   style={{
                     fontSize: 16,
                     fontWeight: 'bold',
-                    alignItems:"center",
-                    alignSelf:"center",
+                    alignItems: 'center',
+                    alignSelf: 'center',
                     color: colors.color3,
                   }}>
                   {group.Name}
@@ -183,7 +185,14 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             autoFocus={true}
             selectTextOnFocus={true}
             value={this.state.newGroupName}
-            style={{borderWidth: 1, flex: 1, padding: 5, borderRadius: 5}}
+            placeholderTextColor={colors.color3}
+            style={{
+              borderBottomWidth: 1,
+              flex: 1,
+              padding: 5,
+              borderBottomColor: colors.primaryButtonTextColor,
+              color: colors.primaryButtonTextColor,
+            }}
             onChangeText={(text) => {
               this.setState({newGroupName: text});
             }}
@@ -211,7 +220,14 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           <TextInput
             placeholder="Kanal Adı"
             value={this.state.currentGroup ? this.state.currentGroup.Name : ''}
-            style={{borderWidth: 1, flex: 1, padding: 5, borderRadius: 5}}
+            placeholderTextColor={colors.color3}
+            style={{
+              borderBottomWidth: 1,
+              flex: 1,
+              padding: 5,
+              borderBottomColor: colors.primaryButtonTextColor,
+              color: colors.primaryButtonTextColor,
+            }}
             onChangeText={(text) => {
               const {currentGroup} = this.state;
               currentGroup.Name = text;
@@ -235,7 +251,12 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
               await this.props.GroupActions.deleteItem(this.state.currentGroup);
             });
           }}>
-          <Text>Grupdan ayrılmak istediğinize eminmisiniz?</Text>
+          <Text
+            style={{
+              color: colors.primaryButtonTextColor,
+            }}>
+            Grupdan ayrılmak istediğinize eminmisiniz?
+          </Text>
         </FormModal>
       </SafeAreaView>
     );
