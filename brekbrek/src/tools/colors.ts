@@ -2,13 +2,14 @@ export const colors = {
   color1: '#232D36', //"rgba(33,36,45,0.9)",
   color2: '#2C363F',
   color3: '#C1C5C7',
+  color4: '#313C42',
   borderColor: '#2C363F',
   inputTextColor: 'rgba(255,255,255,0.87)',
   textColor: '#fff',
   primaryButtonColor: '#3390BB',
   primaryButtonTextColor: '#E8F9F7',
   headerTextColor: '#92969B',
-  bodyBackground:'#101D25'
+  bodyBackground: '#101D25',
 };
 
 export const hexToRgb = (hex) => {

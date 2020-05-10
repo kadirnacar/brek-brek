@@ -23,6 +23,9 @@ interface HomeScreenState {
   showDeleteGroup?: boolean;
   newGroupName?: string;
   currentGroup?: IGroup;
+  search?: string;
+  searchRow?: boolean;
+  actionsRow?: boolean;
 }
 
 interface HomeProps {
@@ -37,6 +40,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
     super(props);
     this.state = {
       showAddGroup: false,
+      search: '',
+      searchRow: false,
+      actionsRow: false,
     };
     this.props.navigation.setOptions({
       // headerLeft: () => { },
@@ -51,7 +57,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={async () => {}}>
+              onPress={async () => {
+                this.setState({searchRow: !this.state.searchRow, search: ''});
+              }}>
               <FontAwesome5Icon
                 name="search"
                 size={20}
@@ -86,52 +94,165 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
         <LoaderSpinner showLoader={this.props.Group.isRequest} />
-        {this.props.Group.groups.map((group, index) => {
-          return (
-            <View
-              key={index}
+        {this.state.searchRow ? (
+          <View
+            style={{
+              backgroundColor: colors.color4,
+              padding: 10,
+              height: 50,
+              borderBottomColor: colors.borderColor,
+              borderBottomWidth: 1,
+            }}>
+            <TextInput
+              placeholder="Ara..."
+              autoFocus={true}
+              clearTextOnFocus={true}
+              clearButtonMode={'always'}
+              selectTextOnFocus={true}
+              value={this.state.search}
+              placeholderTextColor={colors.color3}
+              style={{
+                flex: 1,
+                padding: 5,
+                color: colors.primaryButtonTextColor,
+              }}
+              onChangeText={(text) => {
+                this.setState({search: text});
+              }}
+            />
+          </View>
+        ) : null}
+        {this.state.actionsRow ? (
+          <View
+            style={{
+              backgroundColor: colors.color4,
+              paddingHorizontal: 10,
+              height: 50,
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
               style={{
                 padding: 10,
-                borderBottomWidth: 1,
-                borderBottomColor: colors.borderColor,
+                width: 40,
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={async () => {
+                this.setState({actionsRow: false, currentGroup: null});
+              }}>
+              <FontAwesome5Icon
+                name="arrow-left"
+                size={20}
+                color={colors.headerTextColor}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                justifyContent: 'center',
               }}>
               <TouchableOpacity
-                style={{flexDirection: 'row'}}
+                style={{
+                  padding: 10,
+                  width: 40,
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
                 onPress={async () => {
-                  await this.props.GroupActions.setCurrent(group);
-                  this.props.navigation.navigate('Group');
+                  this.setState({showDeleteGroup: true, actionsRow: false});
                 }}>
-                <View
-                  style={{
-                    backgroundColor: colors.color2,
-                    alignContent: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 30,
-                    width: 60,
-                    height: 60,
-                    marginRight: 10,
-                  }}>
-                  <FontAwesome5Icon
-                    name="users"
-                    size={30}
-                    color={colors.color3}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    color: colors.color3,
-                  }}>
-                  {group.Name}
-                </Text>
+                <FontAwesome5Icon
+                  name="trash"
+                  size={20}
+                  color={colors.headerTextColor}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  width: 40,
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={async () => {
+                  this.setState({showEditGroup: true, actionsRow: false});
+                }}>
+                <FontAwesome5Icon
+                  name="pencil-alt"
+                  size={20}
+                  color={colors.headerTextColor}
+                />
               </TouchableOpacity>
             </View>
-          );
-        })}
+          </View>
+        ) : null}
+        {this.props.Group.groups
+          .filter(
+            (g) =>
+              g.Name.toLowerCase().indexOf(this.state.search.toLowerCase()) >
+              -1,
+          )
+          .map((group, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  backgroundColor:
+                    this.state.currentGroup &&
+                    this.state.currentGroup.Id == group.Id
+                      ? colors.color1
+                      : colors.bodyBackground,
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.borderColor,
+                }}>
+                <TouchableOpacity
+                  style={{flexDirection: 'row'}}
+                  onLongPress={() => {
+                    this.setState({actionsRow: true, currentGroup: group});
+                  }}
+                  onPress={async () => {
+                    await this.props.GroupActions.setCurrent(group);
+                    this.props.navigation.navigate('Group');
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: colors.color2,
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 30,
+                      width: 60,
+                      height: 60,
+                      marginRight: 10,
+                    }}>
+                    <FontAwesome5Icon
+                      name="users"
+                      size={30}
+                      color={colors.color3}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      alignItems: 'center',
+                      alignSelf: 'center',
+                      color: colors.color3,
+                    }}>
+                    {group.Name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         <View
           style={{
             backgroundColor: colors.primaryButtonColor,
@@ -163,101 +284,115 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             />
           </TouchableHighlight>
         </View>
-        <FormModal
-          show={this.state.showAddGroup}
-          title={`Kanal Oluştur`}
-          onCloseModal={() => {
-            this.setState({showAddGroup: false});
-          }}
-          onCancelPress={() => {
-            this.setState({showAddGroup: false});
-          }}
-          onOkPress={async () => {
-            await this.setState({showAddGroup: false}, async () => {
-              if (this.state.newGroupName)
-                await this.props.GroupActions.createItem({
-                  Name: this.state.newGroupName,
+        {this.state.showAddGroup ? (
+          <FormModal
+            show={this.state.showAddGroup}
+            title={`Kanal Oluştur`}
+            onCloseModal={() => {
+              this.setState({showAddGroup: false, currentGroup: null});
+            }}
+            onCancelPress={() => {
+              this.setState({showAddGroup: false, currentGroup: null});
+            }}
+            onOkPress={async () => {
+              await this.setState(
+                {showAddGroup: false, currentGroup: null},
+                async () => {
+                  if (this.state.newGroupName)
+                    await this.props.GroupActions.createItem({
+                      Name: this.state.newGroupName,
+                    });
+                },
+              );
+            }}>
+            <TextInput
+              placeholder="Kanal Adı"
+              autoFocus={true}
+              selectTextOnFocus={true}
+              value={this.state.newGroupName}
+              placeholderTextColor={colors.color3}
+              style={{
+                borderBottomWidth: 1,
+                flex: 1,
+                padding: 5,
+                borderBottomColor: colors.primaryButtonTextColor,
+                color: colors.primaryButtonTextColor,
+              }}
+              onChangeText={(text) => {
+                this.setState({newGroupName: text});
+              }}
+            />
+          </FormModal>
+        ) : null}
+        {this.state.showEditGroup && !!this.state.currentGroup ? (
+          <FormModal
+            show={this.state.showEditGroup && !!this.state.currentGroup}
+            title={`Kanal Düzenle`}
+            onCloseModal={() => {
+              this.setState({showEditGroup: false, currentGroup: null});
+            }}
+            onCancelPress={() => {
+              this.setState({showEditGroup: false, currentGroup: null});
+            }}
+            onOkPress={async () => {
+              if (this.state.currentGroup) {
+                await this.setState({showEditGroup: false}, async () => {
+                  await this.props.GroupActions.updateItem(
+                    this.state.currentGroup,
+                  );
+                  this.setState({currentGroup: null});
                 });
-            });
-          }}>
-          <TextInput
-            placeholder="Kanal Adı"
-            autoFocus={true}
-            selectTextOnFocus={true}
-            value={this.state.newGroupName}
-            placeholderTextColor={colors.color3}
-            style={{
-              borderBottomWidth: 1,
-              flex: 1,
-              padding: 5,
-              borderBottomColor: colors.primaryButtonTextColor,
-              color: colors.primaryButtonTextColor,
+              }
+            }}>
+            <TextInput
+              placeholder="Kanal Adı"
+              value={
+                this.state.currentGroup ? this.state.currentGroup.Name : ''
+              }
+              placeholderTextColor={colors.color3}
+              style={{
+                borderBottomWidth: 1,
+                flex: 1,
+                padding: 5,
+                borderBottomColor: colors.primaryButtonTextColor,
+                color: colors.primaryButtonTextColor,
+              }}
+              onChangeText={(text) => {
+                const {currentGroup} = this.state;
+                currentGroup.Name = text;
+                this.setState({currentGroup});
+              }}
+            />
+          </FormModal>
+        ) : null}
+        {this.state.showDeleteGroup && !!this.state.currentGroup ? (
+          <FormModal
+            show={this.state.showDeleteGroup && !!this.state.currentGroup}
+            title={`Kanaldan Ayrıl: ${
+              this.state.currentGroup ? this.state.currentGroup.Name : ''
+            }`}
+            onCloseModal={() => {
+              this.setState({showDeleteGroup: false, currentGroup: null});
             }}
-            onChangeText={(text) => {
-              this.setState({newGroupName: text});
+            onCancelPress={() => {
+              this.setState({showDeleteGroup: false, currentGroup: null});
             }}
-          />
-        </FormModal>
-
-        <FormModal
-          show={this.state.showEditGroup && !!this.state.currentGroup}
-          title={`Kanal Düzenle`}
-          onCloseModal={() => {
-            this.setState({showEditGroup: false});
-          }}
-          onCancelPress={() => {
-            this.setState({showEditGroup: false});
-          }}
-          onOkPress={async () => {
-            if (this.state.currentGroup) {
-              await this.setState({showEditGroup: false}, async () => {
-                await this.props.GroupActions.updateItem(
+            onOkPress={async () => {
+              await this.setState({showDeleteGroup: false}, async () => {
+                await this.props.GroupActions.deleteItem(
                   this.state.currentGroup,
                 );
+                this.setState({currentGroup: null});
               });
-            }
-          }}>
-          <TextInput
-            placeholder="Kanal Adı"
-            value={this.state.currentGroup ? this.state.currentGroup.Name : ''}
-            placeholderTextColor={colors.color3}
-            style={{
-              borderBottomWidth: 1,
-              flex: 1,
-              padding: 5,
-              borderBottomColor: colors.primaryButtonTextColor,
-              color: colors.primaryButtonTextColor,
-            }}
-            onChangeText={(text) => {
-              const {currentGroup} = this.state;
-              currentGroup.Name = text;
-              this.setState({currentGroup});
-            }}
-          />
-        </FormModal>
-        <FormModal
-          show={this.state.showDeleteGroup && !!this.state.currentGroup}
-          title={`Kanaldan Ayrıl: ${
-            this.state.currentGroup ? this.state.currentGroup.Name : ''
-          }`}
-          onCloseModal={() => {
-            this.setState({showDeleteGroup: false});
-          }}
-          onCancelPress={() => {
-            this.setState({showDeleteGroup: false});
-          }}
-          onOkPress={async () => {
-            await this.setState({showDeleteGroup: false}, async () => {
-              await this.props.GroupActions.deleteItem(this.state.currentGroup);
-            });
-          }}>
-          <Text
-            style={{
-              color: colors.primaryButtonTextColor,
             }}>
-            Grupdan ayrılmak istediğinize eminmisiniz?
-          </Text>
-        </FormModal>
+            <Text
+              style={{
+                color: colors.primaryButtonTextColor,
+              }}>
+              Kanaldan ayrılmak istediğinize eminmisiniz?
+            </Text>
+          </FormModal>
+        ) : null}
       </SafeAreaView>
     );
   }
