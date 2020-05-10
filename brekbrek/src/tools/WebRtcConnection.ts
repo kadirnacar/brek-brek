@@ -173,11 +173,11 @@ export class WebRtcConnection {
         event.target.iceConnectionState === 'disconnected'
       ) {
         if (event.target.iceConnectionState === 'connected') {
+          if (this.onConnectionChange ) {
+            this.onConnectionChange(event.target.iceConnectionState, id);
+          }
           this.createChannel(peer, id);
-        }
-        if (this.onConnectionChange) {
-          this.onConnectionChange(event.target.iceConnectionState, id);
-        }
+        } 
       }
     };
     peer.addStream(this.stream);

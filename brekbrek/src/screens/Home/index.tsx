@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -193,66 +194,68 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             </View>
           </View>
         ) : null}
-        {this.props.Group.groups
-          .filter(
-            (g) =>
-              g.Name.toLowerCase().indexOf(this.state.search.toLowerCase()) >
-              -1,
-          )
-          .map((group, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  backgroundColor:
-                    this.state.currentGroup &&
-                    this.state.currentGroup.Id == group.Id
-                      ? colors.color1
-                      : colors.bodyBackground,
-                  padding: 10,
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.borderColor,
-                }}>
-                <TouchableOpacity
-                  style={{flexDirection: 'row'}}
-                  onLongPress={() => {
-                    this.setState({actionsRow: true, currentGroup: group});
-                  }}
-                  onPress={async () => {
-                    await this.props.GroupActions.setCurrent(group);
-                    this.props.navigation.navigate('Group');
+        <ScrollView>
+          {this.props.Group.groups
+            .filter(
+              (g) =>
+                g.Name.toLowerCase().indexOf(this.state.search.toLowerCase()) >
+                -1,
+            )
+            .map((group, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor:
+                      this.state.currentGroup &&
+                      this.state.currentGroup.Id == group.Id
+                        ? colors.color1
+                        : colors.bodyBackground,
+                    padding: 10,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.borderColor,
                   }}>
-                  <View
-                    style={{
-                      backgroundColor: colors.color2,
-                      alignContent: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 30,
-                      width: 60,
-                      height: 60,
-                      marginRight: 10,
+                  <TouchableOpacity
+                    style={{flexDirection: 'row'}}
+                    onLongPress={() => {
+                      this.setState({actionsRow: true, currentGroup: group});
+                    }}
+                    onPress={async () => {
+                      await this.props.GroupActions.setCurrent(group);
+                      this.props.navigation.navigate('Group');
                     }}>
-                    <FontAwesome5Icon
-                      name="users"
-                      size={30}
-                      color={colors.color3}
-                    />
-                  </View>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      color: colors.color3,
-                    }}>
-                    {group.Name}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+                    <View
+                      style={{
+                        backgroundColor: colors.color2,
+                        alignContent: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 30,
+                        width: 60,
+                        height: 60,
+                        marginRight: 10,
+                      }}>
+                      <FontAwesome5Icon
+                        name="users"
+                        size={30}
+                        color={colors.color3}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        color: colors.color3,
+                      }}>
+                      {group.Name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+        </ScrollView>
         <View
           style={{
             backgroundColor: colors.primaryButtonColor,

@@ -4,6 +4,7 @@ export const colors = {
   color3: '#C1C5C7',
   color4: '#313C42',
   borderColor: '#2C363F',
+  activeBorderColor: '#00B09C',
   inputTextColor: 'rgba(255,255,255,0.87)',
   textColor: '#fff',
   primaryButtonColor: '#3390BB',

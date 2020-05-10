@@ -4,7 +4,7 @@ import {UserStatus} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions} from '@reducers';
 import {ApplicationState} from '@store';
-import {SocketClient, WebRtcConnection} from '@tools';
+import {SocketClient, WebRtcConnection, colors} from '@tools';
 import React, {Component} from 'react';
 import {
   Dimensions,
@@ -13,6 +13,7 @@ import {
   Text,
   TouchableHighlight,
   View,
+  ScrollView,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -110,16 +111,29 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           }
         };
         this.webRtcConnection.onConnectionChange = (status, userId) => {
+          console.log(this.props.User.current.Id,userId,status)
           switch (status) {
             case 'connected':
-              this.props.Group.current.Users[userId].status = UserStatus.Online;
+              if (
+                this.props.Group.current.Users[userId].status !=
+                UserStatus.Online
+              ) {
+                this.props.Group.current.Users[userId].status =
+                  UserStatus.Online;
+                this.setState({});
+              }
               break;
             case 'disconnected':
+              if (
+                this.props.Group.current.Users[userId].status !=
+                UserStatus.Offline
+              ) {
               this.props.Group.current.Users[userId].status =
                 UserStatus.Offline;
+              this.setState({});
+              }
               break;
           }
-          this.setState({});
         };
       }
       await this.webRtcConnection.connect();
@@ -188,21 +202,37 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     }
   }
   render() {
+    const users = (this.props.Group.current && this.props.Group.current.Users
+      ? Object.keys(this.props.Group.current.Users).filter(
+          (x) => true, //x != this.props.User.current.Id,
+        )
+      : []
+    )
+      .map((id) => this.props.Group.current.Users[id])
+      .sort((a, b) => {
+        if (a.status < b.status) {
+          return -1;
+        } else if (a.status > b.status) {
+          return 1;
+        }
+        return 0;
+      });
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
         <LoaderSpinner showLoader={this.props.Group.isRequest} />
         <View
           style={{
             padding: 10,
             borderBottomWidth: 1,
-            borderBottomColor: '#cccccc',
+            backgroundColor: colors.color4,
+            borderBottomColor: colors.borderColor,
             minHeight: 50,
             justifyContent: 'center',
           }}>
           <Text
             style={{
               fontSize: 22,
-              color: '#000',
+              color: colors.color3,
               textAlign: 'center',
               fontWeight: 'bold',
             }}>
@@ -211,67 +241,59 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               : ''}
           </Text>
         </View>
-        <View
+        <ScrollView
           style={{
-            padding: 10,
             flex: 1,
-            borderBottomWidth: 1,
-            borderBottomColor: '#cccccc',
-            justifyContent: 'center',
           }}>
-          <FlatList
-            numColumns={3}
-            contentContainerStyle={{
-              flex: 1,
-              alignContent: 'center',
-              alignItems: 'center',
-            }}
-            data={
-              this.props.Group.current && this.props.Group.current.Users
-                ? Object.keys(this.props.Group.current.Users).filter(
-                    (x) => x != this.props.User.current.Id,
-                  )
-                : []
-            }
-            renderItem={(item) => {
-              return (
-                <View
-                  key={item.index}
-                  style={{
-                    backgroundColor:
-                      this.props.Group.current.Users[item.item].status ==
-                      UserStatus.Online
-                        ? '#3bb33f'
-                        : this.props.Group.current.Users[item.item].status ==
-                          UserStatus.Talking
-                        ? '#9332a8'
-                        : '#cccccc',
-                    borderWidth: 5,
-                    borderColor: '#d3d3d3',
-                    width: width / 3 - 20,
-                    margin: 10,
-                    borderRadius: (width / 3 - 20) / 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    alignSelf: 'center',
-                    height: width / 3 - 20,
-                  }}>
+          {users.map((item, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: colors.bodyBackground,
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.borderColor,
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      borderWidth: item.status == UserStatus.Talking ? 1 : 0,
+                      borderColor: colors.activeBorderColor,
+                      backgroundColor: colors.color2,
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 30,
+                      width: 60,
+                      height: 60,
+                      marginRight: 10,
+                    }}>
+                    <FontAwesome5Icon
+                      name="user"
+                      size={30}
+                      color={
+                        item.status == UserStatus.Offline
+                          ? colors.color1
+                          : colors.color3
+                      }
+                    />
+                  </View>
                   <Text
                     style={{
-                      justifyContent: 'center',
-                      textAlign: 'center',
+                      fontSize: 16,
                       fontWeight: 'bold',
-                      color: '#fff',
+                      alignItems: 'center',
+                      alignSelf: 'center',
+                      color: colors.color3,
                     }}>
-                    {this.props.Group.current.Users[item.item].DisplayName}
+                    {item.DisplayName}
                   </Text>
                 </View>
-              );
-            }}
-            keyExtractor={(item) => item}
-          />
-        </View>
+              </View>
+            );
+          })}
+        </ScrollView>
         <View
           style={{
             position: 'absolute',
@@ -284,7 +306,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             onPressIn={this.handleStart}
             onPressOut={this.handleStop}
             style={{
-              backgroundColor: this.state.activeUser ? '#cccccc' : '#ff5722',
+              backgroundColor: this.state.activeUser
+                ? colors.color4
+                : '#ff5722',
               width: 100,
               borderRadius: 50,
               alignItems: 'center',
@@ -293,7 +317,11 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               alignSelf: 'center',
               height: 100,
             }}>
-            <FontAwesome5Icon name="microphone" size={30} color="#ffffff" />
+            <FontAwesome5Icon
+              name="microphone"
+              size={30}
+              color={colors.primaryButtonTextColor}
+            />
           </TouchableHighlight>
         </View>
 
@@ -310,7 +338,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               this.setState({speakerOn: !this.state.speakerOn});
             }}
             style={{
-              backgroundColor: !this.state.speakerOn ? '#cccccc' : '#4287f5',
+              backgroundColor: !this.state.speakerOn
+                ? colors.color4
+                : colors.primaryButtonColor,
               width: 50,
               borderRadius: 25,
               alignItems: 'center',
@@ -322,7 +352,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             <FontAwesome5Icon
               name={this.state.speakerOn ? 'volume-up' : 'volume-mute'}
               size={20}
-              color="#ffffff"
+              color={colors.primaryButtonTextColor}
             />
           </TouchableHighlight>
         </View>
