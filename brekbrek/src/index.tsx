@@ -1,14 +1,12 @@
 import {AppNavigation} from '@navigation';
+import {UserActionTypes} from '@reducers';
+import {LocalStorage} from '@store';
 import React, {Component} from 'react';
-import {View, Text, Platform} from 'react-native';
+import {Platform, View, Linking} from 'react-native';
 import SafeAreaView, {SafeAreaProvider} from 'react-native-safe-area-view';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {Provider} from 'react-redux';
 import store from './tools/store';
-import {LocalStorage} from '@store';
-import {UserActionTypes} from '@reducers';
-import {UserService} from './services/UserService';
-import {AsyncAlert} from './tools/AsyncAlert';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface AppState {
   isLoaded: boolean;
@@ -17,6 +15,7 @@ interface AppState {
 export default class App extends Component<any, AppState> {
   constructor(props) {
     super(props);
+    this.handleLinking = this.handleLinking.bind(this);
     this.state = {
       isLoaded: false,
       isLogin: false,
@@ -30,10 +29,10 @@ export default class App extends Component<any, AppState> {
       // if (checkUser.hasErrors()) {
       //   await AsyncAlert(checkUser.errors[0]);
       //   this.setState({isLoaded: true, isLogin: false});
-      // } else 
+      // } else
       // if (!checkUser.value.success) {
       //   this.setState({isLoaded: true, isLogin: false});
-      // } else 
+      // } else
       {
         store.dispatch({
           type: UserActionTypes.ReceiveUserItem,
@@ -44,6 +43,18 @@ export default class App extends Component<any, AppState> {
     } else {
       this.setState({isLoaded: true, isLogin: false});
     }
+    // if (Platform.OS === 'android') {
+    const url = await Linking.getInitialURL();
+    console.log(url);
+    // } else {
+    Linking.addEventListener('url', this.handleLinking);
+    // }
+  }
+  componentWillUnmount(){
+    Linking.removeEventListener('url', this.handleLinking);
+  }
+  handleLinking(url) {
+    console.log('handleUrl', url);
   }
   render() {
     return (

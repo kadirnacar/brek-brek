@@ -204,7 +204,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   render() {
     const users = (this.props.Group.current && this.props.Group.current.Users
       ? Object.keys(this.props.Group.current.Users).filter(
-          (x) => true, //x != this.props.User.current.Id,
+          (x) => x != this.props.User.current.Id,
         )
       : []
     )
