@@ -60,6 +60,12 @@ export default class App extends Component<any, AppState> {
         (latestversion.force == true || latestversion.force == 'true')
       ) {
         await AsyncAlert('Lütfen uygulamayı güncelleyiniz.');
+        if (Platform.OS == 'ios' && latestversion.appStoreUrl) {
+          Linking.openURL(latestversion.appStoreUrl);
+        }
+        if (Platform.OS == 'android' && latestversion.playStoreUrl) {
+          Linking.openURL(latestversion.playStoreUrl);
+        }
         BackHandler.exitApp();
       }
     }
