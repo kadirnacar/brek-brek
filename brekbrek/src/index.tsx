@@ -1,5 +1,5 @@
 import {AppNavigation} from '@navigation';
-import {UserActionTypes} from '@reducers';
+import {UserActionTypes, GroupActions} from '@reducers';
 import {LocalStorage} from '@store';
 import React, {Component} from 'react';
 import {Platform, View, Linking, BackHandler} from 'react-native';
@@ -12,6 +12,7 @@ import {AsyncAlert} from './tools/AsyncAlert';
 import VersionCheck from 'react-native-version-check';
 import {UserService} from './services/UserService';
 import config from '@config';
+import {GroupService} from './services/GroupService';
 
 interface AppState {
   isLoaded: boolean;
@@ -91,7 +92,16 @@ export default class App extends Component<any, AppState> {
     }
     // if (Platform.OS === 'android') {
     const url = await Linking.getInitialURL();
-    console.log('url', url);
+    if (url) {
+      try {
+        const groupId = url.split('/').pop();
+        console.log(groupId);
+        if (groupId) {
+          await GroupService.joinGroup(groupId);
+          await GroupActions.getUserGroups()(store.dispatch, store.getState);
+        }
+      } catch {}
+    }
     // } else {
     Linking.addEventListener('url', this.handleLinking);
     // }
@@ -99,7 +109,16 @@ export default class App extends Component<any, AppState> {
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleLinking);
   }
-  handleLinking(url) {
+  async handleLinking(url) {
+    if (url && url.url) {
+      try {
+        const groupId = url.url.split('/').pop();
+        if (groupId) {
+          await GroupService.joinGroup(groupId);
+          await GroupActions.getUserGroups()(store.dispatch, store.getState);
+        }
+      } catch {}
+    }
     console.log('handleUrl', url);
   }
   render() {

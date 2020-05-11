@@ -55,4 +55,15 @@ export class GroupService extends ServiceBase {
     );
     return result;
   }
+
+  public static async joinGroup(groupId): Promise<Result<IGroupUser>> {
+    var result = await this.requestJson<IGroupUser>(
+      {
+        url: `${config.restUrl}/api/group/join/${groupId}`,
+        method: 'GET',
+      },
+      true,
+    );
+    return result;
+  }
 }

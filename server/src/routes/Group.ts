@@ -34,6 +34,36 @@ export class GroupRouter extends BaseRouter<Group> {
     }
   }
 
+  public async join(req: Request, res: Response, next) {
+    try {
+      if (!res.locals.jwtPayload) {
+        res.sendStatus(401);
+        return;
+      }
+      const userId = res.locals.jwtPayload.userId;
+      const groupId = req.params.groupId;
+      const group = await Services.Group.getById(groupId);
+      const user = await Services.User.getById(userId);
+      if (group && user) {
+        const data = await Services.UserGroup.getItem({
+          where: { GroupId: groupId, UserId: userId },
+        });
+        if (!data) {
+          await Services.UserGroup.save({
+            GroupId: groupId,
+            UserId: userId,
+            Deleted: false,
+          });
+        }
+        res.status(200).send({ message: "user join to group" });
+      } else {
+        res.status(200).send({ message: "user or group not found" });
+      }
+    } catch (err) {
+      next(err && err.message ? err.message : err);
+    }
+  }
+
   public async getList(req: Request, res: Response, next) {
     try {
       if (!res.locals.jwtPayload) {
@@ -98,6 +128,7 @@ export class GroupRouter extends BaseRouter<Group> {
 
   init() {
     this.router.get("/users/:groupId", [checkJwt], this.getUsers.bind(this));
+    this.router.get("/join/:groupId", [checkJwt], this.join.bind(this));
     this.router.get("/", [checkJwt], this.getList.bind(this));
     // this.router.get('/:id', this.getItem.bind(this));
     this.router.delete("/:id", [checkJwt], this.deleteItem.bind(this));
