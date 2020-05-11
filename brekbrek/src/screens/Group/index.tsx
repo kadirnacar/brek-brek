@@ -24,6 +24,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import HeadphoneDetection from 'react-native-headphone-detection';
 import Share, {Options} from 'react-native-share';
+import CallDetectorManager from 'react-native-call-detection';
 
 const {width} = Dimensions.get('window');
 
@@ -63,7 +64,39 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   webRtcConnection: WebRtcConnection;
   startInterval;
   volumeListener;
+  callDetector: CallDetectorManager;
+  async startListenerTapped() {
+    this.callDetector = new CallDetectorManager(
+      async (event, phoneNumber) => {
+        if (event === 'Disconnected') {
+        } else if (event === 'Connected') {
+          await this.webRtcConnection.close();
+          this.props.navigation.navigate("Home")
+        } else if (event === 'Incoming') {
+          await this.webRtcConnection.close();
+          this.props.navigation.navigate("Home")
+        } else if (event === 'Dialing') {
+          await this.webRtcConnection.close();
+          this.props.navigation.navigate("Home")
+        } else if (event === 'Offhook') {
+          await this.webRtcConnection.close();
+          this.props.navigation.navigate("Home")
+        } else if (event === 'Missed') {
+        }
+      },
+      false, 
+      () => {}, 
+      {
+        title: 'Phone State Permission',
+        message:
+          'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
+      }, 
+    );
+  }
 
+  stopListenerTapped() {
+    this.callDetector && this.callDetector.dispose();
+  }
   handleHeadPhone(e) {
     if (e.audioJack || e.bluetooth) {
       this.webRtcConnection.speakerOnOff(false);
@@ -77,6 +110,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
+    this.startListenerTapped();
     await this.props.GroupActions.getGroupUsers(this.props.Group.current.Id);
     if (!this.socketClient) {
       this.socketClient = new SocketClient(config.wsUrl, {
@@ -204,6 +238,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
   componentWillUnmount() {
     this.volumeListener.remove();
+    this.stopListenerTapped();
     if (HeadphoneDetection.remove) {
       // The remove is not necessary on Android
       HeadphoneDetection.remove();
