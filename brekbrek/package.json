@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android-release": "react-native run-android --variant=release",
     "ios": "react-native run-ios",
     "start": "react-native start"
   },
@@ -29,6 +30,7 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^2.7.0",
+    "react-native-share": "^3.3.2",
     "react-native-vector-icons": "^6.6.0",
     "react-native-version-check": "^3.4.1",
     "react-native-volume-control": "file:./local_modules/react-native-volume-control",
@@ -44,6 +46,7 @@
     "@types/react-native": "^0.62.7",
     "@types/react-native-fbsdk": "^1.1.0",
     "@types/react-native-incall-manager": "^3.2.0",
+    "@types/react-native-share": "^3.1.0",
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-redux": "^7.1.8",
     "@typescript-eslint/eslint-plugin": "^2.31.0",

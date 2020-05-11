@@ -14,6 +14,7 @@ import {
   TouchableHighlight,
   View,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -22,6 +23,7 @@ import {VolumeControlEvents} from 'react-native-volume-control';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import HeadphoneDetection from 'react-native-headphone-detection';
+import Share, {Options} from 'react-native-share';
 
 const {width} = Dimensions.get('window');
 
@@ -45,6 +47,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     super(props);
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
+    this.handleShare = this.handleShare.bind(this);
     this.state = {
       peers: [],
       isStart: false,
@@ -111,7 +114,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           }
         };
         this.webRtcConnection.onConnectionChange = (status, userId) => {
-          console.log(this.props.User.current.Id,userId,status)
+          console.log(this.props.User.current.Id, userId, status);
           switch (status) {
             case 'connected':
               if (
@@ -128,9 +131,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                 this.props.Group.current.Users[userId].status !=
                 UserStatus.Offline
               ) {
-              this.props.Group.current.Users[userId].status =
-                UserStatus.Offline;
-              this.setState({});
+                this.props.Group.current.Users[userId].status =
+                  UserStatus.Offline;
+                this.setState({});
               }
               break;
           }
@@ -187,6 +190,18 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     this.webRtcConnection.stopMediaStream();
     this.setState({});
   }
+  async handleShare() {
+    const url = `http://brekbrek.kadirnacar.com/join/${this.props.Group.current.Id}`;
+    const title = 'BrekBrek Görüşme Daveti';
+    const message = `${this.props.User.current.DisplayName}, sizi görüşmeye davet etti.`;
+    const options: Options = {
+      title: title,
+      subject: title,
+      message: `${message} ${url}`,
+    };
+
+    await Share.open(options);
+  }
   componentWillUnmount() {
     this.volumeListener.remove();
     if (HeadphoneDetection.remove) {
@@ -228,9 +243,11 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             borderBottomColor: colors.borderColor,
             minHeight: 50,
             justifyContent: 'center',
+            flexDirection: 'row',
           }}>
           <Text
             style={{
+              flex: 1,
               fontSize: 22,
               color: colors.color3,
               textAlign: 'center',
@@ -240,6 +257,23 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ? this.props.Group.current.Name
               : ''}
           </Text>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              width: 45,
+              height: 35,
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              alignContent: 'flex-end',
+              alignSelf: 'flex-end',
+            }}
+            onPress={this.handleShare}>
+            <FontAwesome5Icon
+              name="user-plus"
+              size={20}
+              color={colors.color3}
+            />
+          </TouchableOpacity>
         </View>
         <ScrollView
           style={{
@@ -285,9 +319,10 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                       fontWeight: 'bold',
                       alignItems: 'center',
                       alignSelf: 'center',
-                      color: item.status == UserStatus.Offline
-                      ? colors.color1
-                      : colors.color3,
+                      color:
+                        item.status == UserStatus.Offline
+                          ? colors.color1
+                          : colors.color3,
                     }}>
                     {item.DisplayName}
                   </Text>

@@ -13,6 +13,7 @@ import VersionCheck from 'react-native-version-check';
 import {UserService} from './services/UserService';
 import config from '@config';
 import {GroupService} from './services/GroupService';
+import {AppService} from './services/AppService';
 
 interface AppState {
   isLoaded: boolean;
@@ -42,9 +43,16 @@ export default class App extends Component<any, AppState> {
     const latestversion = await VersionCheck.getLatestVersion({
       forceUpdate: true,
       provider: async () => {
-        const version = await fetch(`${config.restUrl}/api/app/`);
-        return version.json();
+        const result = await AppService.getLastVersion();
+        if (result.hasErrors()) {
+          return {};
+        } else {
+          return result.value;
+        }
       },
+      // fetch(`${config.restUrl}/api/app/`)
+      //   .then((r) => r.json())
+      //   .then(({version}) => version),
     });
     if (latestversion && latestversion.version) {
       const need = await VersionCheck.needUpdate({
@@ -52,8 +60,12 @@ export default class App extends Component<any, AppState> {
         latestVersion: latestversion.version,
         forceUpdate: true,
         provider: async () => {
-          const version = await fetch(`${config.restUrl}/api/app/`);
-          return await version.json();
+          const result = await AppService.getLastVersion();
+          if (result.hasErrors()) {
+            return {};
+          } else {
+            return result.value;
+          }
         },
       });
       if (
