@@ -5,6 +5,7 @@ import * as express from "express";
 import * as xmlparser from "express-xml-bodyparser";
 import * as helmet from "helmet";
 import corsPrefetch from "./cors";
+import { AppRouter } from "./routes/App";
 
 class App {
   public express;
@@ -44,6 +45,7 @@ class App {
     this.express.use("/", router);
     this.express.use("/api/auth", new AuthRouter().router);
     this.express.use("/api/group", new GroupRouter().router);
+    this.express.use("/api/app", new AppRouter().router);
 
     this.express.use((err, req, res, next) => {
       logger.error(err);

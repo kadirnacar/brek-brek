@@ -11,8 +11,12 @@ import { Group } from "./Group";
 export { UserGroup } from "./UserGroup";
 import { UserGroup } from "./UserGroup";
 
+export { App } from "./App";
+import { App } from "./App";
+
 export const Models = {
   User,
   Group,
-  UserGroup
+  UserGroup,
+  App,
 };
