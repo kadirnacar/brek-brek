@@ -91,6 +91,12 @@ export class WebRtcConnection {
     for (const key in this.peers) {
       this.leave(key);
     }
+    try {
+      const tracks = this.stream.getTracks();
+      tracks.forEach((trkc) => {
+        this.stream.removeTrack(trkc);
+      });
+    } catch {}
   }
 
   public speakerOnOff(value: boolean) {
@@ -173,11 +179,11 @@ export class WebRtcConnection {
         event.target.iceConnectionState === 'disconnected'
       ) {
         if (event.target.iceConnectionState === 'connected') {
-          if (this.onConnectionChange ) {
+          if (this.onConnectionChange) {
             this.onConnectionChange(event.target.iceConnectionState, id);
           }
           this.createChannel(peer, id);
-        } 
+        }
       }
     };
     peer.addStream(this.stream);

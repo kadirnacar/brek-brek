@@ -25,6 +25,7 @@ import {bindActionCreators} from 'redux';
 import HeadphoneDetection from 'react-native-headphone-detection';
 import Share, {Options} from 'react-native-share';
 import CallDetectorManager from 'react-native-call-detection';
+import RNBeep from 'react-native-a-beep';
 
 const {width} = Dimensions.get('window');
 
@@ -134,6 +135,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Talking;
               }
+              RNBeep.beep();
               this.setState({activeUser: id});
               break;
             case 'end':
@@ -143,6 +145,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Online;
               }
+              RNBeep.beep()
               this.setState({activeUser: null});
               break;
           }
@@ -205,12 +208,14 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               this.handleStop();
               BackgroundTimer.clearInterval(this.startInterval);
             });
-          }, 500);
+          }, 700);
         }
       },
     );
   }
   handleStart() {
+    RNBeep.beep()
+
     this.webRtcConnection.sendData({
       command: 'start',
     });
@@ -218,6 +223,8 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     this.setState({});
   }
   handleStop() {
+    RNBeep.beep()
+
     this.webRtcConnection.sendData({
       command: 'end',
     });
