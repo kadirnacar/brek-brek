@@ -13,6 +13,7 @@ export class SocketClient {
 
   public onMessageEvent: ((event: WebSocketMessageEvent) => void) | null;
   public onErrorEvent: ((event: WebSocketErrorEvent) => void) | null;
+  public onConnected: ((state: number) => void) | null;
 
   private onMessage = (e: WebSocketMessageEvent) => {
     if (this.onMessageEvent) {
@@ -52,7 +53,7 @@ export class SocketClient {
 
   public async connect() {
     const self = this;
-    const token = (await LocalStorage.getItem('token'));
+    const token = await LocalStorage.getItem('token');
 
     return new Promise((resolve, reject) => {
       if (self.isDisposed) {
@@ -66,6 +67,9 @@ export class SocketClient {
         if (self.socket.readyState == WebSocket.OPEN) {
           console.log('WebSocketClient: connected');
           resolve(WebSocket.OPEN);
+          if (this.onConnected) {
+            this.onConnected(WebSocket.OPEN);
+          }
         } else {
           resolve(self.socket.readyState);
         }
@@ -73,7 +77,7 @@ export class SocketClient {
       self.socket.onclose = self.onClose.bind(self);
       self.socket.onmessage = self.onMessage.bind(self);
       self.socket.onerror = (e) => {
-        console.log(e.message);
+        console.log('socket.onerror', e);
         if (self.onErrorEvent) {
           self.onErrorEvent(e);
         }

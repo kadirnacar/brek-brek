@@ -38,10 +38,12 @@ export class WebRtcConnection {
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
+    console.log('onSocketMessage', data);
     switch (data.command) {
       case 'join':
         for (var i = 0; i < data.peers.length; i++) {
           const peer = data.peers[i];
+          if (peer in this.peers) this.leave(peer);
           if (peer != this.userId) {
             await this.createPeer(peer, true);
           }
@@ -51,14 +53,19 @@ export class WebRtcConnection {
         await this.exchange(data);
         break;
       case 'leave':
-        await this.leave(data.userId);
+        // await this.leave(data.userId);
         break;
     }
   }
 
   public async connect() {
-    const stream = await mediaDevices.getUserMedia({audio: true, video: false});
-    this.stream = <any>stream;
+    if (!this.stream) {
+      const stream = await mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
+      this.stream = <any>stream;
+    }
     InCallManager.setSpeakerphoneOn(true);
 
     this.socket.send('join');
@@ -83,6 +90,7 @@ export class WebRtcConnection {
         }
       }
       delete this.peers[userId];
+
       this.onConnectionChange('disconnected', userId);
     }
   }
@@ -92,6 +100,8 @@ export class WebRtcConnection {
       this.leave(key);
     }
     try {
+      InCallManager.setMicrophoneMute(false);
+      InCallManager.stop();
       const tracks = this.stream.getTracks();
       tracks.forEach((trkc) => {
         this.stream.removeTrack(trkc);
@@ -122,7 +132,7 @@ export class WebRtcConnection {
     const dataChannel = peer.createDataChannel(this.groupId);
 
     dataChannel.onerror = (error) => {
-      console.warn(error);
+      console.warn('dataChannel.onerror', error);
     };
 
     dataChannel.onmessage = (event) => {
@@ -184,6 +194,8 @@ export class WebRtcConnection {
           }
           this.createChannel(peer, id);
         }
+      } else if (event.target.iceConnectionState === 'failed') {
+        this.connect();
       }
     };
     peer.addStream(this.stream);

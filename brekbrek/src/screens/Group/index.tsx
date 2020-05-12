@@ -34,6 +34,7 @@ interface GroupScreenState {
   data?: string;
   peers?: string[];
   activeUser?: string;
+  connected?: boolean;
   speakerOn?: boolean;
 }
 
@@ -56,6 +57,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       data: null,
       activeUser: null,
       speakerOn: true,
+      connected: false,
     };
     this.props.navigation.setOptions({
       // canGoBack: true,
@@ -72,26 +74,26 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         if (event === 'Disconnected') {
         } else if (event === 'Connected') {
           await this.webRtcConnection.close();
-          this.props.navigation.navigate("Home")
+          this.props.navigation.navigate('Home');
         } else if (event === 'Incoming') {
           await this.webRtcConnection.close();
-          this.props.navigation.navigate("Home")
+          this.props.navigation.navigate('Home');
         } else if (event === 'Dialing') {
           await this.webRtcConnection.close();
-          this.props.navigation.navigate("Home")
+          this.props.navigation.navigate('Home');
         } else if (event === 'Offhook') {
           await this.webRtcConnection.close();
-          this.props.navigation.navigate("Home")
+          this.props.navigation.navigate('Home');
         } else if (event === 'Missed') {
         }
       },
-      false, 
-      () => {}, 
+      false,
+      () => {},
       {
         title: 'Phone State Permission',
         message:
           'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
-      }, 
+      },
     );
   }
 
@@ -118,6 +120,18 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         Id: this.props.Group.current.Id,
       });
       const result = await this.socketClient.connect();
+      this.setState({connected: true});
+      this.socketClient.onConnected = async (state) => {
+        console.log('this.socketClient.onConnected', state);
+        if (!this.state.connected) {
+          await this.webRtcConnection.connect();
+        }
+        this.setState({connected: true});
+      };
+      this.socketClient.onErrorEvent = (e) => {
+        this.webRtcConnection.close();
+        this.setState({connected: false});
+      };
       if (result == WebSocket.OPEN) {
         this.webRtcConnection = new WebRtcConnection(
           this.socketClient,
@@ -145,7 +159,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[id].status = UserStatus.Online;
               }
-              RNBeep.beep()
+              RNBeep.beep();
               this.setState({activeUser: null});
               break;
           }
@@ -160,7 +174,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[userId].status =
                   UserStatus.Online;
-                this.setState({});
               }
               break;
             case 'disconnected':
@@ -170,7 +183,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
               ) {
                 this.props.Group.current.Users[userId].status =
                   UserStatus.Offline;
-                this.setState({});
               }
               break;
           }
@@ -214,16 +226,18 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     );
   }
   handleStart() {
-    RNBeep.beep()
+    if (this.state.connected) {
+      RNBeep.beep();
 
-    this.webRtcConnection.sendData({
-      command: 'start',
-    });
-    this.webRtcConnection.startMediaStream();
-    this.setState({});
+      this.webRtcConnection.sendData({
+        command: 'start',
+      });
+      this.webRtcConnection.startMediaStream();
+      this.setState({});
+    }
   }
   handleStop() {
-    RNBeep.beep()
+    RNBeep.beep();
 
     this.webRtcConnection.sendData({
       command: 'end',
@@ -244,7 +258,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     await Share.open(options);
   }
   componentWillUnmount() {
-    this.volumeListener.remove();
+    if (this.volumeListener) {
+      this.volumeListener.remove();
+    }
     this.stopListenerTapped();
     if (HeadphoneDetection.remove) {
       // The remove is not necessary on Android
@@ -381,13 +397,14 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             bottom: 40,
           }}>
           <TouchableHighlight
-            disabled={!!this.state.activeUser}
+            disabled={!!this.state.activeUser && this.state.connected}
             onPressIn={this.handleStart}
             onPressOut={this.handleStop}
             style={{
-              backgroundColor: this.state.activeUser
-                ? colors.color4
-                : '#ff5722',
+              backgroundColor:
+                this.state.activeUser || !this.state.connected
+                  ? colors.color4
+                  : '#ff5722',
               width: 100,
               borderRadius: 50,
               alignItems: 'center',
