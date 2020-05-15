@@ -1,10 +1,25 @@
-import {UserService} from '@services';
-import {batch} from 'react-redux';
-import {Actions} from './state';
+import { Result } from '@models';
+import { UserService } from '@services';
+import { batch } from 'react-redux';
 import * as LocalStorage from '../../store/localStorage';
-import {Alert} from 'react-native';
+import { AsyncAlert } from '../../tools/AsyncAlert';
+import { Actions } from './state';
 
 export const actionCreators = {
+  leaveGroup: (groupId) => async (dispatch, getState) => {
+    let result: Result<any>;
+    await batch(async () => {
+      dispatch({type: Actions.RequestLeaveGroup});
+      result = await UserService.leaveGroup(groupId);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
+      }
+      dispatch({
+        type: Actions.ReceiveLeaveGroup,
+      });
+    });
+    return result;
+  },
   loginWithGoogle: () => async (dispatch, getState) => {
     let isSuccess: boolean = false;
     let message: string = null;

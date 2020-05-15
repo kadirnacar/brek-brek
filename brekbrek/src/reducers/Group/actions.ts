@@ -35,54 +35,6 @@ export const actionCreators = {
     });
     return await result;
   },
-  deleteItem: (item: IGroup) => async (dispatch, getState) => {
-    let result: Result<IGroup>;
-    await batch(async () => {
-      dispatch({type: Actions.RequestDelete});
-      result = await GroupService.delete(item);
-      if (result.hasErrors()) {
-        await AsyncAlert(result.errors[0]);
-      }
-      dispatch({
-        type: Actions.ReceiveDelete,
-        payload: result.value,
-      });
-    });
-    return result;
-  },
-  getGroupUsers: (groupId) => async (dispatch, getState) => {
-    let result: Result<IGroupUser>;
-    await batch(async () => {
-      dispatch({type: Actions.RequestUserList});
-      result = await GroupService.getGroupUsers(groupId);
-      if (result.hasErrors()) {
-        await AsyncAlert(result.errors[0]);
-      }
-      dispatch({
-        type: Actions.ReceiveUserList,
-        payload: result.value,
-        groupId: groupId,
-      });
-    });
-
-    return result;
-  },
-  getUserGroups: () => async (dispatch, getState) => {
-    let result: Result<IGroup[]>;
-    await batch(async () => {
-      dispatch({type: Actions.RequestList});
-      result = await GroupService.getUserGroups();
-      if (result.hasErrors()) {
-        await AsyncAlert(result.errors[0]);
-      }
-      dispatch({
-        type: Actions.ReceiveList,
-        payload: result.value,
-      });
-    });
-
-    return result;
-  },
   clear: () => async (dispatch, getState) => {
     dispatch({type: Actions.ClearItem});
   },

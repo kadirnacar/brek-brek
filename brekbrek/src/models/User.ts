@@ -8,4 +8,10 @@ export interface IUser {
   Email?: string;
   Uid?: string;
   Type?: 'User' | 'Facebook' | 'Google';
+  Groups?: IUserGroup[];
+}
+
+export interface IUserGroup {
+  Id?: any;
+  Name?: string;
 }

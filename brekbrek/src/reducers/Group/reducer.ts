@@ -5,21 +5,15 @@ import {
   IClearAction,
   IReceiveCreateAction,
   IRequestCreateAction,
-  IReceiveListAction,
-  IRequestListAction,
   IReceiveUpdateAction,
   IRequestUpdateAction,
-  IReceiveDeleteAction,
-  IRequestDeleteAction,
-  IReceiveUserListAction,
-  IRequestUserListAction,
-  ISetCurrent,
+  IReceiveGroupAction,
+  IRequestGroupAction,
 } from './state';
 import {IGroupUser, UserStatus} from '@models';
 
 const unloadedState: GroupState = {
   current: null,
-  groups: [],
   isRequest: false,
 };
 
@@ -27,15 +21,10 @@ export type KnownAction =
   | IReceiveCreateAction
   | IRequestCreateAction
   | IClearAction
-  | IReceiveListAction
-  | IRequestListAction
   | IReceiveUpdateAction
   | IRequestUpdateAction
-  | IReceiveDeleteAction
-  | IRequestDeleteAction
-  | ISetCurrent
-  | IReceiveUserListAction
-  | IRequestUserListAction;
+  | IReceiveGroupAction
+  | IRequestGroupAction;
 
 export const reducer = (
   currentState: GroupState = unloadedState,
@@ -43,77 +32,27 @@ export const reducer = (
 ) => {
   const action = incomingAction as KnownAction;
   switch (action.type) {
-    case Actions.ReceiveDelete:
-      if (action.payload) {
-        const old = currentState.groups.findIndex(
-          (i) => i.Id == action.payload.GroupId,
-        );
-        if (old > -1) currentState.groups.splice(old, 1);
-      }
+    case Actions.ReceiveGroup:
       currentState.isRequest = false;
       return {...currentState};
-    case Actions.RequestDelete:
+    case Actions.RequestGroup:
       currentState.isRequest = true;
       return {...currentState};
     case Actions.ReceiveUpdate:
-      if (action.payload) {
-        const old = currentState.groups.findIndex(
-          (i) => i.Id == action.payload.Id,
-        );
-        if (old > -1) {
-          currentState.groups.splice(old, 1);
-        }
-        currentState.groups.push(action.payload.item);
-      }
       currentState.isRequest = false;
       return {...currentState};
     case Actions.RequestUpdate:
       currentState.isRequest = true;
       return {...currentState};
     case Actions.ReceiveCreate:
-      if (action.payload) {
-        currentState.groups.push(action.payload);
-      }
       currentState.isRequest = false;
       return {...currentState};
     case Actions.RequestCreate:
       currentState.isRequest = true;
       return {...currentState};
-    case Actions.ReceiveUserList:
-      if (action.payload && action.groupId && currentState.groups) {
-        const group = currentState.groups.find((g) => g.Id == action.groupId);
-        if (group) {
-          const users: IGroupUser = {};
-          Object.keys(action.payload).forEach((userId) => {
-            users[userId] = {
-              DisplayName: action.payload[userId],
-              status: UserStatus.Offline,
-            };
-          });
-          group.Users = users;
-        }
-      }
-      currentState.isRequest = false;
-      return {...currentState};
-    case Actions.RequestUserList:
-      currentState.isRequest = true;
-      return {...currentState};
-    case Actions.ReceiveList:
-      if (action.payload) {
-        currentState.groups = action.payload;
-      }
-      currentState.isRequest = false;
-      return {...currentState};
-    case Actions.RequestList:
-      currentState.isRequest = true;
-      return {...currentState};
     case Actions.ClearItem:
       currentState.isRequest = false;
       currentState.current = null;
-      return {...currentState};
-    case Actions.SetCurrent:
-      currentState.isRequest = false;
-      currentState.current = action.payload;
       return {...currentState};
     default:
       break;

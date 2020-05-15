@@ -2,11 +2,9 @@ import { Column, Entity } from "typeorm";
 import { BaseModel, NullColumn } from "./utils/BaseModel";
 
 export class GroupUser {
-  @NullColumn()
-  Id?: any;
-
-  @NullColumn()
-  DisplayName?: string;
+  [key: string]: {
+    DisplayName: string;
+  };
 }
 
 @Entity()
@@ -21,5 +19,5 @@ export class Group extends BaseModel {
   CreateUserId?: string;
 
   @Column((type) => GroupUser)
-  Users?: GroupUser[] = [];
+  Users?: GroupUser;
 }

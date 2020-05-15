@@ -94,6 +94,16 @@ export class UserService extends ServiceBase {
       return new Result<IUser>(null, ex.message);
     }
   }
+  public static async leaveGroup(groupId): Promise<Result<any>> {
+    var result = await this.requestJson<any>(
+      {
+        url: `${config.restUrl}/api/group/${groupId}`,
+        method: 'DELETE',
+      },
+      true,
+    );
+    return result;
+  }
   public static async checkUser() {
     try {
       var result = await this.requestJson<any>(

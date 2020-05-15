@@ -3,11 +3,9 @@ import { BaseModel, NullColumn } from "./utils/BaseModel";
 import { Group } from "./Group";
 
 export class UserGroup {
-  @NullColumn()
-  Id?: any;
-
-  @NullColumn()
-  Name?: string;
+  [key: string]: {
+    Name: string;
+  };
 }
 
 @Entity()
@@ -25,5 +23,5 @@ export class User extends BaseModel {
   Type?: "Admin" | "User" | "Facebook" | "Google" | "Anonymous" = "User";
 
   @Column((type) => UserGroup)
-  Groups?: UserGroup[] = [];
+  Groups?: UserGroup;
 }

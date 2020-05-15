@@ -1,11 +1,8 @@
 import { Group } from "@models";
 import { Services } from "@services";
 import { Request, Response } from "express";
-import { ObjectId } from "mongodb";
 import { checkJwt } from "../middlewares/checkJwt";
 import { BaseRouter } from "./BaseRoute";
-import Utils from "@utils";
-import { isRegExp } from "util";
 
 export class GroupRouter extends BaseRouter<Group> {
   constructor() {
@@ -24,9 +21,15 @@ export class GroupRouter extends BaseRouter<Group> {
       const group = await Services.Group.getById(groupId);
       const user = await Services.User.getById(userId);
       if (group && user) {
-        group.Users.push({ DisplayName: user.DisplayName, Id: user.Id });
+        if (!group.Users) {
+          group.Users = {};
+        }
+        group.Users[user.Id.toString()] = { DisplayName: user.DisplayName };
         await Services.Group.save(group);
-        user.Groups.push({ Id: group.Id, Name: group.Name });
+        if (!user.Groups) {
+          user.Groups = {};
+        }
+        user.Groups[group.Id.toString()] = { Name: group.Name };
         await Services.User.save(user);
         res.status(200).send({ message: "user join to group" });
       } else {
@@ -51,10 +54,16 @@ export class GroupRouter extends BaseRouter<Group> {
         const data = await this.service.save({
           ...new Group(),
           ...values.item,
-          ...{ Users: [{ DisplayName: user.DisplayName, Id: user.Id }] },
+          ...{
+            Users: { [user.Id.toString()]: { DisplayName: user.DisplayName } },
+          },
           CreateUserId: res.locals.jwtPayload.userId,
         });
-        user.Groups.push({ Id: data.Id, Name: data.Name });
+        if (!user.Groups) {
+          user.Groups = {};
+        }
+        user.Groups[data.Id.toString()] = { Name: data.Name };
+
         await Services.User.save(user);
         res.status(200).send(data);
       } else {
@@ -74,18 +83,13 @@ export class GroupRouter extends BaseRouter<Group> {
       const user = await Services.User.getById(userId);
 
       if (group && user) {
-        const groupUserIndex = group.Users
-          ? group.Users.findIndex((u) => u.Id == user.Id)
-          : -1;
-        if (groupUserIndex > -1) {
-          group.Users.splice(groupUserIndex, 1);
+        if (group.Users && user.Id.toString() in group.Users) {
+          delete group.Users[user.Id.toString()];
           await Services.Group.save(group);
         }
-        const userGroupIndex = user.Groups
-          ? user.Groups.findIndex((u) => u.Id == group.Id)
-          : -1;
-        if (userGroupIndex > -1) {
-          user.Groups.splice(userGroupIndex, 1);
+
+        if (user.Groups && group.Id.toString() in user.Groups) {
+          delete user.Groups[groupId.Id.toString()];
           await Services.User.save(user);
         }
         res.status(200).send({});
@@ -99,7 +103,7 @@ export class GroupRouter extends BaseRouter<Group> {
 
   init() {
     this.router.get("/join/:groupId", [checkJwt], this.join.bind(this));
-    // this.router.get('/:id', this.getItem.bind(this));
+    this.router.get('/:id', this.getItem.bind(this));
     this.router.delete("/:id", [checkJwt], this.deleteItem.bind(this));
     this.router.patch("/", [checkJwt], this.updateItem.bind(this));
     this.router.post("/", [checkJwt], this.createItem.bind(this));
