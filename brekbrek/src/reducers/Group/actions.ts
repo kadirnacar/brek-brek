@@ -20,6 +20,22 @@ export const actionCreators = {
     });
     return result;
   },
+  getItem: (groupId) => async (dispatch, getState) => {
+    let result: Result<IGroup>;
+    await batch(async () => {
+      dispatch({type: Actions.RequestGroup});
+      result = await GroupService.getItem(groupId);
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
+      }
+      dispatch({
+        type: Actions.ReceiveGroup,
+        payload: result.value,
+        groupId: groupId,
+      });
+    });
+    return await result;
+  },
   updateItem: (item: IGroup) => async (dispatch, getState) => {
     let result: Result<IGroup>;
     await batch(async () => {
@@ -38,7 +54,7 @@ export const actionCreators = {
   clear: () => async (dispatch, getState) => {
     dispatch({type: Actions.ClearItem});
   },
-  setCurrent: (item: IGroup) => async (dispatch, getState) => {
-    dispatch({type: Actions.SetCurrent, payload: item});
+  setCurrent: (groupId) => async (dispatch, getState) => {
+    dispatch({type: Actions.SetCurrent, payload: groupId});
   },
 };

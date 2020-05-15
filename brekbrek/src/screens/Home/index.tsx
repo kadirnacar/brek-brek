@@ -1,7 +1,7 @@
 import {FormModal, LoaderSpinner} from '@components';
-import {IGroup} from '@models';
+import {IGroup, IUserGroup} from '@models';
 import {NavigationProp} from '@react-navigation/native';
-import {GroupActions} from '@reducers';
+import {GroupActions, UserActions} from '@reducers';
 import {ApplicationState} from '@store';
 import React, {Component} from 'react';
 import {
@@ -23,7 +23,7 @@ interface HomeScreenState {
   showEditGroup?: boolean;
   showDeleteGroup?: boolean;
   newGroupName?: string;
-  currentGroup?: IGroup;
+  currentGroupId?: string;
   search?: string;
   searchRow?: boolean;
   actionsRow?: boolean;
@@ -32,6 +32,7 @@ interface HomeScreenState {
 interface HomeProps {
   navigation: NavigationProp<any>;
   GroupActions: typeof GroupActions;
+  UserActions: typeof UserActions;
 }
 
 type Props = HomeProps & ApplicationState;
@@ -88,9 +89,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
       canGoBack: true,
     });
   }
-  async componentDidMount() {
-    await this.props.GroupActions.getUserGroups();
-  }
+
+  async componentDidMount() {}
+
   render() {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
@@ -140,7 +141,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 alignItems: 'center',
               }}
               onPress={async () => {
-                this.setState({actionsRow: false, currentGroup: null});
+                this.setState({actionsRow: false, currentGroupId: null});
               }}>
               <FontAwesome5Icon
                 name="arrow-left"
@@ -195,22 +196,24 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           </View>
         ) : null}
         <ScrollView>
-          {this.props.Group.groups
-            .filter(
-              (g) =>
-                g.Name.toLowerCase().indexOf(this.state.search.toLowerCase()) >
-                -1,
-            )
-            .map((group, index) => {
+          {Object.keys(this.props.User.current.Groups)
+            .filter((g) => {
+              const group = this.props.User.current.Groups[g];
+              return (
+                group.Name.toLowerCase().indexOf(
+                  this.state.search.toLowerCase(),
+                ) > -1
+              );
+            })
+            .map((id, index) => {
+              const group = this.props.User.current.Groups[id];
               return (
                 <View
                   key={index}
                   style={{
-                    backgroundColor:
-                      this.state.currentGroup &&
-                      this.state.currentGroup.Id == group.Id
-                        ? colors.color1
-                        : colors.bodyBackground,
+                    backgroundColor: this.state.currentGroupId
+                      ? colors.color1
+                      : colors.bodyBackground,
                     padding: 10,
                     borderBottomWidth: 1,
                     borderBottomColor: colors.borderColor,
@@ -218,10 +221,10 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                   <TouchableOpacity
                     style={{flexDirection: 'row'}}
                     onLongPress={() => {
-                      this.setState({actionsRow: true, currentGroup: group});
+                      this.setState({actionsRow: true, currentGroupId: id});
                     }}
                     onPress={async () => {
-                      await this.props.GroupActions.setCurrent(group);
+                      await this.props.GroupActions.setCurrent(id);
                       this.props.navigation.navigate('Group');
                     }}>
                     <View
@@ -292,14 +295,14 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             show={this.state.showAddGroup}
             title={`Kanal Oluştur`}
             onCloseModal={() => {
-              this.setState({showAddGroup: false, currentGroup: null});
+              this.setState({showAddGroup: false, currentGroupId: null});
             }}
             onCancelPress={() => {
-              this.setState({showAddGroup: false, currentGroup: null});
+              this.setState({showAddGroup: false, currentGroupId: null});
             }}
             onOkPress={async () => {
               await this.setState(
-                {showAddGroup: false, currentGroup: null},
+                {showAddGroup: false, currentGroupId: null},
                 async () => {
                   if (this.state.newGroupName)
                     await this.props.GroupActions.createItem({
@@ -327,30 +330,30 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             />
           </FormModal>
         ) : null}
-        {this.state.showEditGroup && !!this.state.currentGroup ? (
+        {this.state.showEditGroup && !!this.state.currentGroupId ? (
           <FormModal
-            show={this.state.showEditGroup && !!this.state.currentGroup}
+            show={this.state.showEditGroup && !!this.state.currentGroupId}
             title={`Kanal Düzenle`}
             onCloseModal={() => {
-              this.setState({showEditGroup: false, currentGroup: null});
+              this.setState({showEditGroup: false, currentGroupId: null});
             }}
             onCancelPress={() => {
-              this.setState({showEditGroup: false, currentGroup: null});
+              this.setState({showEditGroup: false, currentGroupId: null});
             }}
             onOkPress={async () => {
-              if (this.state.currentGroup) {
+              if (this.state.currentGroupId) {
                 await this.setState({showEditGroup: false}, async () => {
                   await this.props.GroupActions.updateItem(
-                    this.state.currentGroup,
+                    this.props.User.current.Groups[this.state.currentGroupId],
                   );
-                  this.setState({currentGroup: null});
+                  this.setState({currentGroupId: null});
                 });
               }
             }}>
             <TextInput
               placeholder="Kanal Adı"
               value={
-                this.state.currentGroup ? this.state.currentGroup.Name : ''
+                this.state.currentGroupId ? this.props.User.current.Groups[this.state.currentGroupId].Name : ''
               }
               placeholderTextColor={colors.color3}
               style={{
@@ -361,31 +364,31 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 color: colors.primaryButtonTextColor,
               }}
               onChangeText={(text) => {
-                const {currentGroup} = this.state;
-                currentGroup.Name = text;
-                this.setState({currentGroup});
+                const {currentGroupId} = this.state;
+                this.props.User.current.Groups[this.state.currentGroupId].Name = text;
+                this.setState({currentGroupId});
               }}
             />
           </FormModal>
         ) : null}
-        {this.state.showDeleteGroup && !!this.state.currentGroup ? (
+        {this.state.showDeleteGroup && !!this.state.currentGroupId ? (
           <FormModal
-            show={this.state.showDeleteGroup && !!this.state.currentGroup}
+            show={this.state.showDeleteGroup && !!this.state.currentGroupId}
             title={`Kanaldan Ayrıl: ${
-              this.state.currentGroup ? this.state.currentGroup.Name : ''
+              this.state.currentGroupId ? this.props.User.current.Groups[this.state.currentGroupId].Name : ''
             }`}
             onCloseModal={() => {
-              this.setState({showDeleteGroup: false, currentGroup: null});
+              this.setState({showDeleteGroup: false, currentGroupId: null});
             }}
             onCancelPress={() => {
-              this.setState({showDeleteGroup: false, currentGroup: null});
+              this.setState({showDeleteGroup: false, currentGroupId: null});
             }}
             onOkPress={async () => {
               await this.setState({showDeleteGroup: false}, async () => {
-                await this.props.GroupActions.deleteItem(
-                  this.state.currentGroup,
+                await this.props.UserActions.leaveGroup(
+                  this.state.currentGroupId,
                 );
-                this.setState({currentGroup: null});
+                this.setState({currentGroupId: null});
               });
             }}>
             <Text
@@ -405,6 +408,7 @@ export const HomeScreen = connect(
   (dispatch) => {
     return {
       GroupActions: bindActionCreators({...GroupActions}, dispatch),
+      UserActions: bindActionCreators({...UserActions}, dispatch),
     };
   },
 )(HomeScreenComp);

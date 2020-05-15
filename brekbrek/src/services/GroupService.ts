@@ -25,30 +25,11 @@ export class GroupService extends ServiceBase {
     );
     return result;
   }
-  public static async delete(item: IGroup): Promise<Result<IGroup>> {
+
+  public static async getItem(groupId): Promise<Result<IGroup>> {
     var result = await this.requestJson<IGroup>(
       {
-        url: `${config.restUrl}/api/group/${item.Id}`,
-        method: 'DELETE',
-      },
-      true,
-    );
-    return result;
-  }
-  public static async getUserGroups(): Promise<Result<IGroup[]>> {
-    var result = await this.requestJson<IGroup[]>(
-      {
-        url: `${config.restUrl}/api/group`,
-        method: 'GET',
-      },
-      true,
-    );
-    return result;
-  }
-  public static async getGroupUsers(groupId): Promise<Result<IGroupUser>> {
-    var result = await this.requestJson<IGroupUser>(
-      {
-        url: `${config.restUrl}/api/group/users/${groupId}`,
+        url: `${config.restUrl}/api/group/${groupId}`,
         method: 'GET',
       },
       true,
@@ -56,8 +37,8 @@ export class GroupService extends ServiceBase {
     return result;
   }
 
-  public static async joinGroup(groupId): Promise<Result<IGroupUser>> {
-    var result = await this.requestJson<IGroupUser>(
+  public static async joinGroup(groupId): Promise<Result<any>> {
+    var result = await this.requestJson<any>(
       {
         url: `${config.restUrl}/api/group/join/${groupId}`,
         method: 'GET',

@@ -14,12 +14,6 @@ export enum UserStatus {
   Online,
   Offline,
 }
-// export interface IGroupUser {
-//   [key: string]: {DisplayName: string; status: UserStatus};
-// }
-
 export interface IGroupUser {
-  Id?: any;
-  DisplayName?: string;
-  status?: UserStatus;
+  [key: string]: {DisplayName: string; status: UserStatus};
 }

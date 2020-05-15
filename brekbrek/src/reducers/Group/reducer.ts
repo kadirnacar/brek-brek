@@ -9,11 +9,13 @@ import {
   IRequestUpdateAction,
   IReceiveGroupAction,
   IRequestGroupAction,
+  ISetCurrentAction,
 } from './state';
 import {IGroupUser, UserStatus} from '@models';
 
 const unloadedState: GroupState = {
   current: null,
+  currentId: null,
   isRequest: false,
 };
 
@@ -21,6 +23,7 @@ export type KnownAction =
   | IReceiveCreateAction
   | IRequestCreateAction
   | IClearAction
+  | ISetCurrentAction
   | IReceiveUpdateAction
   | IRequestUpdateAction
   | IReceiveGroupAction
@@ -49,6 +52,11 @@ export const reducer = (
       return {...currentState};
     case Actions.RequestCreate:
       currentState.isRequest = true;
+      return {...currentState};
+    case Actions.SetCurrent:
+      currentState.currentId = action.payload;
+      currentState.isRequest = false;
+      currentState.current = null;
       return {...currentState};
     case Actions.ClearItem:
       currentState.isRequest = false;

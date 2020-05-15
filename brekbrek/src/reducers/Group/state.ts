@@ -13,11 +13,17 @@ export enum Actions {
 }
 
 export interface GroupState extends IBaseReducer {
-  current: IGroup;
+  current?: IGroup;
+  currentId?: string;
 }
 
 export interface IClearAction {
   type: Actions.ClearItem;
+}
+
+export interface ISetCurrentAction {
+  type: Actions.SetCurrent;
+  payload: string;
 }
 
 export interface IRequestUpdateAction {
