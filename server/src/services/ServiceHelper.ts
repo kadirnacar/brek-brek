@@ -1,12 +1,20 @@
 import { Models } from "@models";
-import { Connection, ConnectionOptions, createConnection, getConnection } from "typeorm";
+import {
+  Connection,
+  ConnectionOptions,
+  createConnection,
+  getConnection,
+} from "typeorm";
 import { CoreRepository } from "../repository";
 
+//mongodb://brekbrek:39kna1983@azure.kadirnacar.com:27017
 const typeConfig: ConnectionOptions = {
   name: "configConnection",
   // type: "sqlite",
   // database: `data.sqlite`,
   type: "mongodb",
+  username: "brekbrek",
+  password: "39kna1983",
   // host: "localhost",
   host: "azure.kadirnacar.com",
   port: 27017,
