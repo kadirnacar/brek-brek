@@ -92,9 +92,11 @@ export abstract class ServiceBase {
       console.log(error);
       result = new Result<T>(
         null,
-        error.response && error.response.data
-          ? error.response.data
-          : error.message,
+        // opts.url +
+          // ' - ' +
+          (error.response && error.response.data
+            ? error.response.data
+            : error.message),
       );
     }
 
