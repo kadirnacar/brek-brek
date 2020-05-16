@@ -18,6 +18,6 @@ export class Group extends BaseModel {
   @NullColumn()
   CreateUserId?: string;
 
-  @Column((type) => GroupUser)
+  @NullColumn()
   Users?: GroupUser;
 }

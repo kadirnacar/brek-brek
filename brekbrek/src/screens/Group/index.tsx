@@ -110,11 +110,12 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     }
   }
   async componentDidMount() {
+    await this.props.GroupActions.getItem(this.props.Group.currentId);
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
     this.startListenerTapped();
-    await this.props.GroupActions.getGroupUsers(this.props.Group.current.Id);
+    // await this.props.GroupActions.getGroupUsers(this.props.Group.current.Id);
     if (!this.socketClient) {
       this.socketClient = new SocketClient(config.wsUrl, {
         Id: this.props.Group.current.Id,
@@ -122,7 +123,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       const result = await this.socketClient.connect();
       this.setState({connected: true});
       this.socketClient.onConnected = async (state) => {
-        console.log('this.socketClient.onConnected', state);
         if (!this.state.connected) {
           await this.webRtcConnection.connect();
         }
@@ -165,7 +165,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           }
         };
         this.webRtcConnection.onConnectionChange = (status, userId) => {
-          console.log(this.props.User.current.Id, userId, status);
           switch (status) {
             case 'connected':
               if (

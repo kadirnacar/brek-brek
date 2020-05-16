@@ -11,6 +11,7 @@ import {
 
 const unloadedState: UserState = {
   current: null,
+  isRequest: false,
 };
 
 export type KnownAction =
@@ -36,6 +37,9 @@ export const reducer = (
       currentState.isRequest = true;
       return {...currentState};
     case Actions.ReceiveLeaveGroup:
+      if (action.payload) {
+        currentState.current = action.payload;
+      }
       currentState.isRequest = false;
       return {...currentState};
     case Actions.RequestLeaveGroup:

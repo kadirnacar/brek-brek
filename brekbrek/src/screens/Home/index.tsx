@@ -43,7 +43,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
     this.state = {
       showAddGroup: false,
       search: '',
-      searchRow: false,
+      searchRow: true,
       actionsRow: false,
     };
     this.props.navigation.setOptions({
@@ -51,7 +51,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
       headerRight: (props) => {
         return (
           <View style={{flexDirection: 'row', marginHorizontal: 5}}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 padding: 10,
                 width: 40,
@@ -82,7 +82,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 size={20}
                 color={colors.headerTextColor}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         );
       },
@@ -95,8 +95,8 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
   render() {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
-        <LoaderSpinner showLoader={this.props.Group.isRequest} />
-        {this.state.searchRow ? (
+        <LoaderSpinner showLoader={this.props.Group.isRequest || this.props.User.isRequest} />
+        {!this.state.actionsRow ? (
           <View
             style={{
               backgroundColor: colors.color4,
@@ -107,10 +107,10 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
             }}>
             <TextInput
               placeholder="Ara..."
-              autoFocus={true}
+              // autoFocus={true}
               clearTextOnFocus={true}
               clearButtonMode={'always'}
-              selectTextOnFocus={true}
+              // selectTextOnFocus={true}
               value={this.state.search}
               placeholderTextColor={colors.color3}
               style={{
@@ -141,7 +141,11 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                 alignItems: 'center',
               }}
               onPress={async () => {
-                this.setState({actionsRow: false, currentGroupId: null});
+                this.setState({
+                  actionsRow: false,
+                  currentGroupId: null,
+                  searchRow: true,
+                });
               }}>
               <FontAwesome5Icon
                 name="arrow-left"
@@ -167,7 +171,11 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                   alignItems: 'center',
                 }}
                 onPress={async () => {
-                  this.setState({showDeleteGroup: true, actionsRow: false});
+                  this.setState({
+                    showDeleteGroup: true,
+                    actionsRow: false,
+                    searchRow: true,
+                  });
                 }}>
                 <FontAwesome5Icon
                   name="trash"
@@ -184,7 +192,11 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                   alignItems: 'center',
                 }}
                 onPress={async () => {
-                  this.setState({showEditGroup: true, actionsRow: false});
+                  this.setState({
+                    showEditGroup: true,
+                    actionsRow: false,
+                    searchRow: true,
+                  });
                 }}>
                 <FontAwesome5Icon
                   name="pencil-alt"
@@ -196,68 +208,76 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           </View>
         ) : null}
         <ScrollView>
-          {Object.keys(this.props.User.current.Groups)
-            .filter((g) => {
-              const group = this.props.User.current.Groups[g];
-              return (
-                group.Name.toLowerCase().indexOf(
-                  this.state.search.toLowerCase(),
-                ) > -1
-              );
-            })
-            .map((id, index) => {
-              const group = this.props.User.current.Groups[id];
-              return (
-                <View
-                  key={index}
-                  style={{
-                    backgroundColor: this.state.currentGroupId
-                      ? colors.color1
-                      : colors.bodyBackground,
-                    padding: 10,
-                    borderBottomWidth: 1,
-                    borderBottomColor: colors.borderColor,
-                  }}>
-                  <TouchableOpacity
-                    style={{flexDirection: 'row'}}
-                    onLongPress={() => {
-                      this.setState({actionsRow: true, currentGroupId: id});
-                    }}
-                    onPress={async () => {
-                      await this.props.GroupActions.setCurrent(id);
-                      this.props.navigation.navigate('Group');
-                    }}>
+          {this.props.User.current && this.props.User.current.Groups
+            ? Object.keys(this.props.User.current.Groups)
+                .filter((g) => {
+                  const group = this.props.User.current.Groups[g];
+                  return (
+                    group.Name.toLowerCase().indexOf(
+                      this.state.search.toLowerCase(),
+                    ) > -1
+                  );
+                })
+                .map((id, index) => {
+                  const group = this.props.User.current.Groups[id];
+                  return (
                     <View
+                      key={index}
                       style={{
-                        backgroundColor: colors.color2,
-                        alignContent: 'center',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 30,
-                        width: 60,
-                        height: 60,
-                        marginRight: 10,
+                        backgroundColor:
+                          this.state.currentGroupId &&
+                          this.state.currentGroupId == id
+                            ? colors.color1
+                            : colors.bodyBackground,
+                        padding: 10,
+                        borderBottomWidth: 1,
+                        borderBottomColor: colors.borderColor,
                       }}>
-                      <FontAwesome5Icon
-                        name="users"
-                        size={30}
-                        color={colors.color3}
-                      />
+                      <TouchableOpacity
+                        style={{flexDirection: 'row'}}
+                        onLongPress={() => {
+                          this.setState({
+                            actionsRow: true,
+                            currentGroupId: id,
+                            searchRow: false,
+                          });
+                        }}
+                        onPress={async () => {
+                          await this.props.GroupActions.setCurrent(id);
+                          this.props.navigation.navigate('Group');
+                        }}>
+                        <View
+                          style={{
+                            backgroundColor: colors.color2,
+                            alignContent: 'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 30,
+                            width: 60,
+                            height: 60,
+                            marginRight: 10,
+                          }}>
+                          <FontAwesome5Icon
+                            name="users"
+                            size={30}
+                            color={colors.color3}
+                          />
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                            alignItems: 'center',
+                            alignSelf: 'center',
+                            color: colors.color3,
+                          }}>
+                          {group.Name}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                        color: colors.color3,
-                      }}>
-                      {group.Name}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+                  );
+                })
+            : null}
         </ScrollView>
         <View
           style={{
@@ -308,6 +328,7 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
                     await this.props.GroupActions.createItem({
                       Name: this.state.newGroupName,
                     });
+                  await this.props.UserActions.checkUser();
                 },
               );
             }}>
@@ -344,16 +365,22 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
               if (this.state.currentGroupId) {
                 await this.setState({showEditGroup: false}, async () => {
                   await this.props.GroupActions.updateItem(
+                    this.state.currentGroupId,
                     this.props.User.current.Groups[this.state.currentGroupId],
                   );
+                  await this.props.UserActions.checkUser();
                   this.setState({currentGroupId: null});
                 });
               }
             }}>
             <TextInput
               placeholder="Kanal Adı"
+              autoFocus={true}
               value={
-                this.state.currentGroupId ? this.props.User.current.Groups[this.state.currentGroupId].Name : ''
+                this.state.currentGroupId
+                  ? this.props.User.current.Groups[this.state.currentGroupId]
+                      .Name
+                  : ''
               }
               placeholderTextColor={colors.color3}
               style={{
@@ -365,7 +392,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
               }}
               onChangeText={(text) => {
                 const {currentGroupId} = this.state;
-                this.props.User.current.Groups[this.state.currentGroupId].Name = text;
+                this.props.User.current.Groups[
+                  this.state.currentGroupId
+                ].Name = text;
                 this.setState({currentGroupId});
               }}
             />
@@ -375,7 +404,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
           <FormModal
             show={this.state.showDeleteGroup && !!this.state.currentGroupId}
             title={`Kanaldan Ayrıl: ${
-              this.state.currentGroupId ? this.props.User.current.Groups[this.state.currentGroupId].Name : ''
+              this.state.currentGroupId
+                ? this.props.User.current.Groups[this.state.currentGroupId].Name
+                : ''
             }`}
             onCloseModal={() => {
               this.setState({showDeleteGroup: false, currentGroupId: null});

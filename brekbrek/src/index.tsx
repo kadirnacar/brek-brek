@@ -88,14 +88,14 @@ export default class App extends Component<any, AppState> {
     if (token) {
       const checkUser = await UserService.checkUser();
       if (checkUser.hasErrors()) {
-        await AsyncAlert(checkUser.errors[0]);
+        await AsyncAlert('checkuser' + ' - ' + checkUser.errors[0]);
         this.setState({isLoaded: true, isLogin: false});
       } else if (!checkUser.value.success) {
         this.setState({isLoaded: true, isLogin: false});
       } else {
         store.dispatch({
           type: UserActionTypes.ReceiveUserItem,
-          payload: JSON.parse(user),
+          payload: checkUser.value.data,
         });
         this.setState({isLoaded: true, isLogin: true});
       }
@@ -107,10 +107,9 @@ export default class App extends Component<any, AppState> {
     if (url) {
       try {
         const groupId = url.split('/').pop();
-        console.log(groupId);
         if (groupId) {
           await GroupService.joinGroup(groupId);
-          await GroupActions.getUserGroups()(store.dispatch, store.getState);
+          // await GroupActions.getUserGroups()(store.dispatch, store.getState);
         }
       } catch {}
     }
@@ -127,11 +126,10 @@ export default class App extends Component<any, AppState> {
         const groupId = url.url.split('/').pop();
         if (groupId) {
           await GroupService.joinGroup(groupId);
-          await GroupActions.getUserGroups()(store.dispatch, store.getState);
+          // await GroupActions.getUserGroups()(store.dispatch, store.getState);
         }
       } catch {}
     }
-    console.log('handleUrl', url);
   }
   render() {
     return (

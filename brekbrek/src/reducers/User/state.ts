@@ -32,4 +32,5 @@ export interface IRequestLeaveGroupAction {
 
 export interface IReceiveLeaveGroupAction {
   type: Actions.ReceiveLeaveGroup;
+  payload: IUser;
 }

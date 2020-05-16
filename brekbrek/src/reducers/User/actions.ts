@@ -1,9 +1,9 @@
-import { Result } from '@models';
-import { UserService } from '@services';
-import { batch } from 'react-redux';
+import {Result, IUser} from '@models';
+import {UserService} from '@services';
+import {batch} from 'react-redux';
 import * as LocalStorage from '../../store/localStorage';
-import { AsyncAlert } from '../../tools/AsyncAlert';
-import { Actions } from './state';
+import {AsyncAlert} from '../../tools/AsyncAlert';
+import {Actions} from './state';
 
 export const actionCreators = {
   leaveGroup: (groupId) => async (dispatch, getState) => {
@@ -16,6 +16,7 @@ export const actionCreators = {
       }
       dispatch({
         type: Actions.ReceiveLeaveGroup,
+        payload: result.value,
       });
     });
     return result;
@@ -87,6 +88,21 @@ export const actionCreators = {
       }
     });
     return {success: isSuccess, message: message};
+  },
+  checkUser: () => async (dispatch, getState) => {
+    let result: Result<any>;
+    await batch(async () => {
+      dispatch({type: Actions.RequestUserItem});
+      result = await UserService.checkUser();
+      if (result.hasErrors()) {
+        await AsyncAlert(result.errors[0]);
+      }
+      dispatch({
+        type: Actions.ReceiveUserItem,
+        payload: result.hasErrors() ? null : result.value.data,
+      });
+    });
+    return await result;
   },
   clear: () => async (dispatch, getState) => {
     await LocalStorage.removeItem('user');

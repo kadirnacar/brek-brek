@@ -14,5 +14,6 @@ export interface IUser {
 export interface IUserGroup {
   [key: string]: {
     Name: string;
+    IsAdmin: boolean;
   };
 }

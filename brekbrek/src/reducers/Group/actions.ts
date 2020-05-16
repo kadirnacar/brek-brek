@@ -1,4 +1,4 @@
-import {IGroup, Result, IGroupUser} from '@models';
+import {IGroup, Result, IGroupUser, IUserGroup} from '@models';
 import {GroupService} from '@services';
 import {batch} from 'react-redux';
 import {Actions} from './state';
@@ -36,11 +36,11 @@ export const actionCreators = {
     });
     return await result;
   },
-  updateItem: (item: IGroup) => async (dispatch, getState) => {
+  updateItem: (id, item) => async (dispatch, getState) => {
     let result: Result<IGroup>;
     await batch(async () => {
       dispatch({type: Actions.RequestUpdate});
-      result = await GroupService.update(item);
+      result = await GroupService.update({...item, Id: id});
       if (result.hasErrors()) {
         await AsyncAlert(result.errors[0]);
       }

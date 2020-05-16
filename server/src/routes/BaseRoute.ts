@@ -26,7 +26,7 @@ export class BaseRouter<T> {
     public async getItem(req: Request, res: Response, next) {
         try {
             const id = req.params["id"];
-            const data = await this.service.getById(parseInt(id));
+            const data = await this.service.getById(id);
             res.status(200).send(data);
         } catch (err) {
             next(err);
@@ -36,7 +36,7 @@ export class BaseRouter<T> {
     public async deleteItem(req: Request, res: Response, next) {
         try {
             const id = req.params["id"];
-            const data = await this.service.delete(parseInt(id));
+            const data = await this.service.delete(id);
             res.status(200).send(data);
         } catch (err) {
             next(err);

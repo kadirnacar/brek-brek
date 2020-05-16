@@ -15,7 +15,6 @@ GoogleSignin.configure({
 });
 export class UserService extends ServiceBase {
   public static async loginWithGoogle() {
-    console.log(config.restUrl)
     try {
       const user = await GoogleSignin.signIn();
       let result: Result<any>;

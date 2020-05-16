@@ -83,7 +83,7 @@ export class AuthRouter {
         user.Email = postUser.Email;
         user.Type = "Google";
         user.Uid = postUser.Uid;
-        user.Groups = {}
+        user.Groups = {};
         user = await UserService.save(user);
       }
 
@@ -115,7 +115,7 @@ export class AuthRouter {
       }
       const userId = res.locals.jwtPayload.userId;
       const data = await Services.User.getById(userId);
-      res.status(200).send({ success: !!data });
+      res.status(200).send({ success: !!data, data });
     } catch (err) {
       next(err && err.message ? err.message : err);
     }

@@ -5,6 +5,7 @@ import { Group } from "./Group";
 export class UserGroup {
   [key: string]: {
     Name: string;
+    IsAdmin: boolean;
   };
 }
 
@@ -22,6 +23,6 @@ export class User extends BaseModel {
   @NullColumn({ default: "User" })
   Type?: "Admin" | "User" | "Facebook" | "Google" | "Anonymous" = "User";
 
-  @Column((type) => UserGroup)
+  @NullColumn()
   Groups?: UserGroup;
 }

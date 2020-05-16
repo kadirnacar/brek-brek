@@ -36,6 +36,9 @@ export const reducer = (
   const action = incomingAction as KnownAction;
   switch (action.type) {
     case Actions.ReceiveGroup:
+      if (action.payload) {
+        currentState.current = action.payload;
+      }
       currentState.isRequest = false;
       return {...currentState};
     case Actions.RequestGroup:
@@ -61,6 +64,7 @@ export const reducer = (
     case Actions.ClearItem:
       currentState.isRequest = false;
       currentState.current = null;
+      currentState.currentId = null;
       return {...currentState};
     default:
       break;
