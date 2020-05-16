@@ -2,8 +2,8 @@ import {LoaderSpinner} from '@components';
 import config from '@config';
 import {UserStatus} from '@models';
 import {NavigationProp} from '@react-navigation/native';
-import {GroupActions} from '@reducers';
-import {ApplicationState} from '@store';
+import {GroupActions, UserActions} from '@reducers';
+import {ApplicationState, LocalStorage} from '@store';
 import {SocketClient, WebRtcConnection, colors} from '@tools';
 import React, {Component} from 'react';
 import {
@@ -41,6 +41,7 @@ interface GroupScreenState {
 interface GroupProps {
   navigation: NavigationProp<any>;
   GroupActions: typeof GroupActions;
+  UserActions: typeof UserActions;
 }
 
 type Props = GroupProps & ApplicationState;
@@ -110,6 +111,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     }
   }
   async componentDidMount() {
+    if(!this.props.User.current){
+      await this.props.UserActions.checkUser()
+    }
     await this.props.GroupActions.getItem(this.props.Group.currentId);
     if (!this.props.Group || !this.props.Group.current) {
       return;
@@ -460,6 +464,7 @@ export const GroupScreen = connect(
   (dispatch) => {
     return {
       GroupActions: bindActionCreators({...GroupActions}, dispatch),
+      UserActions: bindActionCreators({...UserActions}, dispatch),
     };
   },
 )(GroupScreenComp);

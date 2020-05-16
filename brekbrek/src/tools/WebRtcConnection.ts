@@ -7,6 +7,8 @@ import {
   MediaStreamTrack,
 } from 'react-native-webrtc';
 import {SocketClient} from './SocketClient';
+import {generateKey, encryptData, decryptData} from '@utils';
+import config from '@config';
 
 export class WebRtcConnection {
   constructor(
@@ -22,6 +24,7 @@ export class WebRtcConnection {
     this.socket.onMessageEvent = this.onSocketMessage.bind(this);
     this.configuration = {...this.configuration, ...configuration};
   }
+  private key;
   private socket: SocketClient;
   private userId: string;
   private groupId: string;
@@ -38,7 +41,6 @@ export class WebRtcConnection {
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
-    console.log('onSocketMessage', data);
     switch (data.command) {
       case 'join':
         for (var i = 0; i < data.peers.length; i++) {
@@ -59,6 +61,7 @@ export class WebRtcConnection {
   }
 
   public async connect() {
+    this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
     if (!this.stream) {
       const stream = await mediaDevices.getUserMedia({
         audio: true,
@@ -66,6 +69,7 @@ export class WebRtcConnection {
       });
       this.stream = <any>stream;
     }
+
     InCallManager.setSpeakerphoneOn(true);
 
     this.socket.send('join');
@@ -100,10 +104,11 @@ export class WebRtcConnection {
       this.leave(key);
     }
     try {
-      InCallManager.setMicrophoneMute(false);
+      // InCallManager.setMicrophoneMute(false);
       InCallManager.stop();
       const tracks = this.stream.getTracks();
       tracks.forEach((trkc) => {
+        trkc.stop();
         this.stream.removeTrack(trkc);
       });
     } catch {}
@@ -116,14 +121,15 @@ export class WebRtcConnection {
     this.stream.getTracks().forEach((t) => {
       if (t.kind === 'audio') t.enabled = true;
     });
-    InCallManager.setMicrophoneMute(false);
+    // InCallManager.setMicrophoneMute(false);
   }
 
   public stopMediaStream() {
     this.stream.getTracks().forEach((t) => {
       if (t.kind === 'audio') t.enabled = false;
+      t.stop();
     });
-    InCallManager.setMicrophoneMute(true);
+    // InCallManager.setMicrophoneMute(true);
   }
 
   private createChannel(peer: RTCPeerConnection, id) {
@@ -163,7 +169,9 @@ export class WebRtcConnection {
     if (!peer) return;
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
-    this.socket.send('exchange', {to: id, sdp: peer.localDescription});
+    const data = JSON.stringify(peer.localDescription);
+    const sdp = await encryptData(data, this.key);
+    this.socket.send('exchange', {to: id, sdp});
   }
 
   private async createPeer(id, isOffer) {
@@ -177,9 +185,11 @@ export class WebRtcConnection {
         await this.createOffer(peer, id);
       }
     };
-    peer.onicecandidate = (event) => {
+    peer.onicecandidate = async (event) => {
       if (event.candidate) {
-        this.socket.send('exchange', {to: id, candidate: event.candidate});
+        const data = JSON.stringify(event.candidate);
+        const candidate = await encryptData(data, this.key);
+        this.socket.send('exchange', {to: id, candidate});
       }
     };
 
@@ -199,7 +209,7 @@ export class WebRtcConnection {
       }
     };
     peer.addStream(this.stream);
-    InCallManager.setMicrophoneMute(true);
+    // InCallManager.setMicrophoneMute(true);
     this.stream.getTracks().forEach((t) => {
       if (t.kind === 'audio') t.enabled = false;
     });
@@ -220,14 +230,21 @@ export class WebRtcConnection {
       pc = await this.createPeer(fromId, false);
     }
     if (data.sdp) {
-      await pc.setRemoteDescription(data.sdp);
+      const decryptSdp = JSON.parse(await decryptData(data.sdp, this.key));
+      await pc.setRemoteDescription(decryptSdp);
       if (pc.remoteDescription.type == 'offer') {
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
-        this.socket.send('exchange', {to: fromId, sdp: pc.localDescription});
+
+        const data = JSON.stringify(pc.localDescription);
+        const sdp = await encryptData(data, this.key);
+        this.socket.send('exchange', {to: fromId, sdp});
       }
     } else if (data.candidate) {
-      await pc.addIceCandidate(data.candidate);
+      const decryptCandidate = JSON.parse(
+        await decryptData(data.candidate, this.key),
+      );
+      await pc.addIceCandidate(decryptCandidate);
     }
   }
 }

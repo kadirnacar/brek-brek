@@ -101,6 +101,8 @@ export const actionCreators = {
         type: Actions.ReceiveUserItem,
         payload: result.hasErrors() ? null : result.value.data,
       });
+      if (!result.hasErrors())
+        await LocalStorage.setItem('user', JSON.stringify(result.value.data));
     });
     return await result;
   },
