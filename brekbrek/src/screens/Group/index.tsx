@@ -4,7 +4,7 @@ import {UserStatus} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions, UserActions} from '@reducers';
 import {ApplicationState, LocalStorage} from '@store';
-import {SocketClient, WebRtcConnection, colors} from '@tools';
+import {SocketClient, WebRtcConnection, colors, ExposedToJava} from '@tools';
 import React, {Component} from 'react';
 import {
   Dimensions,
@@ -64,190 +64,32 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       // canGoBack: true,
     });
   }
-  socketClient: SocketClient;
-  webRtcConnection: WebRtcConnection;
+
   startInterval;
   volumeListener;
   callDetector: CallDetectorManager;
-  async startListenerTapped() {
-    this.callDetector = new CallDetectorManager(
-      async (event, phoneNumber) => {
-        if (event === 'Disconnected') {
-        } else if (event === 'Connected') {
-          await this.webRtcConnection.close();
-          this.props.navigation.navigate('Home');
-        } else if (event === 'Incoming') {
-          await this.webRtcConnection.close();
-          this.props.navigation.navigate('Home');
-        } else if (event === 'Dialing') {
-          await this.webRtcConnection.close();
-          this.props.navigation.navigate('Home');
-        } else if (event === 'Offhook') {
-          await this.webRtcConnection.close();
-          this.props.navigation.navigate('Home');
-        } else if (event === 'Missed') {
-        }
-      },
-      false,
-      () => {},
-      {
-        title: 'Phone State Permission',
-        message:
-          'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
-      },
-    );
-  }
 
-  stopListenerTapped() {
-    this.callDetector && this.callDetector.dispose();
-  }
-  handleHeadPhone(e) {
-    if (e.audioJack || e.bluetooth) {
-      this.webRtcConnection.speakerOnOff(false);
-      this.setState({speakerOn: false});
-    } else {
-      this.webRtcConnection.speakerOnOff(true);
-      this.setState({speakerOn: true});
-    }
-  }
   async componentDidMount() {
-    if(!this.props.User.current){
-      await this.props.UserActions.checkUser()
+    if (!this.props.User.current) {
+      await this.props.UserActions.checkUser();
     }
     await this.props.GroupActions.getItem(this.props.Group.currentId);
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
-    this.startListenerTapped();
-    // await this.props.GroupActions.getGroupUsers(this.props.Group.current.Id);
-    if (!this.socketClient) {
-      this.socketClient = new SocketClient(config.wsUrl, {
-        Id: this.props.Group.current.Id,
-      });
-      const result = await this.socketClient.connect();
-      this.setState({connected: true});
-      this.socketClient.onConnected = async (state) => {
-        if (!this.state.connected) {
-          await this.webRtcConnection.connect();
-        }
-        this.setState({connected: true});
-      };
-      this.socketClient.onErrorEvent = (e) => {
-        this.webRtcConnection.close();
-        this.setState({connected: false});
-      };
-      if (result == WebSocket.OPEN) {
-        this.webRtcConnection = new WebRtcConnection(
-          this.socketClient,
-          this.props.Group.current.Id,
-          this.props.User.current.Id,
-        );
-
-        this.webRtcConnection.onData = (id, data) => {
-          const message = JSON.parse(data.data);
-          switch (message.command) {
-            case 'start':
-              if (
-                this.props.Group.current.Users &&
-                id in this.props.Group.current.Users
-              ) {
-                this.props.Group.current.Users[id].status = UserStatus.Talking;
-              }
-              RNBeep.beep();
-              this.setState({activeUser: id});
-              break;
-            case 'end':
-              if (
-                this.props.Group.current.Users &&
-                id in this.props.Group.current.Users
-              ) {
-                this.props.Group.current.Users[id].status = UserStatus.Online;
-              }
-              RNBeep.beep();
-              this.setState({activeUser: null});
-              break;
-          }
-        };
-        this.webRtcConnection.onConnectionChange = (status, userId) => {
-          switch (status) {
-            case 'connected':
-              if (
-                this.props.Group.current.Users[userId].status !=
-                UserStatus.Online
-              ) {
-                this.props.Group.current.Users[userId].status =
-                  UserStatus.Online;
-              }
-              break;
-            case 'disconnected':
-              if (
-                this.props.Group.current.Users[userId].status !=
-                UserStatus.Offline
-              ) {
-                this.props.Group.current.Users[userId].status =
-                  UserStatus.Offline;
-              }
-              break;
-          }
-        };
-      }
-      await this.webRtcConnection.connect();
-    }
-    const headPhone = await HeadphoneDetection.isAudioDeviceConnected();
-    this.handleHeadPhone(headPhone);
-    HeadphoneDetection.addListener((e) => {
-      this.handleHeadPhone(e);
-    });
-    this.volumeListener = VolumeControlEvents.addListener(
-      'VolumeChanged',
-      (event) => {
-        if (!this.state.isStart && !this.state.activeUser) {
-          this.setState({isStart: true}, () => {
-            this.handleStart();
-          });
-          BackgroundTimer.clearInterval(this.startInterval);
-        } else {
-          if (this.startInterval) {
-            BackgroundTimer.clearInterval(this.startInterval);
-            if (Platform.OS == 'ios') {
-              BackgroundTimer.stop();
-            }
-          }
-
-          if (Platform.OS == 'ios') {
-            BackgroundTimer.start();
-          }
-
-          this.startInterval = BackgroundTimer.setInterval(() => {
-            this.setState({isStart: false}, () => {
-              this.handleStop();
-              BackgroundTimer.clearInterval(this.startInterval);
-              BackgroundTimer.stop();
-            });
-          }, 700);
-        }
-      },
+    ExposedToJava.start(
+      this.props.Group.current.Id,
+      this.props.User.current.Id,
     );
   }
   handleStart() {
-    if (this.state.connected) {
-      RNBeep.beep();
-
-      this.webRtcConnection.sendData({
-        command: 'start',
-      });
-      this.webRtcConnection.startMediaStream();
-      this.setState({});
-    }
+    ExposedToJava.start(
+      this.props.Group.current.Id,
+      this.props.User.current.Id,
+    );
   }
   handleStop() {
-    RNBeep.beep();
-
-    this.webRtcConnection.sendData({
-      command: 'end',
-    });
-    this.webRtcConnection.stopMediaStream();
-    this.setState({});
+    ExposedToJava.close();
   }
   async handleShare() {
     const url = `http://brekbrek.kadirnacar.com/join/${this.props.Group.current.Id}`;
@@ -262,22 +104,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     await Share.open(options);
   }
   componentWillUnmount() {
-
-    if (this.volumeListener) {
-      this.volumeListener.remove();
-    }
-    this.stopListenerTapped();
-    if (HeadphoneDetection.remove) {
-      // The remove is not necessary on Android
-      HeadphoneDetection.remove();
-    }
-    // SystemSetting.removeVolumeListener(this.volumeListener);
-    if (this.socketClient) {
-      this.socketClient.dispose();
-      if (this.webRtcConnection) {
-        this.webRtcConnection.close();
-      }
-    }
+    ExposedToJava.close();
   }
   render() {
     const users = (this.props.Group.current && this.props.Group.current.Users
@@ -435,7 +262,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           }}>
           <TouchableHighlight
             onPress={async () => {
-              this.webRtcConnection.speakerOnOff(!this.state.speakerOn);
+              // this.webRtcConnection.speakerOnOff(!this.state.speakerOn);
               this.setState({speakerOn: !this.state.speakerOn});
             }}
             style={{

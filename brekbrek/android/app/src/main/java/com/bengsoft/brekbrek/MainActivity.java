@@ -1,7 +1,8 @@
 package com.bengsoft.brekbrek;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -10,13 +11,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableNativeArray;
-
-import android.app.ActivityManager;
-import android.content.Context;
-import android.app.Service;
-import android.os.IBinder;
-import android.app.Activity;
-import androidx.core.content.ContextCompat;
 
 public class MainActivity extends ReactActivity {
     Intent mServiceIntent;
@@ -50,8 +44,8 @@ public class MainActivity extends ReactActivity {
 
     @Override
     protected void onDestroy() {
-        stopService(mServiceIntent);
         super.onDestroy();
+        //stopService(mServiceIntent);
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -62,5 +56,23 @@ public class MainActivity extends ReactActivity {
             }
         }
         return false;
+    }
+
+    private void callScript(String msg) {
+        MainApplication application = (MainApplication) this.getApplication();
+        ReactNativeHost reactNativeHost = application.getReactNativeHost();
+        ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
+        ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
+
+        if (reactContext != null) {
+            try {
+                CatalystInstance catalystInstance = reactContext.getCatalystInstance();
+                WritableNativeArray params = new WritableNativeArray();
+                params.pushString(msg);
+                catalystInstance.callFunction("JavaScriptVisibleToJava", "getCommand", params);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
