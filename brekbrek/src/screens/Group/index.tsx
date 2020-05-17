@@ -222,6 +222,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             this.setState({isStart: false}, () => {
               this.handleStop();
               BackgroundTimer.clearInterval(this.startInterval);
+              BackgroundTimer.stop();
             });
           }, 700);
         }
@@ -261,6 +262,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     await Share.open(options);
   }
   componentWillUnmount() {
+
     if (this.volumeListener) {
       this.volumeListener.remove();
     }

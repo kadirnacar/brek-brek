@@ -14,6 +14,12 @@ import {UserService} from './services/UserService';
 import config from '@config';
 import {GroupService} from './services/GroupService';
 import {AppService} from './services/AppService';
+import { ExposedToJava } from './tools/ExposedToJava';
+import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
+
+
+const exposedToJava = new ExposedToJava();
+BatchedBridge.registerCallableModule("JavaScriptVisibleToJava", exposedToJava);
 
 interface AppState {
   isLoaded: boolean;

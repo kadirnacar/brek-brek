@@ -31,6 +31,7 @@ export class WebRtcConnection {
   private configuration = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
   private peers: {[key: string]: {pc?: RTCPeerConnection; dc?: RTCDataChannel}};
   private stream: MediaStream;
+  private track: MediaStreamTrack;
   public onData: (userId, data) => void;
   public onChannelOpen: () => void;
   public onChannelClose: () => void;
@@ -68,10 +69,14 @@ export class WebRtcConnection {
         video: false,
       });
       this.stream = <any>stream;
+      this.stream.getTracks().forEach((t) => {
+        if (t.kind === 'audio') {
+          t.stop();
+        }
+      });
     }
-
+    // this.stream.removeTrack(this.track);
     InCallManager.setSpeakerphoneOn(true);
-
     this.socket.send('join');
   }
 
@@ -105,12 +110,13 @@ export class WebRtcConnection {
     }
     try {
       // InCallManager.setMicrophoneMute(false);
-      InCallManager.stop();
+      // InCallManager.stop();
       const tracks = this.stream.getTracks();
       tracks.forEach((trkc) => {
-        trkc.stop();
         this.stream.removeTrack(trkc);
+        trkc.stop();
       });
+      
     } catch {}
   }
 
@@ -120,14 +126,16 @@ export class WebRtcConnection {
   public async startMediaStream() {
     this.stream.getTracks().forEach((t) => {
       if (t.kind === 'audio') t.enabled = true;
+      console.log(t);
     });
     // InCallManager.setMicrophoneMute(false);
   }
 
   public stopMediaStream() {
+
     this.stream.getTracks().forEach((t) => {
       if (t.kind === 'audio') t.enabled = false;
-      t.stop();
+      // t.stop();
     });
     // InCallManager.setMicrophoneMute(true);
   }
