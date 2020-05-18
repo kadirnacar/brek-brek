@@ -1,4 +1,5 @@
 import {LocalStorage} from '../store';
+import BackgroundTimer from 'react-native-background-timer';
 
 export class SocketClient {
   constructor(url: string, options?: any) {
@@ -9,7 +10,7 @@ export class SocketClient {
   private options: any;
   private socket: WebSocket;
   private isDisposed: boolean = false;
-  private autoReconnectInterval = 5 * 1000;
+  private autoReconnectInterval = 1 * 1000;
 
   public onMessageEvent: ((event: WebSocketMessageEvent) => void) | null;
   public onErrorEvent: ((event: WebSocketErrorEvent) => void) | null;
@@ -20,9 +21,10 @@ export class SocketClient {
       this.onMessageEvent(e);
     }
   };
-
+  timeoutId;
   private onClose = (e) => {
-    setTimeout(() => {
+    this.timeoutId = BackgroundTimer.setTimeout(() => {
+      BackgroundTimer.clearTimeout(this.timeoutId);
       if (!this.isDisposed) {
         console.log('WebSocketClient: reconnecting...');
         this.socket.close();
@@ -34,6 +36,9 @@ export class SocketClient {
         this.connect();
       }
     }, this.autoReconnectInterval);
+
+    // Cancel the timeout if necessary
+    setTimeout(() => {}, this.autoReconnectInterval);
   };
   public dispose() {
     this.isDisposed = true;

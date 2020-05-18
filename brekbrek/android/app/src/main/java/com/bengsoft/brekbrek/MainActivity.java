@@ -3,6 +3,7 @@ package com.bengsoft.brekbrek;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -38,7 +39,12 @@ public class MainActivity extends ReactActivity {
         mBackgroundCallerService = new BackgroundCallerService(getCtx());
         mServiceIntent = new Intent(getCtx(), mBackgroundCallerService.getClass());
         if (!isMyServiceRunning(mBackgroundCallerService.getClass())) {
-            startService(mServiceIntent);
+            //startService(mServiceIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(mServiceIntent);
+            } else {
+                startService(mServiceIntent);
+            }
         }
     }
 

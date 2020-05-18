@@ -3,8 +3,8 @@
   <uses-permission android:name="android.permission.INTERNET" />
 
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
   <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:theme="@style/AppTheme" android:usesCleartextTraffic="true">
     <activity android:name=".MainActivity" android:label="@string/app_name" android:screenOrientation = "portrait" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize">
@@ -21,13 +21,16 @@
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-    <service android:name=".BackgroundCallerService" android:enabled="true" android:exported="true">
+    <service android:name=".BackgroundCallerService" android:enabled="true" android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.MEDIA_BUTTON" />
         <action android:name="android.media.AUDIO_BECOMING_NOISY" />
         <action android:name="android.media.browse.MediaBrowserService" />
       </intent-filter>
     </service>
+<!--    <receiver android:name=".BackgroundCallerRestarterBroadcastReceiver" android:enabled="true" android:exported="false" android:label="RestartServiceWhenStopped">-->
+<!--    </receiver>-->
+
     <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
       <intent-filter>
         <action android:name="android.intent.action.MEDIA_BUTTON" />

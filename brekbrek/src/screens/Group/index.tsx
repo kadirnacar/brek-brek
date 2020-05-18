@@ -1,40 +1,31 @@
 import {LoaderSpinner} from '@components';
-import config from '@config';
 import {UserStatus} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions, UserActions} from '@reducers';
-import {ApplicationState, LocalStorage} from '@store';
-import {SocketClient, WebRtcConnection, colors, ExposedToJava} from '@tools';
+import {ApplicationState} from '@store';
+import {colors, ExposedToJava} from '@tools';
 import React, {Component} from 'react';
 import {
   Dimensions,
-  FlatList,
-  Platform,
+  ScrollView,
   Text,
   TouchableHighlight,
-  View,
-  ScrollView,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
+import InCallManager from 'react-native-incall-manager';
 import SafeAreaView from 'react-native-safe-area-view';
+import Share, {Options} from 'react-native-share';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {VolumeControlEvents} from 'react-native-volume-control';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import HeadphoneDetection from 'react-native-headphone-detection';
-import Share, {Options} from 'react-native-share';
-import CallDetectorManager from 'react-native-call-detection';
-import RNBeep from 'react-native-a-beep';
 
 const {width} = Dimensions.get('window');
 
 interface GroupScreenState {
   isStart?: boolean;
   data?: string;
-  peers?: string[];
   activeUser?: string;
-  connected?: boolean;
   speakerOn?: boolean;
 }
 
@@ -49,25 +40,14 @@ type Props = GroupProps & ApplicationState;
 export class GroupScreenComp extends Component<Props, GroupScreenState> {
   constructor(props) {
     super(props);
-    this.handleStart = this.handleStart.bind(this);
-    this.handleStop = this.handleStop.bind(this);
     this.handleShare = this.handleShare.bind(this);
     this.state = {
-      peers: [],
       isStart: false,
       data: null,
       activeUser: null,
       speakerOn: true,
-      connected: false,
     };
-    this.props.navigation.setOptions({
-      // canGoBack: true,
-    });
   }
-
-  startInterval;
-  volumeListener;
-  callDetector: CallDetectorManager;
 
   async componentDidMount() {
     if (!this.props.User.current) {
@@ -80,17 +60,31 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     ExposedToJava.start(
       this.props.Group.current.Id,
       this.props.User.current.Id,
+      this.props.User.current.DisplayName,
     );
+    ExposedToJava.onPeerConnectionChange = (status, userId) => {
+      switch (status) {
+        case 'connected':
+          this.props.Group.current.Users[userId].status = UserStatus.Online;
+          break;
+        case 'disconnected':
+          this.props.Group.current.Users[userId].status = UserStatus.Offline;
+          break;
+      }
+      this.setState({});
+    };
+    ExposedToJava.onData = (userId, data) => {
+      switch (data.command) {
+        case 'start':
+          this.setState({activeUser: userId});
+          break;
+        case 'end':
+          this.setState({activeUser: null});
+          break;
+      }
+    };
   }
-  handleStart() {
-    ExposedToJava.start(
-      this.props.Group.current.Id,
-      this.props.User.current.Id,
-    );
-  }
-  handleStop() {
-    ExposedToJava.close();
-  }
+
   async handleShare() {
     const url = `http://brekbrek.kadirnacar.com/join/${this.props.Group.current.Id}`;
     const title = 'BrekBrek Görüşme Daveti';
@@ -197,9 +191,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                       name="user"
                       size={30}
                       color={
-                        item.status == UserStatus.Offline
-                          ? colors.color1
-                          : colors.color3
+                        item.status == UserStatus.Offline || !item.status
+                          ? colors.headerTextColor
+                          : colors.activeBorderColor
                       }
                     />
                   </View>
@@ -210,9 +204,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                       alignItems: 'center',
                       alignSelf: 'center',
                       color:
-                        item.status == UserStatus.Offline
-                          ? colors.color1
-                          : colors.color3,
+                        item.status == UserStatus.Offline || !item.status
+                          ? colors.headerTextColor
+                          : colors.activeBorderColor,
                     }}>
                     {item.DisplayName}
                   </Text>
@@ -229,14 +223,17 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
             bottom: 40,
           }}>
           <TouchableHighlight
-            disabled={!!this.state.activeUser && this.state.connected}
-            onPressIn={this.handleStart}
-            onPressOut={this.handleStop}
+            // disabled={!!this.state.activeUser}
+            onPressIn={() => {
+              ExposedToJava.startVoice();
+            }}
+            onPressOut={() => {
+              ExposedToJava.stopVoice();
+            }}
             style={{
-              backgroundColor:
-                this.state.activeUser || !this.state.connected
-                  ? colors.color4
-                  : '#ff5722',
+              backgroundColor: this.state.activeUser
+                ? colors.color4
+                : '#ff5722',
               width: 100,
               borderRadius: 50,
               alignItems: 'center',
@@ -263,6 +260,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           <TouchableHighlight
             onPress={async () => {
               // this.webRtcConnection.speakerOnOff(!this.state.speakerOn);
+              InCallManager.setSpeakerphoneOn(!this.state.speakerOn);
               this.setState({speakerOn: !this.state.speakerOn});
             }}
             style={{

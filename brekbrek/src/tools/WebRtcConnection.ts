@@ -16,22 +16,23 @@ export class WebRtcConnection {
     groupId: string,
     userId: string,
     configuration?: any,
+    userName?: string,
   ) {
     this.groupId = groupId;
     this.userId = userId;
+    this.userName = userName;
     this.socket = socket;
     this.peers = {};
     this.socket.onMessageEvent = this.onSocketMessage.bind(this);
     this.configuration = {...this.configuration, ...configuration};
   }
+  private userName;
   private key;
   private socket: SocketClient;
   private userId: string;
   private groupId: string;
   private configuration = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
   private peers: {[key: string]: {pc?: RTCPeerConnection; dc?: RTCDataChannel}};
-  private stream: MediaStream;
-  private track: MediaStreamTrack;
   public onData: (userId, data) => void;
   public onChannelOpen: () => void;
   public onChannelClose: () => void;
@@ -56,27 +57,15 @@ export class WebRtcConnection {
         await this.exchange(data);
         break;
       case 'leave':
-        // await this.leave(data.userId);
+        await this.leave(data.userId);
         break;
     }
   }
 
   public async connect() {
     this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
-    if (!this.stream) {
-      const stream = await mediaDevices.getUserMedia({
-        audio: true,
-        video: false,
-      });
-      this.stream = <any>stream;
-      this.stream.getTracks().forEach((t) => {
-        if (t.kind === 'audio') {
-          t.stop();
-        }
-      });
-    }
     // this.stream.removeTrack(this.track);
-    InCallManager.setSpeakerphoneOn(true);
+    // InCallManager.setSpeakerphoneOn(true);
     this.socket.send('join');
   }
 
@@ -100,7 +89,9 @@ export class WebRtcConnection {
       }
       delete this.peers[userId];
 
-      this.onConnectionChange('disconnected', userId);
+      if (this.onConnectionChange) {
+        this.onConnectionChange('disconnected', userId);
+      }
     }
   }
 
@@ -108,36 +99,10 @@ export class WebRtcConnection {
     for (const key in this.peers) {
       this.leave(key);
     }
-    try {
-      // InCallManager.setMicrophoneMute(false);
-      // InCallManager.stop();
-      const tracks = this.stream.getTracks();
-      tracks.forEach((trkc) => {
-        this.stream.removeTrack(trkc);
-        trkc.stop();
-      });
-      
-    } catch {}
   }
 
   public speakerOnOff(value: boolean) {
     InCallManager.setSpeakerphoneOn(value);
-  }
-  public async startMediaStream() {
-    this.stream.getTracks().forEach((t) => {
-      if (t.kind === 'audio') t.enabled = true;
-      console.log(t);
-    });
-    // InCallManager.setMicrophoneMute(false);
-  }
-
-  public stopMediaStream() {
-
-    this.stream.getTracks().forEach((t) => {
-      if (t.kind === 'audio') t.enabled = false;
-      // t.stop();
-    });
-    // InCallManager.setMicrophoneMute(true);
   }
 
   private createChannel(peer: RTCPeerConnection, id) {
@@ -146,7 +111,7 @@ export class WebRtcConnection {
     const dataChannel = peer.createDataChannel(this.groupId);
 
     dataChannel.onerror = (error) => {
-      console.warn('dataChannel.onerror', error);
+      console.log(this.userName, 'dataChannel.onerror', error);
     };
 
     dataChannel.onmessage = (event) => {
@@ -165,6 +130,7 @@ export class WebRtcConnection {
       if (this.onChannelClose) {
         this.onChannelClose();
       }
+      console.log(this.userName, 'dataChannel.onclose');
     };
     if (!this.peers[id]) {
       this.peers[id] = {};
@@ -210,20 +176,32 @@ export class WebRtcConnection {
           if (this.onConnectionChange) {
             this.onConnectionChange(event.target.iceConnectionState, id);
           }
-          this.createChannel(peer, id);
         }
-      } else if (event.target.iceConnectionState === 'failed') {
+      } else if (
+        event.target.iceConnectionState === 'failed' 
+      ) {
+        // for (const key in this.peers) {
+        //   delete this.peers[key];
+        // }
         this.connect();
       }
+      console.log(
+        this.userName,
+        'peer.oniceconnectionstatechange',
+        event.target.iceConnectionState,
+      );
     };
-    peer.addStream(this.stream);
-    // InCallManager.setMicrophoneMute(true);
-    this.stream.getTracks().forEach((t) => {
-      if (t.kind === 'audio') t.enabled = false;
-    });
+    peer.onremovestream = () => {
+      console.log(this.userName, 'peer.onremovestream');
+    };
+    peer.onsignalingstatechange = () => {
+      console.log(this.userName, 'peer.onsignalingstatechange');
+    };
+
     if (!this.peers[id]) {
       this.peers[id] = {};
     }
+    this.createChannel(peer, id);
 
     this.peers[id].pc = peer;
     return peer;
