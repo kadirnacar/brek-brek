@@ -1,4 +1,4 @@
-package com.score.rahasak.utils;
+package com.bengsoft.brekbrek.utils;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
@@ -23,8 +23,8 @@ public class OpusEncoder {
     public static final int OPUS_APPLICATION_AUDIO               = 2049;
     public static final int OPUS_APPLICATION_RESTRICTED_LOWDELAY = 2051;
 
-    private native int nativeInitEncoder(@com.score.rahasak.utils.Annotations.SamplingRate int samplingRate,
-                                         @com.score.rahasak.utils.Annotations.NumberOfChannels int numberOfChannels,
+    private native int nativeInitEncoder(@Annotations.SamplingRate int samplingRate,
+                                         @Annotations.NumberOfChannels int numberOfChannels,
                                          @ApplicationType int application);
     private native int nativeSetBitrate(int bitrate);
     private native int nativeSetComplexity(@IntRange(from=0, to=10) int complexity);
@@ -33,27 +33,27 @@ public class OpusEncoder {
     private native boolean nativeReleaseEncoder();
 
     static {
-        System.loadLibrary("senz");
+        System.loadLibrary("brekbrek");
     }
 
     public void init(int sampleRate, int channels, int application) {
-        com.score.rahasak.utils.OpusError.throwIfError(this.nativeInitEncoder(sampleRate, channels, application));
+        OpusError.throwIfError(this.nativeInitEncoder(sampleRate, channels, application));
     }
 
     public void setBitrate(int bitrate) {
-        com.score.rahasak.utils.OpusError.throwIfError(this.nativeSetBitrate(bitrate));
+        OpusError.throwIfError(this.nativeSetBitrate(bitrate));
     }
 
     public void setComplexity(int complexity) {
-        com.score.rahasak.utils.OpusError.throwIfError(this.nativeSetComplexity(complexity));
+        OpusError.throwIfError(this.nativeSetComplexity(complexity));
     }
 
     public int encode(short[] buffer, int frames, byte[] out) {
-        return com.score.rahasak.utils.OpusError.throwIfError(this.nativeEncodeShorts(buffer, frames, out));
+        return OpusError.throwIfError(this.nativeEncodeShorts(buffer, frames, out));
     }
 
     public int encode(byte[] buffer, int frames, byte[] out) {
-        return com.score.rahasak.utils.OpusError.throwIfError(this.nativeEncodeBytes(buffer, frames, out));
+        return OpusError.throwIfError(this.nativeEncodeBytes(buffer, frames, out));
     }
 
     public void close() {

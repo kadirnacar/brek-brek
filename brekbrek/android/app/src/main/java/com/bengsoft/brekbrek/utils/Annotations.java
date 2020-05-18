@@ -1,4 +1,4 @@
-package com.score.rahasak.utils;
+package com.bengsoft.brekbrek.utils;
 
 
 import androidx.annotation.IntDef;

@@ -2,8 +2,8 @@
 #include <jni.h>
 /* Header for class com_score_rahasak_utils_OpusDecoder */
 
-#ifndef _Included_com_score_rahasak_utils_OpusDecoder
-#define _Included_com_score_rahasak_utils_OpusDecoder
+#ifndef _Included_com_bengsoft_brekbrek_utils_OpusDecoder
+#define _Included_com_bengsoft_brekbrek_utils_OpusDecoder
 #ifdef __cplusplus
 extern "C" {
 #endif

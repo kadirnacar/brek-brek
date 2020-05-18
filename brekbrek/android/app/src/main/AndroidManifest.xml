@@ -28,8 +28,6 @@
         <action android:name="android.media.browse.MediaBrowserService" />
       </intent-filter>
     </service>
-<!--    <receiver android:name=".BackgroundCallerRestarterBroadcastReceiver" android:enabled="true" android:exported="false" android:label="RestartServiceWhenStopped">-->
-<!--    </receiver>-->
 
     <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
       <intent-filter>

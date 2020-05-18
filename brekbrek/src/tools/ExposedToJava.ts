@@ -1,8 +1,9 @@
 import config from '@config';
+import { NativeModules } from 'react-native';
 import RNBeep from 'react-native-a-beep';
 import { SocketClient } from './SocketClient';
 import { WebRtcConnection } from './WebRtcConnection';
-import BackgroundTimer from 'react-native-background-timer';
+const ChannelModule = NativeModules.ChannelModule;
 
 export class ExposedToJava {
   constructor() {}
@@ -20,12 +21,15 @@ export class ExposedToJava {
   public static onData: (userId, data) => void;
 
   public static close() {
+    ChannelModule.stopService();
+
     this.webRtcConnection.close();
     this.socketClient.dispose();
     this.connected = false;
   }
 
   public static async start(groupId, userId,userName?) {
+    ChannelModule.startService();
     this.socketClient = new SocketClient(config.wsUrl, {
       Id: groupId,
     });
@@ -58,13 +62,17 @@ export class ExposedToJava {
         switch (message.command) {
           case 'start':
             this.isBusy = true;
+            ChannelModule.startPlay()
             RNBeep.beep();
             break;
           case 'end':
             this.isBusy = false;
+            ChannelModule.stopPlay()
             RNBeep.beep();
             break;
           case 'data':
+            // console.log(message.data)
+            ChannelModule.stream(message.data)
             break;
         }
       };
@@ -99,7 +107,7 @@ export class ExposedToJava {
     } else if (msg == 'stop') {
       await ExposedToJava.stopVoice();
     } else if (msg == 'data') {
-      console.log(data);
+      // console.log(data);
       await ExposedToJava.webRtcConnection.sendData({command: 'data', data});
     } else {
       console.log(msg);

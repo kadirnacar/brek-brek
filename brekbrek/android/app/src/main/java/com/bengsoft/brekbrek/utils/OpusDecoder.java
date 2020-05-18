@@ -1,4 +1,4 @@
-package com.score.rahasak.utils;
+package com.bengsoft.brekbrek.utils;
 
 public class OpusDecoder {
     /* Native pointer to OpusDecoder */
@@ -10,7 +10,7 @@ public class OpusDecoder {
     private native boolean nativeReleaseDecoder();
 
     static {
-        System.loadLibrary("senz");
+        System.loadLibrary("brekbrek");
     }
 
     public void init(@Annotations.SamplingRate int sampleRate,

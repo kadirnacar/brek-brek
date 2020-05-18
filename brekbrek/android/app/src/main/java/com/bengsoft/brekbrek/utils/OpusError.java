@@ -1,4 +1,4 @@
-package com.score.rahasak.utils;
+package com.bengsoft.brekbrek.utils;
 
 public class OpusError extends RuntimeException {
     public OpusError() {
