@@ -3,7 +3,6 @@ package com.bengsoft.brekbrek.utils;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
 
 import com.bengsoft.brekbrek.NativeModules.ChannelModule;
 
@@ -79,15 +78,18 @@ public class Player {
         int i = 0;
         while (playing && !Thread.interrupted()) {
             if (destination != null) {
-                Log.d("destination.size()", String.valueOf(destination.size()));
+                //Log.d("destination.size()", String.valueOf(destination.size()));
 
                 if (destination.size() > i) {
                     byte[] data = destination.get(i);
-                    int decoded = opusDecoder.decode(data, outBuf, FRAME_SIZE);
-                    //Log.d("decoded", String.valueOf(decoded));
-                    Log.d("data", String.valueOf(data.length));
+                    if (data != null && data.length > 0) {
+                        outBuf = new short[FRAME_SIZE * NUM_CHANNELS];
+                        int decoded = opusDecoder.decode(data, outBuf, FRAME_SIZE);
+                        //Log.d("decoded", String.valueOf(decoded));
+                        //Log.d("data", String.valueOf(data.length));
 
-                    audioTrack.write(outBuf, 0, outBuf.length);
+                        audioTrack.write(outBuf, 0, decoded);
+                    }
                     i++;
                 }
             }

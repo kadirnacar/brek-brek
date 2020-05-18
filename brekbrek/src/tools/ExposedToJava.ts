@@ -1,8 +1,8 @@
 import config from '@config';
-import { NativeModules } from 'react-native';
+import {NativeModules} from 'react-native';
 import RNBeep from 'react-native-a-beep';
-import { SocketClient } from './SocketClient';
-import { WebRtcConnection } from './WebRtcConnection';
+import {SocketClient} from './SocketClient';
+import {WebRtcConnection} from './WebRtcConnection';
 const ChannelModule = NativeModules.ChannelModule;
 
 export class ExposedToJava {
@@ -28,7 +28,7 @@ export class ExposedToJava {
     this.connected = false;
   }
 
-  public static async start(groupId, userId,userName?) {
+  public static async start(groupId, userId, userName?) {
     ChannelModule.startService();
     this.socketClient = new SocketClient(config.wsUrl, {
       Id: groupId,
@@ -51,7 +51,7 @@ export class ExposedToJava {
         groupId,
         userId,
         null,
-        userName
+        userName,
       );
 
       this.webRtcConnection.onData = (id, data) => {
@@ -62,17 +62,17 @@ export class ExposedToJava {
         switch (message.command) {
           case 'start':
             this.isBusy = true;
-            ChannelModule.startPlay()
+            ChannelModule.startPlay();
             RNBeep.beep();
             break;
           case 'end':
             this.isBusy = false;
-            ChannelModule.stopPlay()
+            ChannelModule.stopPlay();
             RNBeep.beep();
             break;
           case 'data':
-            // console.log(message.data)
-            ChannelModule.stream(message.data)
+            console.log(message.data)
+            ChannelModule.stream(message.data);
             break;
         }
       };
@@ -90,22 +90,24 @@ export class ExposedToJava {
       RNBeep.beep();
       // InCallManager.setMicrophoneMute(false)
       await this.webRtcConnection.sendData({command: 'start'});
+     ChannelModule.startRecord();
     }
   }
 
   public static async stopVoice() {
     if (!this.isBusy) {
       RNBeep.beep();
-      // InCallManager.setMicrophoneMute(true)
-      await this.webRtcConnection.sendData({command: 'end'});
+      ChannelModule.stopRecord();
     }
   }
 
   async getCommand(msg, data, size) {
     if (msg == 'start') {
-      await ExposedToJava.startVoice();
+      // await ExposedToJava.startVoice();
+      await ExposedToJava.webRtcConnection.sendData({command: 'start'});
     } else if (msg == 'stop') {
-      await ExposedToJava.stopVoice();
+      // await ExposedToJava.stopVoice();
+      await ExposedToJava.webRtcConnection.sendData({command: 'end'});
     } else if (msg == 'data') {
       // console.log(data);
       await ExposedToJava.webRtcConnection.sendData({command: 'data', data});

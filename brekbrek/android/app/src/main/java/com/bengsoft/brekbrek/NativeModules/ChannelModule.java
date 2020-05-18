@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.bengsoft.brekbrek.BackgroundCallerService;
 import com.bengsoft.brekbrek.MainApplication;
 import com.bengsoft.brekbrek.utils.Player;
+import com.bengsoft.brekbrek.utils.Recorder;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.CatalystInstance;
@@ -62,14 +63,27 @@ public class ChannelModule extends ReactContextBaseJavaModule {
             reactContext.stopService(mServiceIntent);
         }
     }
+
+    @ReactMethod
+    public void startRecord() {
+        Recorder.start();
+    }
+
+    @ReactMethod
+    public void stopRecord() {
+        Recorder.stop();
+    }
+
     @ReactMethod
     public void startPlay() {
         Player.start();
     }
+
     @ReactMethod
     public void stopPlay() {
         Player.stop();
     }
+
     @ReactMethod
     public void stream(ReadableArray arr) {
         byte[] array = readableArrayToByteArray(arr);

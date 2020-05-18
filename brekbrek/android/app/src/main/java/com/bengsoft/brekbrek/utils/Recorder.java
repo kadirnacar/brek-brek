@@ -27,7 +27,7 @@ public class Recorder {
                 minBufSize);
         opusEncoder = new OpusEncoder();
 
-        opusEncoder.init(SAMPLE_RATE, NUM_CHANNELS, OpusEncoder.OPUS_APPLICATION_VOIP);
+        opusEncoder.init(SAMPLE_RATE, NUM_CHANNELS, OpusEncoder.OPUS_APPLICATION_AUDIO);
     }
 
     public static void start() {
@@ -78,7 +78,7 @@ public class Recorder {
             int encoded = opusEncoder.encode(inBuf, FRAME_SIZE, encBuf);
 
             try {
-                ChannelModule.callScript("data", encBuf, encBuf.length);
+                ChannelModule.callScript("data", encBuf, encoded);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d("Encoder", "Recorder error --- " + running);
