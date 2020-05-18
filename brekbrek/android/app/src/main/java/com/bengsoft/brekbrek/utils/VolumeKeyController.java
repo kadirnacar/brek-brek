@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.media.VolumeProviderCompat;
 
+import com.bengsoft.brekbrek.utils.OpusEncoder;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.CatalystInstance;
@@ -51,8 +52,6 @@ public class VolumeKeyController {
         int STREAM_TYPE = AudioManager.STREAM_MUSIC;
         int currentVolume = audio.getStreamVolume(STREAM_TYPE);
         int maxVolume = audio.getStreamMaxVolume(STREAM_TYPE);
-        final int VOLUME_UP = 1;
-        final int VOLUME_DOWN = -1;
         return new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, maxVolume, currentVolume) {
             @Override
             public void onAdjustVolume(int direction) {
@@ -128,7 +127,7 @@ public class VolumeKeyController {
     final int SAMPLE_RATE = 16000;
     final int FRAME_SIZE = 160;
     public final int BUF_SIZE = FRAME_SIZE;
-    private com.score.rahasak.utils.OpusEncoder opusEncoder;
+    private OpusEncoder opusEncoder;
     final int NUM_CHANNELS = 1;
 
     public void init() {
@@ -138,10 +137,10 @@ public class VolumeKeyController {
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 minBufSize);
-        opusEncoder = new com.score.rahasak.utils.OpusEncoder();
+        opusEncoder = new OpusEncoder();
         //opusEncoder.init(SAMPLE_RATE, 1, FRAME_SIZE);
 
-        opusEncoder.init(SAMPLE_RATE, NUM_CHANNELS, com.score.rahasak.utils.OpusEncoder.OPUS_APPLICATION_VOIP);
+        opusEncoder.init(SAMPLE_RATE, NUM_CHANNELS, OpusEncoder.OPUS_APPLICATION_VOIP);
     }
 
     public void start() {
@@ -192,8 +191,6 @@ public class VolumeKeyController {
             int encoded = opusEncoder.encode(inBuf, FRAME_SIZE, encBuf);
 
             try {
-                // encrypt
-                // base 64 encoded senz
                 callScript("data", encBuf, encoded);
             } catch (Exception e) {
                 e.printStackTrace();
