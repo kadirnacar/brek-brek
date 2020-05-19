@@ -27,6 +27,7 @@ export class ExposedToJava {
 
     if (this.webRtcConnection) {
       this.webRtcConnection.close();
+      this.webRtcConnection = null;
     }
     if (this.socketClient) {
       this.socketClient.dispose();
@@ -99,7 +100,7 @@ export class ExposedToJava {
       }
       this.connected = false;
     };
-    if (result == WebSocket.OPEN) {
+    if (result == WebSocket.OPEN || !this.webRtcConnection) {
       this.initWebRtc(groupId, userId, userName);
     }
     await this.webRtcConnection.connect();

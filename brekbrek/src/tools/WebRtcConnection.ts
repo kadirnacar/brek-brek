@@ -43,9 +43,9 @@ export class WebRtcConnection {
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
+    console.log('onSocketMessage', data);
     switch (data.command) {
       case 'join':
-        console.log("onSocketMessage",data)
         // for (const key in this.peers) {
         for (var i = 0; i < data.peers.length; i++) {
           const peer = data.peers[i];
@@ -68,6 +68,7 @@ export class WebRtcConnection {
     this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
     // this.stream.removeTrack(this.track);
     // InCallManager.setSpeakerphoneOn(true);
+    console.log('send join');
     this.socket.send('join');
   }
 
@@ -153,20 +154,20 @@ export class WebRtcConnection {
 
   private async createPeer(id, isOffer) {
     if (id in this.peers) {
-      return;
+      this.leave(id, false);
     }
-
+    const self = this;
     const peer: RTCPeerConnection = new RTCPeerConnection(this.configuration);
     peer.onnegotiationneeded = async () => {
       if (isOffer) {
-        await this.createOffer(peer, id);
+        await self.createOffer(peer, id);
       }
     };
     peer.onicecandidate = async (event) => {
       if (event.candidate) {
         const data = JSON.stringify(event.candidate);
-        const candidate = await encryptData(data, this.key);
-        this.socket.send('exchange', {to: id, candidate});
+        const candidate = await encryptData(data, self.key);
+        self.socket.send('exchange', {to: id, candidate});
       }
     };
 
@@ -176,29 +177,38 @@ export class WebRtcConnection {
         event.target.iceConnectionState === 'disconnected'
       ) {
         if (event.target.iceConnectionState === 'connected') {
-          if (this.onConnectionChange) {
-            this.onConnectionChange(event.target.iceConnectionState, id);
+          if (self.onConnectionChange) {
+            self.onConnectionChange(event.target.iceConnectionState, id);
           }
         }
       } else if (event.target.iceConnectionState === 'closed') {
-        if (this.onConnectionChange) {
-          this.leave(id, true);
-          // this.onConnectionChange('disconnected', id);
+        // if (self.onConnectionChange) {
+        //   self.leave(id, true);
+        // this.onConnectionChange('disconnected', id);
+        // }
+        if (self.onConnectionChange && id != self.userId) {
+          self.onConnectionChange('disconnected', id);
         }
       } else if (event.target.iceConnectionState === 'failed') {
         // for (const key in this.peers) {
         //   delete this.peers[key];
         // }
-        //this.connect();
+        if (self.onConnectionChange && id != self.userId) {
+          self.onConnectionChange('disconnected', id);
+        }
+        if (isOffer) {
+          self.createPeer(id, isOffer);
+          // self.connect();
+        }
       }
       console.log(
-        this.userName,
+        self.userName,
         'peer.oniceconnectionstatechange',
         event.target.iceConnectionState,
       );
     };
     peer.onsignalingstatechange = () => {
-      console.log(this.userName, 'peer.onsignalingstatechange');
+      console.log(self.userName, 'peer.onsignalingstatechange');
     };
 
     if (!this.peers[id]) {
