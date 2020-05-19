@@ -18,20 +18,25 @@ public class Player {
     private static final int BUF_SIZE = FRAME_SIZE;
     private static OpusDecoder opusDecoder;
     private static final int NUM_CHANNELS = 1;
+    private static int minBufSize;
+    private static boolean isPlaying;
 
     public static void init() {
-        int minBufSize = AudioTrack.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+        isPlaying = false;
+        minBufSize = AudioTrack.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
-        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, minBufSize, AudioTrack.MODE_STREAM);
+//        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+//                AudioFormat.ENCODING_PCM_16BIT, minBufSize, AudioTrack.MODE_STREAM);
         opusDecoder = new OpusDecoder();
 
         opusDecoder.init(SAMPLE_RATE, NUM_CHANNELS);
     }
 
     public static void start() {
+        isPlaying = true;
 
-        int state = audioTrack.getState();
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, minBufSize, AudioTrack.MODE_STREAM);
         destination = new ArrayList<>();
         ChannelModule.callScript("start play", null, 0);
         audioTrack.play();
@@ -44,13 +49,17 @@ public class Player {
     }
 
     public static void stop() {
-        if (audioTrack != null && audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED) {
-            audioTrack.stop();
-            if (playingThread != null && playingThread.isAlive()) {
-                playingThread.interrupt();
-            }
-            playingThread = null;
+        isPlaying = false;
+
+        if (playingThread != null && playingThread.isAlive()) {
+            playingThread.interrupt();
         }
+        audioTrack.pause();
+        audioTrack.flush();
+        audioTrack.release();
+
+        audioTrack = null;
+        playingThread = null;
         destination = null;
     }
 
@@ -64,11 +73,9 @@ public class Player {
     }
 
     private static void playing() {
-        byte[] inBuf = new byte[FRAME_SIZE * NUM_CHANNELS * 2];
-        byte[] encBuf = new byte[2048];
-        short[] outBuf = new short[FRAME_SIZE * NUM_CHANNELS];
+        short[] outBuf;
         int i = 0;
-        while (!Thread.interrupted()) {
+        while (isPlaying) {
             if (destination != null) {
 
                 if (destination.size() > i) {

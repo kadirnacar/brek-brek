@@ -18,7 +18,6 @@ import com.bengsoft.brekbrek.utils.VolumeKeyController;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class BackgroundCallerService extends Service {
 
     VolumeKeyController mVolumeKeyController;

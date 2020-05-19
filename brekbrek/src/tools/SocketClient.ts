@@ -16,6 +16,7 @@ export class SocketClient {
   public onMessageEvent: ((event: WebSocketMessageEvent) => void) | null;
   public onErrorEvent: ((event: WebSocketErrorEvent) => void) | null;
   public onConnected: ((state: number) => void) | null;
+  public onCloseEvent: (() => void) | null;
 
   private onMessage = (e: WebSocketMessageEvent) => {
     if (this.onMessageEvent) {
@@ -25,6 +26,9 @@ export class SocketClient {
   timeoutId;
   private onClose = (e) => {
     this.timeoutId = BackgroundTimer.setTimeout(() => {
+      if (this.onCloseEvent) {
+        this.onCloseEvent();
+      }
       BackgroundTimer.clearTimeout(this.timeoutId);
       if (!this.isDisposed) {
         console.log('WebSocketClient: reconnecting...');

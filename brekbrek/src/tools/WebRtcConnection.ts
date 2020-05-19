@@ -45,9 +45,11 @@ export class WebRtcConnection {
     const data = JSON.parse(event.data);
     switch (data.command) {
       case 'join':
+        console.log("onSocketMessage",data)
+        // for (const key in this.peers) {
         for (var i = 0; i < data.peers.length; i++) {
           const peer = data.peers[i];
-          if (peer in this.peers) this.leave(peer);
+          if (peer in this.peers) this.leave(peer, false);
           if (peer != this.userId) {
             await this.createPeer(peer, true);
           }
@@ -57,7 +59,7 @@ export class WebRtcConnection {
         await this.exchange(data);
         break;
       case 'leave':
-        await this.leave(data.userId);
+        await this.leave(data.userId, true);
         break;
     }
   }
@@ -78,7 +80,7 @@ export class WebRtcConnection {
     }
   }
 
-  private leave(userId) {
+  private leave(userId, trigger) {
     if (userId in this.peers) {
       const pc = this.peers[userId];
       if (pc && pc.pc) {
@@ -89,7 +91,7 @@ export class WebRtcConnection {
       }
       delete this.peers[userId];
 
-      if (this.onConnectionChange) {
+      if (trigger && this.onConnectionChange && userId != this.userId) {
         this.onConnectionChange('disconnected', userId);
       }
     }
@@ -97,7 +99,7 @@ export class WebRtcConnection {
 
   public close() {
     for (const key in this.peers) {
-      this.leave(key);
+      this.leave(key, false);
     }
   }
 
@@ -178,22 +180,22 @@ export class WebRtcConnection {
             this.onConnectionChange(event.target.iceConnectionState, id);
           }
         }
-      } else if (
-        event.target.iceConnectionState === 'failed' 
-      ) {
+      } else if (event.target.iceConnectionState === 'closed') {
+        if (this.onConnectionChange) {
+          this.leave(id, true);
+          // this.onConnectionChange('disconnected', id);
+        }
+      } else if (event.target.iceConnectionState === 'failed') {
         // for (const key in this.peers) {
         //   delete this.peers[key];
         // }
-        this.connect();
+        //this.connect();
       }
       console.log(
         this.userName,
         'peer.oniceconnectionstatechange',
         event.target.iceConnectionState,
       );
-    };
-    peer.onremovestream = () => {
-      console.log(this.userName, 'peer.onremovestream');
     };
     peer.onsignalingstatechange = () => {
       console.log(this.userName, 'peer.onsignalingstatechange');

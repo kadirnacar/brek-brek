@@ -3,7 +3,7 @@ import {NativeModules} from 'react-native';
 import RNBeep from 'react-native-a-beep';
 import {SocketClient} from './SocketClient';
 import {WebRtcConnection} from './WebRtcConnection';
-import {log} from '@utils';
+import {log, encryptData, generateKey, decryptData} from '@utils';
 const ChannelModule = NativeModules.ChannelModule;
 
 export class ExposedToJava {
@@ -14,6 +14,7 @@ export class ExposedToJava {
   static currentGroup;
   static currentUser;
   static isBusy: boolean;
+  static key;
 
   public static onPeerConnectionChange: (
     status: 'connected' | 'disconnected',
@@ -24,12 +25,53 @@ export class ExposedToJava {
   public static close() {
     ChannelModule.stopService();
 
-    this.webRtcConnection.close();
-    this.socketClient.dispose();
+    if (this.webRtcConnection) {
+      this.webRtcConnection.close();
+    }
+    if (this.socketClient) {
+      this.socketClient.dispose();
+    }
     this.connected = false;
   }
+  private static initWebRtc(groupId, userId, userName?) {
+    this.webRtcConnection = new WebRtcConnection(
+      this.socketClient,
+      groupId,
+      userId,
+      null,
+      userName,
+    );
 
+    this.webRtcConnection.onData = async (id, data) => {
+      const message = JSON.parse(data.data);
+      if (this.onData) {
+        this.onData(id, message);
+      }
+      switch (message.command) {
+        case 'start':
+          this.isBusy = true;
+          ChannelModule.startPlay();
+          RNBeep.beep();
+          break;
+        case 'end':
+          this.isBusy = false;
+          ChannelModule.stopPlay();
+          RNBeep.beep();
+          break;
+        case 'data':
+          ChannelModule.stream(message.data);
+          break;
+      }
+    };
+    this.webRtcConnection.onConnectionChange = (status, peerId) => {
+      if (this.onPeerConnectionChange) {
+        this.onPeerConnectionChange(status, peerId);
+      }
+    };
+  }
   public static async start(groupId, userId, userName?) {
+    this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
+
     ChannelModule.startService();
     this.socketClient = new SocketClient(config.wsUrl, {
       Id: groupId,
@@ -37,50 +79,28 @@ export class ExposedToJava {
     const result = await this.socketClient.connect();
     this.connected = true;
     this.socketClient.onConnected = async (state) => {
-      if (!this.connected) {
-        await this.webRtcConnection.connect();
+      if (!this.webRtcConnection) {
+        this.initWebRtc(groupId, userId, userName);
       }
+      console.log(userName, 'webrtc Connect');
+      await this.webRtcConnection.connect();
+
       this.connected = true;
     };
     this.socketClient.onErrorEvent = (e) => {
-      this.webRtcConnection.close();
+      if (this.webRtcConnection) {
+        this.webRtcConnection.close();
+      }
+      this.connected = false;
+    };
+    this.socketClient.onCloseEvent = () => {
+      if (this.webRtcConnection) {
+        this.webRtcConnection.close();
+      }
       this.connected = false;
     };
     if (result == WebSocket.OPEN) {
-      this.webRtcConnection = new WebRtcConnection(
-        this.socketClient,
-        groupId,
-        userId,
-        null,
-        userName,
-      );
-
-      this.webRtcConnection.onData = (id, data) => {
-        const message = JSON.parse(data.data);
-        if (this.onData) {
-          this.onData(id, message);
-        }
-        switch (message.command) {
-          case 'start':
-            this.isBusy = true;
-            ChannelModule.startPlay();
-            RNBeep.beep();
-            break;
-          case 'end':
-            this.isBusy = false;
-            ChannelModule.stopPlay();
-            RNBeep.beep();
-            break;
-          case 'data':
-            ChannelModule.stream(message.data);
-            break;
-        }
-      };
-      this.webRtcConnection.onConnectionChange = (status, peerId) => {
-        if (this.onPeerConnectionChange) {
-          this.onPeerConnectionChange(status, peerId);
-        }
-      };
+      this.initWebRtc(groupId, userId, userName);
     }
     await this.webRtcConnection.connect();
   }
@@ -110,8 +130,11 @@ export class ExposedToJava {
       // await ExposedToJava.stopVoice();
       await ExposedToJava.webRtcConnection.sendData({command: 'end'});
     } else if (msg == 'data') {
-      // console.log(data);
-      await ExposedToJava.webRtcConnection.sendData({command: 'data', data});
+      console.log(size);
+      await ExposedToJava.webRtcConnection.sendData({
+        command: 'data',
+        data: data,
+      });
     } else {
       console.log(msg);
       log.info(msg);

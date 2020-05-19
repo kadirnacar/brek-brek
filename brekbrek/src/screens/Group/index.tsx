@@ -57,6 +57,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
+    console.log("componentDidMount")
     ExposedToJava.start(
       this.props.Group.current.Id,
       this.props.User.current.Id,

@@ -88,7 +88,7 @@ export class SocketService {
 
     switch (command.command) {
       case "join":
-        SocketService.sendMessageToGroup(
+        SocketService.sendMessageToPeer(
           groupId,
           userId,
           JSON.stringify({
