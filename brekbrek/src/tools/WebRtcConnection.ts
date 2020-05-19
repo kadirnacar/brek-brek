@@ -60,6 +60,9 @@ export class WebRtcConnection {
         break;
       case 'leave':
         await this.leave(data.userId, true);
+        if (data.userId == this.userId) {
+          this.connect();
+        }
         break;
     }
   }
@@ -196,10 +199,8 @@ export class WebRtcConnection {
         if (self.onConnectionChange && id != self.userId) {
           self.onConnectionChange('disconnected', id);
         }
-        if (isOffer) {
-          self.createPeer(id, isOffer);
-          // self.connect();
-        }
+        self.createPeer(id, isOffer);
+        // self.connect();
       }
       console.log(
         self.userName,
