@@ -3,6 +3,7 @@ import {NativeModules} from 'react-native';
 import RNBeep from 'react-native-a-beep';
 import {SocketClient} from './SocketClient';
 import {WebRtcConnection} from './WebRtcConnection';
+import {log} from '@utils';
 const ChannelModule = NativeModules.ChannelModule;
 
 export class ExposedToJava {
@@ -71,7 +72,6 @@ export class ExposedToJava {
             RNBeep.beep();
             break;
           case 'data':
-            console.log(message.data)
             ChannelModule.stream(message.data);
             break;
         }
@@ -90,13 +90,14 @@ export class ExposedToJava {
       RNBeep.beep();
       // InCallManager.setMicrophoneMute(false)
       await this.webRtcConnection.sendData({command: 'start'});
-     ChannelModule.startRecord();
+      ChannelModule.startRecord();
     }
   }
 
   public static async stopVoice() {
     if (!this.isBusy) {
       RNBeep.beep();
+      await this.webRtcConnection.sendData({command: 'end'});
       ChannelModule.stopRecord();
     }
   }
@@ -113,6 +114,7 @@ export class ExposedToJava {
       await ExposedToJava.webRtcConnection.sendData({command: 'data', data});
     } else {
       console.log(msg);
+      log.info(msg);
     }
   }
 }

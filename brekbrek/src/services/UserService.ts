@@ -8,6 +8,7 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk';
+import { log } from '@utils';
 
 GoogleSignin.configure({
   webClientId: config.googleWebClientId,
@@ -39,6 +40,7 @@ export class UserService extends ServiceBase {
       return result;
     } catch (ex) {
       console.log(ex);
+      log.error(ex);
       return new Result<IUser>(null, ex.message);
     }
   }
@@ -90,6 +92,7 @@ export class UserService extends ServiceBase {
       return result;
     } catch (ex) {
       console.log(ex);
+      log.error(ex);
       return new Result<IUser>(null, ex.message);
     }
   }
@@ -115,6 +118,7 @@ export class UserService extends ServiceBase {
       return result;
     } catch (ex) {
       console.log(ex);
+      log.error(ex);
       return new Result<IUser>(null, ex.message);
     }
   }

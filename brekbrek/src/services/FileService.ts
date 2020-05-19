@@ -1,6 +1,7 @@
 import { ApplicationState } from '@store';
 import * as path from 'path';
 import * as RNFS from 'react-native-fs';
+import { log } from '@utils';
 
 class FileServiceHelper {
     stateFile: string = path.join(RNFS.DocumentDirectoryPath, 'state.json');
@@ -16,6 +17,7 @@ class FileServiceHelper {
             return result;
         } catch (ex) {
             console.warn(ex)
+            log.error(ex);
             return {};
         }
     }
@@ -36,6 +38,7 @@ class FileServiceHelper {
             return result;
         } catch (ex) {
             console.warn(ex)
+            log.error(ex);
             return {};
         }
     }

@@ -7,7 +7,7 @@ import {
   MediaStreamTrack,
 } from 'react-native-webrtc';
 import {SocketClient} from './SocketClient';
-import {generateKey, encryptData, decryptData} from '@utils';
+import {generateKey, encryptData, decryptData, log} from '@utils';
 import config from '@config';
 
 export class WebRtcConnection {
@@ -111,6 +111,7 @@ export class WebRtcConnection {
     const dataChannel = peer.createDataChannel(this.groupId);
 
     dataChannel.onerror = (error) => {
+      log.error(error);
       console.log(this.userName, 'dataChannel.onerror', error);
     };
 

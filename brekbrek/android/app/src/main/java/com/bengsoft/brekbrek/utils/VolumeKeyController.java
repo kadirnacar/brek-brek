@@ -19,12 +19,10 @@ public class VolumeKeyController {
     private void createMediaSession() {
         mMediaSession = new MediaSessionCompat(mContext, "Tag");
 
-        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS |
-                MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS);
-        mMediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f)
-                .build());
+        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
+                | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS);
+        mMediaSession.setPlaybackState(
+                new PlaybackStateCompat.Builder().setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f).build());
         mMediaSession.setPlaybackToRemote(getVolumeProvider());
         mMediaSession.setActive(true);
         Recorder.init();
@@ -38,6 +36,10 @@ public class VolumeKeyController {
         int STREAM_TYPE = AudioManager.STREAM_MUSIC;
         int currentVolume = audio.getStreamVolume(STREAM_TYPE);
         int maxVolume = audio.getStreamMaxVolume(STREAM_TYPE);
+        final int VOLUME_UP = 1;
+        final int VOLUME_DOWN = -1;
+        // return new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE,
+        // maxVolume, currentVolume) {
         return new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, maxVolume, currentVolume) {
             @Override
             public void onAdjustVolume(int direction) {
@@ -50,6 +52,15 @@ public class VolumeKeyController {
                     state = direction;
                     Recorder.start();
                 }
+                if (direction == VOLUME_UP) {
+                    audio.adjustStreamVolume(STREAM_TYPE,
+                            AudioManager.ADJUST_RAISE, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+                }
+                else if (direction == VOLUME_DOWN) {
+                    audio.adjustStreamVolume(STREAM_TYPE,
+                            AudioManager.ADJUST_LOWER, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+                }
+                setCurrentVolume(audio.getStreamVolume(STREAM_TYPE));
             }
         };
     }

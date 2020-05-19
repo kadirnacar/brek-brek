@@ -1,6 +1,5 @@
 import {Result} from '@models';
-import {isNode} from '@utils';
-import Axios, {AxiosRequestConfig} from 'axios';
+import {log} from '@utils';
 import jsonToUrl from 'json-to-url';
 import * as LocalStorage from '../store/localStorage';
 
@@ -8,12 +7,6 @@ export interface IRequestOptions {
   url: string;
   data?: any;
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-}
-
-export interface ISendFormDataOptions {
-  url: string;
-  data: FormData;
-  method: 'POST' | 'PUT' | 'PATCH';
 }
 
 /**
@@ -40,63 +33,73 @@ export abstract class ServiceBase {
       return url;
     };
 
-    var axiosRequestConfig: AxiosRequestConfig;
-
+    const headers: any = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
     if (setAuthHeader) {
       const token = await LocalStorage.getItem('token');
-      axiosRequestConfig = {
-        headers: {
-          auth: token,
-        },
-      };
+      headers.auth = token;
     }
     try {
       switch (opts.method) {
         case 'GET':
-          axiosResult = await Axios.get(
-            processQuery(opts.url, opts.data),
-            axiosRequestConfig,
-          );
+          axiosResult = await (
+            await fetch(processQuery(opts.url, opts.data), {
+              method: 'GET',
+              headers,
+            })
+          ).json();
+
           break;
         case 'POST':
-          axiosResult = await Axios.post(
-            opts.url,
-            opts.data,
-            axiosRequestConfig,
-          );
+          axiosResult = await (
+            await fetch(opts.url, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(opts.data),
+            })
+          ).json();
           break;
         case 'PUT':
-          axiosResult = await Axios.put(
-            opts.url,
-            opts.data,
-            axiosRequestConfig,
-          );
+          axiosResult = await (
+            await fetch(opts.url, {
+              method: 'PUT',
+              headers,
+              body: JSON.stringify(opts.data),
+            })
+          ).json();
           break;
         case 'PATCH':
-          axiosResult = await Axios.patch(
-            opts.url,
-            opts.data,
-            axiosRequestConfig,
-          );
+          axiosResult = await (
+            await fetch(opts.url, {
+              method: 'PATCH',
+              headers,
+              body: JSON.stringify(opts.data),
+            })
+          ).json();
           break;
         case 'DELETE':
-          axiosResult = await Axios.delete(
-            processQuery(opts.url, opts.data),
-            axiosRequestConfig,
-          );
+          axiosResult = await (
+            await fetch(processQuery(opts.url, opts.data), {
+              method: 'DELETE',
+              headers,
+            })
+          ).json();
           break;
       }
 
-      result = new Result<T>(axiosResult.data, null);
+      result = new Result<T>(axiosResult, null);
     } catch (error) {
       console.log(error);
+      log.error(error);
       result = new Result<T>(
         null,
         // opts.url +
-          // ' - ' +
-          (error.response && error.response.data
-            ? error.response.data
-            : error.message),
+        // ' - ' +
+        error.response && error.response.data
+          ? error.response.data
+          : error.message,
       );
     }
 
@@ -107,48 +110,6 @@ export abstract class ServiceBase {
       //     window.location.href = "/";
       // }
     }
-    return result;
-  }
-
-  /**
-   * Allows you to send files to the server.
-   * @param opts
-   */
-  public static async sendFormData<T>(
-    opts: ISendFormDataOptions,
-  ): Promise<Result<T>> {
-    var axiosResult = null;
-    var result = null;
-
-    // opts.url = transformUrl(opts.url); // Allow requests also for Node.
-
-    var axiosOpts = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    try {
-      switch (opts.method) {
-        case 'POST':
-          axiosResult = await Axios.post(opts.url, opts.data, axiosOpts);
-          break;
-        case 'PUT':
-          axiosResult = await Axios.put(opts.url, opts.data, axiosOpts);
-          break;
-        case 'PATCH':
-          axiosResult = await Axios.patch(opts.url, opts.data, axiosOpts);
-          break;
-      }
-      result = new Result(axiosResult.data.value, axiosResult.data.errors);
-    } catch (error) {
-      result = new Result(null, error.message);
-    }
-
-    if (result.hasErrors) {
-      // Ui.showErrors(result.errors);
-    }
-
     return result;
   }
 }

@@ -48,7 +48,7 @@ public class BackgroundCallerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        this.startTimer();
+        // this.startTimer();
         this.mVolumeKeyController = new VolumeKeyController(getApplicationContext());
         this.mVolumeKeyController.setActive(true);
         return START_STICKY;
@@ -58,7 +58,7 @@ public class BackgroundCallerService extends Service {
     public void onDestroy() {
         //this.mVolumeKeyController.setActive(false);
         this.mVolumeKeyController.destroy();
-        stoptimertask();
+        // stoptimertask();
         super.onDestroy();
     }
 

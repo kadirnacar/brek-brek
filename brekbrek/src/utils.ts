@@ -1,5 +1,26 @@
 import {NativeModules} from 'react-native';
+import {logger} from 'react-native-logs';
+import {rnFsFileAsync} from 'react-native-logs/dist/transports/rnFsFileAsync';
+import * as RNFS from 'react-native-fs';
 
+const defaultConfig = {
+  transport: rnFsFileAsync,
+  transportOptions: {
+    dateFormat: 'iso',
+    loggerName: 'myLogsFile',
+    loggerPath: RNFS.DownloadDirectoryPath,
+  },
+  levels: {
+    trace: 0,
+    info: 1,
+    silly: 2,
+    error: 3,
+    mad: 4,
+    timer: 5,
+  },
+};
+
+export const log = logger.createLogger(defaultConfig);
 declare var process: any;
 const Aes = NativeModules.Aes;
 

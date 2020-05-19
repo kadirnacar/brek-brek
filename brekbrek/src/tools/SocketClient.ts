@@ -1,5 +1,6 @@
 import {LocalStorage} from '../store';
 import BackgroundTimer from 'react-native-background-timer';
+import {log} from '@utils';
 
 export class SocketClient {
   constructor(url: string, options?: any) {
@@ -83,6 +84,7 @@ export class SocketClient {
       self.socket.onmessage = self.onMessage.bind(self);
       self.socket.onerror = (e) => {
         console.log('socket.onerror', e);
+        log.error(e);
         if (self.onErrorEvent) {
           self.onErrorEvent(e);
         }
