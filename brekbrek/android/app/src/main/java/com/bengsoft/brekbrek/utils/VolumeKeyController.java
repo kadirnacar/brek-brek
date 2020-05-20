@@ -25,7 +25,7 @@ public class VolumeKeyController {
                 new PlaybackStateCompat.Builder().setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f).build());
         mMediaSession.setPlaybackToRemote(getVolumeProvider());
         mMediaSession.setActive(true);
-        Recorder.init();
+        com.kadirnacar.brekbrek.utils.Recorder.init();
     }
 
     int state = 0;
@@ -47,10 +47,10 @@ public class VolumeKeyController {
                 // Replace with your action, if you don't want to adjust system volume
                 if (direction == 0) {
                     state = 0;
-                    Recorder.stop();
+                    com.kadirnacar.brekbrek.NativeModules.ChannelModule.callScript("stop",null,0);
                 } else if (direction != state) {
                     state = direction;
-                    Recorder.start();
+                    com.kadirnacar.brekbrek.NativeModules.ChannelModule.callScript("start",null,0);
                 }
                 if (direction == VOLUME_UP) {
                     audio.adjustStreamVolume(STREAM_TYPE,

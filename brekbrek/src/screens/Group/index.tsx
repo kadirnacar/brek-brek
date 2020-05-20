@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
+  PermissionsAndroid,
 } from 'react-native';
 import InCallManager from 'react-native-incall-manager';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -50,6 +51,16 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
 
   async componentDidMount() {
+    const granted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+    );
+
+    if (!granted) {
+      const result = await PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+      if(!result){
+        this.props.navigation.navigate("Home");
+      }
+    }
     if (!this.props.User.current) {
       await this.props.UserActions.checkUser();
     }
@@ -57,7 +68,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
-    console.log("componentDidMount")
     ExposedToJava.start(
       this.props.Group.current.Id,
       this.props.User.current.Id,

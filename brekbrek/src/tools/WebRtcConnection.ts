@@ -43,7 +43,6 @@ export class WebRtcConnection {
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
-    console.log('onSocketMessage', data);
     switch (data.command) {
       case 'join':
         // for (const key in this.peers) {
@@ -71,7 +70,6 @@ export class WebRtcConnection {
     this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
     // this.stream.removeTrack(this.track);
     // InCallManager.setSpeakerphoneOn(true);
-    console.log('send join');
     this.socket.send('join');
   }
 

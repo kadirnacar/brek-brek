@@ -83,7 +83,6 @@ export class ExposedToJava {
       if (!this.webRtcConnection) {
         this.initWebRtc(groupId, userId, userName);
       }
-      console.log(userName, 'webrtc Connect');
       await this.webRtcConnection.connect();
 
       this.connected = true;
@@ -126,12 +125,11 @@ export class ExposedToJava {
   async getCommand(msg, data, size) {
     if (msg == 'start') {
       // await ExposedToJava.startVoice();
-      await ExposedToJava.webRtcConnection.sendData({command: 'start'});
+      ExposedToJava.startVoice();
     } else if (msg == 'stop') {
       // await ExposedToJava.stopVoice();
-      await ExposedToJava.webRtcConnection.sendData({command: 'end'});
+      ExposedToJava.stopVoice();
     } else if (msg == 'data') {
-      console.log(size);
       await ExposedToJava.webRtcConnection.sendData({
         command: 'data',
         data: data,

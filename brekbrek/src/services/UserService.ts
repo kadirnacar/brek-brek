@@ -9,7 +9,6 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import { log } from '@utils';
-
 GoogleSignin.configure({
   webClientId: config.googleWebClientId,
   forceCodeForRefreshToken: true,
