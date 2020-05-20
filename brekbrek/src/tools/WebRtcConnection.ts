@@ -1,14 +1,7 @@
-import InCallManager from 'react-native-incall-manager';
-import {
-  mediaDevices,
-  MediaStream,
-  RTCDataChannel,
-  RTCPeerConnection,
-  MediaStreamTrack,
-} from 'react-native-webrtc';
-import {SocketClient} from './SocketClient';
-import {generateKey, encryptData, decryptData, log} from '@utils';
 import config from '@config';
+import {decryptData, encryptData, generateKey, log} from '@utils';
+import {RTCDataChannel, RTCPeerConnection} from 'react-native-webrtc';
+import {SocketClient} from './SocketClient';
 
 export class WebRtcConnection {
   constructor(
@@ -68,8 +61,6 @@ export class WebRtcConnection {
 
   public async connect() {
     this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
-    // this.stream.removeTrack(this.track);
-    // InCallManager.setSpeakerphoneOn(true);
     this.socket.send('join');
   }
 
@@ -105,9 +96,7 @@ export class WebRtcConnection {
     }
   }
 
-  public speakerOnOff(value: boolean) {
-    InCallManager.setSpeakerphoneOn(value);
-  }
+  public speakerOnOff(value: boolean) {}
 
   private createChannel(peer: RTCPeerConnection, id) {
     if (!peer) return;

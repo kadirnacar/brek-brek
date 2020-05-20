@@ -7,7 +7,6 @@ import SafeAreaView, {SafeAreaProvider} from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {Provider} from 'react-redux';
 import store from './tools/store';
-import NetInfo from '@react-native-community/netinfo';
 import {AsyncAlert} from './tools/AsyncAlert';
 import VersionCheck from 'react-native-version-check';
 import {UserService} from './services/UserService';
@@ -36,12 +35,7 @@ export default class App extends Component<any, AppState> {
     };
   }
   async componentDidMount() {
-    const connectionState = await NetInfo.fetch();
-    if (!connectionState.isConnected) {
-      await AsyncAlert('İnternet bağlantınızı kontrol ediniz.');
-      BackHandler.exitApp();
-      return;
-    }
+    
     const packageName = VersionCheck.getPackageName();
     const buildNumber = VersionCheck.getCurrentBuildNumber();
     const version = VersionCheck.getCurrentVersion();

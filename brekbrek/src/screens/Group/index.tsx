@@ -14,7 +14,6 @@ import {
   View,
   PermissionsAndroid,
 } from 'react-native';
-import InCallManager from 'react-native-incall-manager';
 import SafeAreaView from 'react-native-safe-area-view';
 import Share, {Options} from 'react-native-share';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -271,7 +270,6 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
           <TouchableHighlight
             onPress={async () => {
               // this.webRtcConnection.speakerOnOff(!this.state.speakerOn);
-              InCallManager.setSpeakerphoneOn(!this.state.speakerOn);
               this.setState({speakerOn: !this.state.speakerOn});
             }}
             style={{
