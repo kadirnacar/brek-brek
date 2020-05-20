@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek;
+package com.kadirnacar.brekbrek;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,8 +12,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.bengsoft.brekbrek.NativeModules.ChannelModule;
-import com.bengsoft.brekbrek.utils.VolumeKeyController;
+import com.kadirnacar.brekbrek.NativeModules.ChannelModule;
+import com.kadirnacar.brekbrek.utils.VolumeKeyController;
 
 import java.util.Timer;
 import java.util.TimerTask;

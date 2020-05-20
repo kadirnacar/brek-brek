@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek;
+package com.kadirnacar.brekbrek;
 
 import android.content.Context;
 import android.os.Bundle;

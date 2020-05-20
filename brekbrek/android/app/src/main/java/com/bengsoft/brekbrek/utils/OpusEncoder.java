@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek.utils;
+package com.kadirnacar.brekbrek.utils;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;

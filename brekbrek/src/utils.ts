@@ -7,8 +7,8 @@ const defaultConfig = {
   transport: rnFsFileAsync,
   transportOptions: {
     dateFormat: 'iso',
-    loggerName: 'myLogsFile',
-    loggerPath: RNFS.DownloadDirectoryPath,
+    loggerName: 'brekbrek-logs',
+    // loggerPath: RNFS.DownloadDirectoryPath,
   },
   levels: {
     trace: 0,

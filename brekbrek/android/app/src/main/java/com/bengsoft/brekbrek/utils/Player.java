@@ -1,10 +1,10 @@
-package com.bengsoft.brekbrek.utils;
+package com.kadirnacar.brekbrek.utils;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import com.bengsoft.brekbrek.NativeModules.ChannelModule;
+import com.kadirnacar.brekbrek.NativeModules.ChannelModule;
 
 import java.util.ArrayList;
 import java.util.List;

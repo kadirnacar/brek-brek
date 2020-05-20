@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek.NativeModules;
+package com.kadirnacar.brekbrek.NativeModules;
 
 import android.content.Context;
 

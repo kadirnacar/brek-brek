@@ -1,10 +1,10 @@
-package com.bengsoft.brekbrek.utils;
+package com.kadirnacar.brekbrek.utils;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
-import com.bengsoft.brekbrek.NativeModules.ChannelModule;
+import com.kadirnacar.brekbrek.NativeModules.ChannelModule;
 
 public class Recorder {
     private static AudioRecord audioRecord;

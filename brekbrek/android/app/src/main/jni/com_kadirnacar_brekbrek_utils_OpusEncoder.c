@@ -1,9 +1,9 @@
-#include <com_bengsoft_brekbrek_utils_OpusEncoder.h>
+#include <com_kadirnacar_brekbrek_utils_OpusEncoder.h>
 #include "opus/include/opus.h"
 #include <malloc.h>
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeInitEncoder(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeInitEncoder(JNIEnv *env, jobject thiz,
                                                                jint sampling_rate,
                                                                jint number_of_channels,
                                                                jint application) {
@@ -26,7 +26,7 @@ Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeInitEncoder(JNIEnv *env, jobj
 	return error;
 }
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeEncodeBytes(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeEncodeBytes(JNIEnv *env, jobject thiz,
 															   jbyteArray in, jint frames,
 															   jbyteArray out) {
 	// TODO: implement nativeEncodeBytes()
@@ -54,7 +54,7 @@ Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeEncodeBytes(JNIEnv *env, jobj
 }
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeSetBitrate(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeSetBitrate(JNIEnv *env, jobject thiz,
 															  jint bitrate) {
 	jclass cls = (*env)->GetObjectClass(env, thiz);
 	jfieldID fid = (*env)->GetFieldID(env, cls, "address", "J");
@@ -63,7 +63,7 @@ Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeSetBitrate(JNIEnv *env, jobje
 }
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeSetComplexity(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeSetComplexity(JNIEnv *env, jobject thiz,
 																 jint complexity) {
 	jclass cls = (*env)->GetObjectClass(env, thiz);
 	jfieldID fid = (*env)->GetFieldID(env, cls, "address", "J");
@@ -72,7 +72,7 @@ Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeSetComplexity(JNIEnv *env, jo
 }
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeEncodeShorts(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeEncodeShorts(JNIEnv *env, jobject thiz,
 																jshortArray in, jint frames,
 																jbyteArray out) {
 	jclass cls = (*env)->GetObjectClass(env, thiz);
@@ -94,7 +94,7 @@ Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeEncodeShorts(JNIEnv *env, job
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusEncoder_nativeReleaseEncoder(JNIEnv *env, jobject thiz) {
+Java_com_kadirnacar_brekbrek_utils_OpusEncoder_nativeReleaseEncoder(JNIEnv *env, jobject thiz) {
 	jclass cls = (*env)->GetObjectClass(env, thiz);
 	jfieldID fid = (*env)->GetFieldID(env, cls, "address", "J");
 	OpusEncoder* enc = (OpusEncoder*)((*env)->GetLongField(env, thiz, fid));

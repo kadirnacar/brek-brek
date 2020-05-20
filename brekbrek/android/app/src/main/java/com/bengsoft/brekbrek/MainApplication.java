@@ -1,9 +1,9 @@
-package com.bengsoft.brekbrek;
+package com.kadirnacar.brekbrek;
 
 import android.app.Application;
 import android.content.Context;
 
-import com.bengsoft.brekbrek.NativeModules.ChannelPackage;
+import com.kadirnacar.brekbrek.NativeModules.ChannelPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -67,7 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-                Class<?> aClass = Class.forName("com.bengsoft.brekbrek.ReactNativeFlipper");
+                Class<?> aClass = Class.forName("com.kadirnacar.brekbrek.ReactNativeFlipper");
                 aClass
                         .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
                         .invoke(null, context, reactInstanceManager);

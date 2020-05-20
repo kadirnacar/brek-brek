@@ -1,9 +1,9 @@
-#include <com_bengsoft_brekbrek_utils_OpusDecoder.h>
+#include <com_kadirnacar_brekbrek_utils_OpusDecoder.h>
 #include "opus/include/opus.h"
 #include <malloc.h>
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeInitDecoder(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusDecoder_nativeInitDecoder(JNIEnv *env, jobject thiz,
                                                                jint sampling_rate,
                                                                jint number_of_channels) {
     int size;
@@ -25,7 +25,7 @@ Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeInitDecoder(JNIEnv *env, jobj
 }
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeDecodeShorts(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusDecoder_nativeDecodeShorts(JNIEnv *env, jobject thiz,
                                                                 jbyteArray in, jshortArray out,
                                                                 jint frames) {
     jclass cls = (*env)->GetObjectClass(env, thiz);
@@ -45,7 +45,7 @@ Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeDecodeShorts(JNIEnv *env, job
 }
 
 JNIEXPORT jint JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeDecodeBytes(JNIEnv *env, jobject thiz,
+Java_com_kadirnacar_brekbrek_utils_OpusDecoder_nativeDecodeBytes(JNIEnv *env, jobject thiz,
                                                                jbyteArray in, jbyteArray out,
                                                                jint frames) {
     jclass cls = (*env)->GetObjectClass(env, thiz);
@@ -65,7 +65,7 @@ Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeDecodeBytes(JNIEnv *env, jobj
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_bengsoft_brekbrek_utils_OpusDecoder_nativeReleaseDecoder(JNIEnv *env, jobject thiz) {
+Java_com_kadirnacar_brekbrek_utils_OpusDecoder_nativeReleaseDecoder(JNIEnv *env, jobject thiz) {
     jclass cls = (*env)->GetObjectClass(env, thiz);
     jfieldID fid = (*env)->GetFieldID(env, cls, "address", "J");
     OpusDecoder* enc = (OpusDecoder*)((*env)->GetLongField(env, thiz, fid));

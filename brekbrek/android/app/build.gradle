@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.bengsoft.brekbrek"
+        applicationId "com.kadirnacar.brekbrek"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -146,10 +146,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('signed.keystore')
+            storePassword '39kna1983'
+            keyAlias 'brekbrekkey'
+            keyPassword '39kna1983'
         }
     }
     buildTypes {

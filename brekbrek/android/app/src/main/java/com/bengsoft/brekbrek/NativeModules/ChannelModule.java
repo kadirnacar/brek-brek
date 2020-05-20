@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek.NativeModules;
+package com.kadirnacar.brekbrek.NativeModules;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -9,10 +9,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bengsoft.brekbrek.BackgroundCallerService;
-import com.bengsoft.brekbrek.MainApplication;
-import com.bengsoft.brekbrek.utils.Player;
-import com.bengsoft.brekbrek.utils.Recorder;
+import com.kadirnacar.brekbrek.BackgroundCallerService;
+import com.kadirnacar.brekbrek.MainApplication;
+import com.kadirnacar.brekbrek.utils.Player;
+import com.kadirnacar.brekbrek.utils.Recorder;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.CatalystInstance;

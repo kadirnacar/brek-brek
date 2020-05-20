@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek.utils;
+package com.kadirnacar.brekbrek.utils;
 
 public class OpusError extends RuntimeException {
     public OpusError() {

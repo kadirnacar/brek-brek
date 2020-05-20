@@ -1,4 +1,4 @@
-package com.bengsoft.brekbrek.utils;
+package com.kadirnacar.brekbrek.utils;
 
 public class OpusDecoder {
     /* Native pointer to OpusDecoder */
