@@ -14,6 +14,7 @@ export class ExposedToJava {
   static currentGroup;
   static currentUser;
   static isBusy: boolean;
+  public static hasCall: boolean;
   static key;
   static currentSpeaker;
   static hasSpeaker = false;
@@ -52,11 +53,13 @@ export class ExposedToJava {
       }
       switch (message.command) {
         case 'start':
-          this.currentSpeaker = id;
-          this.isBusy = true;
-          await ChannelModule.stopPlay();
-          await ChannelModule.startPlay();
-          RNBeep.beep();
+          if (!this.hasCall) {
+            this.currentSpeaker = id;
+            this.isBusy = true;
+            await ChannelModule.stopPlay();
+            await ChannelModule.startPlay();
+            RNBeep.beep();
+          }
           break;
         case 'end':
           console.log('data', this.isBusy);

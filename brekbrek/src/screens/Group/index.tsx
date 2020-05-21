@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
   PermissionsAndroid,
+  NativeModules,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import Share, {Options} from 'react-native-share';
@@ -20,7 +21,9 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import NetInfo from '@react-native-community/netinfo';
+import CallDetectorManager from 'react-native-call-detection';
 
+const ChannelModule = NativeModules.ChannelModule;
 const {width} = Dimensions.get('window');
 
 interface GroupScreenState {
@@ -50,11 +53,67 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     };
   }
   netConnectionListener;
+  callDetector: CallDetectorManager;
+  startListenerTapped() {
+    this.callDetector = new CallDetectorManager(
+      async (event, phoneNumber) => {
+        // For iOS event will be either "Connected",
+        // "Disconnected","Dialing" and "Incoming"
+
+        // For Android event will be either "Offhook",
+        // "Disconnected", "Incoming" or "Missed"
+        // phoneNumber should store caller/called number
+
+        if (event === 'Disconnected') {
+          await ExposedToJava.hasCall = false;
+          // Do something call got disconnected
+        } else if (event === 'Connected') {
+          await ExposedToJava.stopVoice();
+          await ChannelModule.stopPlay();
+          // Do something call got connected
+          // This clause will only be executed for iOS
+        } else if (event === 'Incoming') {
+          await ExposedToJava.stopVoice();
+          await ChannelModule.stopPlay();
+
+          // Do something call got incoming
+        } else if (event === 'Dialing') {
+          await ExposedToJava.stopVoice();
+          await ChannelModule.stopPlay();
+
+          // Do something call got dialing
+          // This clause will only be executed for iOS
+        } else if (event === 'Offhook') {
+          //Device call state: Off-hook.
+          // At least one call exists that is dialing,
+          // active, or on hold,
+          // and no calls are ringing or waiting.
+          // This clause will only be executed for Android
+        } else if (event === 'Missed') {
+          ExposedToJava.hasCall = false;
+          // Do something call got missed
+          // This clause will only be executed for Android
+        }
+      },
+      false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
+      () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
+      {
+        title: 'Phone State Permission',
+        message:
+          'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
+      }, // a custom permission request message to explain to your user, why you need the permission [recommended] - this is the default one
+    );
+  }
+
+  stopListenerTapped() {
+    this.callDetector && this.callDetector.dispose();
+  }
   async componentDidMount() {
+    this.startListenerTapped();
     this.netConnectionListener = NetInfo.addEventListener((state) => {
-      console.log('Connection type', state.type);
-      console.log('Is connected?', state.isConnected);
-      console.log(state);
+      // console.log('Connection type', state.type);
+      // console.log('Is connected?', state.isConnected);
+      // console.log(state);
     });
     const granted = await PermissionsAndroid.check(
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
@@ -75,7 +134,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     if (!this.props.Group || !this.props.Group.current) {
       return;
     }
-    ExposedToJava.start(
+    await ExposedToJava.start(
       this.props.Group.current.Id,
       this.props.User.current.Id,
       this.props.User.current.DisplayName,
@@ -116,6 +175,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     await Share.open(options);
   }
   componentWillUnmount() {
+    this.stopListenerTapped();
     ExposedToJava.close();
     this.netConnectionListener();
   }
