@@ -16,6 +16,7 @@ export class ExposedToJava {
   static isBusy: boolean;
   static key;
   static currentSpeaker;
+  static hasSpeaker = false;
 
   public static onPeerConnectionChange: (
     status: 'connected' | 'disconnected',
@@ -35,7 +36,7 @@ export class ExposedToJava {
     }
     this.connected = false;
   }
-  private static initWebRtc(groupId, userId, userName?) {
+  private static async initWebRtc(groupId, userId, userName?) {
     this.webRtcConnection = new WebRtcConnection(
       this.socketClient,
       groupId,
@@ -53,22 +54,33 @@ export class ExposedToJava {
         case 'start':
           this.currentSpeaker = id;
           this.isBusy = true;
-          ChannelModule.startPlay();
+          await ChannelModule.stopPlay();
+          await ChannelModule.startPlay();
           RNBeep.beep();
           break;
         case 'end':
+          console.log('data', this.isBusy);
           this.currentSpeaker = null;
           this.isBusy = false;
-          ChannelModule.stopPlay();
+          await ChannelModule.stopPlay();
           RNBeep.beep();
           break;
         case 'data':
-          this.currentSpeaker = id;
-          ChannelModule.stream(message.data);
+          //this.currentSpeaker = id;
+          if (this.currentSpeaker) {
+            ChannelModule.stream(message.data);
+          } else if (!this.isBusy) {
+            if (this.onData) {
+              this.onData(id, {command: 'start'});
+            }
+            await ChannelModule.stopPlay();
+            await ChannelModule.startPlay();
+            this.currentSpeaker = id;
+          }
           break;
       }
     };
-    this.webRtcConnection.onConnectionChange = (status, peerId) => {
+    this.webRtcConnection.onConnectionChange = async (status, peerId) => {
       if (status == 'disconnected' && this.webRtcConnection) {
         this.webRtcConnection.leave(peerId, false);
       }
@@ -79,14 +91,15 @@ export class ExposedToJava {
         if (this.onData) {
           this.onData(peerId, {command: 'end'});
         }
-        ChannelModule.stopPlay();
+        await ChannelModule.stopPlay();
       }
     };
   }
   public static async start(groupId, userId, userName?) {
     this.key = await generateKey(config.securityKey, 'salt', 5000, 256);
-
-    ChannelModule.startService();
+    this.isBusy = false;
+    this.currentSpeaker = null;
+    await ChannelModule.startService();
     this.socketClient = new SocketClient(config.wsUrl, {
       Id: groupId,
     });
@@ -94,30 +107,38 @@ export class ExposedToJava {
     this.connected = true;
     this.socketClient.onConnected = async (state) => {
       if (!this.webRtcConnection) {
-        this.initWebRtc(groupId, userId, userName);
+        await this.initWebRtc(groupId, userId, userName);
       }
       await this.webRtcConnection.connect();
+      this.isBusy = false;
+      this.currentSpeaker = null;
 
       this.connected = true;
     };
-    this.socketClient.onErrorEvent = (e) => {
+    this.socketClient.onErrorEvent = async (e) => {
       if (this.webRtcConnection) {
         this.webRtcConnection.close();
       }
-      ChannelModule.stopRecord();
-      ChannelModule.stopPlay();
+      await ChannelModule.stopRecord();
+      await ChannelModule.stopPlay();
+      this.isBusy = false;
+      this.currentSpeaker = null;
+
       this.connected = false;
     };
-    this.socketClient.onCloseEvent = () => {
+    this.socketClient.onCloseEvent = async () => {
       if (this.webRtcConnection) {
         this.webRtcConnection.close();
       }
-      ChannelModule.stopRecord();
-      ChannelModule.stopPlay();
+      await ChannelModule.stopRecord();
+      await ChannelModule.stopPlay();
+      this.isBusy = false;
+      this.currentSpeaker = null;
+
       this.connected = false;
     };
     if (result == WebSocket.OPEN || !this.webRtcConnection) {
-      this.initWebRtc(groupId, userId, userName);
+      await this.initWebRtc(groupId, userId, userName);
     }
     await this.webRtcConnection.connect();
   }
@@ -126,7 +147,7 @@ export class ExposedToJava {
     if (!this.isBusy) {
       // InCallManager.setMicrophoneMute(false)
       await this.webRtcConnection.sendData({command: 'start'});
-      ChannelModule.startRecord();
+      await ChannelModule.startRecord();
       RNBeep.beep();
     }
   }
@@ -134,7 +155,7 @@ export class ExposedToJava {
   public static async stopVoice() {
     if (!this.isBusy) {
       await this.webRtcConnection.sendData({command: 'end'});
-      ChannelModule.stopRecord();
+      await ChannelModule.stopRecord();
       RNBeep.beep();
     }
   }
@@ -142,10 +163,10 @@ export class ExposedToJava {
   async getCommand(msg, data, size) {
     if (msg == 'start') {
       // await ExposedToJava.startVoice();
-      ExposedToJava.startVoice();
+      await ExposedToJava.startVoice();
     } else if (msg == 'stop') {
       // await ExposedToJava.stopVoice();
-      ExposedToJava.stopVoice();
+      await ExposedToJava.stopVoice();
     } else if (msg == 'data') {
       await ExposedToJava.webRtcConnection.sendData({
         command: 'data',

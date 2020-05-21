@@ -45,6 +45,9 @@ public class Player {
     }
 
     public static void stop() {
+        if (playingThread != null) {
+            playingThread.interrupt();
+        }
         isPlaying = false;
         if (destination != null) {
             destination.clear();
@@ -52,9 +55,7 @@ public class Player {
         if (audioTrack != null) {
             audioTrack.stop();
         }
-        if (playingThread != null) {
-            playingThread.interrupt();
-        }
+
         playingThread = null;
     }
 
