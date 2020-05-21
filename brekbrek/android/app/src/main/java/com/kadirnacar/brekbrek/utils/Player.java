@@ -8,12 +8,13 @@ import com.kadirnacar.brekbrek.NativeModules.ChannelModule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Player {
     private static AudioTrack audioTrack;
     private static Thread playingThread;
     private static final int SAMPLE_RATE = 24000;
-    private static final int FRAME_SIZE = 240;
+    private static final int FRAME_SIZE = 2400;
     private static OpusDecoder opusDecoder;
     private static final int NUM_CHANNELS = 1;
     private static int minBufSize;
@@ -72,6 +73,11 @@ public class Player {
     private static void playing() {
         short[] outBuf;
         int i = 0;
+        try {
+            TimeUnit.MILLISECONDS.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         while (isPlaying && audioTrack != null && audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
             if (destination != null) {
 
