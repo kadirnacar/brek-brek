@@ -45,6 +45,7 @@ export class ExposedToJava {
 
     this.webRtcConnection.onData = async (id, data) => {
       const message = JSON.parse(data.data);
+      console.log(message)
       if (this.onData) {
         this.onData(id, message);
       }
@@ -107,18 +108,18 @@ export class ExposedToJava {
 
   public static async startVoice() {
     if (!this.isBusy) {
-      RNBeep.beep();
       // InCallManager.setMicrophoneMute(false)
       await this.webRtcConnection.sendData({command: 'start'});
       ChannelModule.startRecord();
+      RNBeep.beep();
     }
   }
 
   public static async stopVoice() {
     if (!this.isBusy) {
-      RNBeep.beep();
       await this.webRtcConnection.sendData({command: 'end'});
       ChannelModule.stopRecord();
+      RNBeep.beep();
     }
   }
 
@@ -130,6 +131,7 @@ export class ExposedToJava {
       // await ExposedToJava.stopVoice();
       ExposedToJava.stopVoice();
     } else if (msg == 'data') {
+      // console.log(size);
       await ExposedToJava.webRtcConnection.sendData({
         command: 'data',
         data: data,

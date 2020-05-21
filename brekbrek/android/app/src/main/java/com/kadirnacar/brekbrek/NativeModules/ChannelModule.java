@@ -24,6 +24,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableNativeArray;
 
+import java.util.Arrays;
+
 public class ChannelModule extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactContext;
     private static Context aContext;
@@ -107,7 +109,7 @@ public class ChannelModule extends ReactContextBaseJavaModule {
         ReactNativeHost reactNativeHost = application.getReactNativeHost();
         ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
-
+        Arrays.t
         if (reactContext != null) {
             try {
                 CatalystInstance catalystInstance = reactContext.getCatalystInstance();
