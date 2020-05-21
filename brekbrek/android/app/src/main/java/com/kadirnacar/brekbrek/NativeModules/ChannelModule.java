@@ -109,7 +109,6 @@ public class ChannelModule extends ReactContextBaseJavaModule {
         ReactNativeHost reactNativeHost = application.getReactNativeHost();
         ReactInstanceManager reactInstanceManager = reactNativeHost.getReactInstanceManager();
         ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
-        Arrays.t
         if (reactContext != null) {
             try {
                 CatalystInstance catalystInstance = reactContext.getCatalystInstance();

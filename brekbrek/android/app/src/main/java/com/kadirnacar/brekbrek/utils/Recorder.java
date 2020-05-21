@@ -3,7 +3,11 @@ package com.kadirnacar.brekbrek.utils;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.NoiseSuppressor;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 
 import com.kadirnacar.brekbrek.NativeModules.ChannelModule;
@@ -14,7 +18,7 @@ public class Recorder {
     private static AudioRecord audioRecord;
     private static Thread recordingThread;
     private static final int SAMPLE_RATE = 24000;
-    private static int FRAME_SIZE = 2400;
+    private static int FRAME_SIZE = 240;
     private static OpusEncoder opusEncoder;
     private static final int NUM_CHANNELS = 1;
     private static boolean isRecording;
@@ -34,10 +38,28 @@ public class Recorder {
         //FRAME_SIZE = speexEncoder.getFrameSize();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void start() {
 
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, minBufSize);
+
+        NoiseSuppressor ns;
+        AcousticEchoCanceler aec;
+
+        if (NoiseSuppressor.isAvailable()) {
+            ns = NoiseSuppressor.create(audioRecord.getAudioSessionId());
+            if (ns != null) {
+                ns.setEnabled(true);
+            }
+        }
+
+        if (AcousticEchoCanceler.isAvailable()) {
+            aec = AcousticEchoCanceler.create(audioRecord.getAudioSessionId());
+            if (aec != null) {
+                aec.setEnabled(true);
+            }
+        }
         audioRecord.startRecording();
 
         if (recordingThread != null && recordingThread.isAlive()) {

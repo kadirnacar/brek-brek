@@ -13,7 +13,7 @@ public class Player {
     private static AudioTrack audioTrack;
     private static Thread playingThread;
     private static final int SAMPLE_RATE = 24000;
-    private static final int FRAME_SIZE = 2400;
+    private static final int FRAME_SIZE = 240;
     private static OpusDecoder opusDecoder;
     private static final int NUM_CHANNELS = 1;
     private static int minBufSize;

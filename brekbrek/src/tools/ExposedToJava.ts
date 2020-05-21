@@ -45,7 +45,6 @@ export class ExposedToJava {
 
     this.webRtcConnection.onData = async (id, data) => {
       const message = JSON.parse(data.data);
-      console.log(message)
       if (this.onData) {
         this.onData(id, message);
       }
