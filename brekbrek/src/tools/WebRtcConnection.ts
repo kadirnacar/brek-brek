@@ -51,7 +51,7 @@ export class WebRtcConnection {
         await this.exchange(data);
         break;
       case 'leave':
-        await this.leave(data.userId, true);
+        //await this.leave(data.userId, true);
         if (data.userId == this.userId) {
           this.connect();
         }
@@ -73,7 +73,7 @@ export class WebRtcConnection {
     }
   }
 
-  private leave(userId, trigger) {
+  public leave(userId, trigger) {
     if (userId in this.peers) {
       const pc = this.peers[userId];
       if (pc && pc.pc) {
@@ -134,12 +134,18 @@ export class WebRtcConnection {
   }
 
   private async createOffer(peer, id) {
-    if (!peer) return;
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    const data = JSON.stringify(peer.localDescription);
-    const sdp = await encryptData(data, this.key);
-    this.socket.send('exchange', {to: id, sdp});
+    try {
+      if (!peer) return;
+      const offer = await peer.createOffer();
+      await peer.setLocalDescription(offer);
+      const data = JSON.stringify(peer.localDescription);
+      const sdp = await encryptData(data, this.key);
+      this.socket.send('exchange', {to: id, sdp});
+    } catch (ex) {
+      this.leave(id, true);
+      await this.createPeer(id, true);
+      console.log(this.userName, 'createOffer', ex);
+    }
   }
 
   private async createPeer(id, isOffer) {
@@ -166,28 +172,20 @@ export class WebRtcConnection {
         event.target.iceConnectionState === 'connected' ||
         event.target.iceConnectionState === 'disconnected'
       ) {
-        if (event.target.iceConnectionState === 'connected') {
-          if (self.onConnectionChange) {
-            self.onConnectionChange(event.target.iceConnectionState, id);
-          }
+        if (self.onConnectionChange) {
+          self.onConnectionChange(event.target.iceConnectionState, id);
         }
       } else if (event.target.iceConnectionState === 'closed') {
-        // if (self.onConnectionChange) {
-        //   self.leave(id, true);
-        // this.onConnectionChange('disconnected', id);
-        // }
         if (self.onConnectionChange && id != self.userId) {
           self.onConnectionChange('disconnected', id);
         }
+        self.leave(id, true);
       } else if (event.target.iceConnectionState === 'failed') {
-        // for (const key in this.peers) {
-        //   delete this.peers[key];
-        // }
         if (self.onConnectionChange && id != self.userId) {
           self.onConnectionChange('disconnected', id);
         }
-        self.createPeer(id, isOffer);
-        // self.connect();
+        self.leave(id, true);
+        self.createPeer(id, true);
       }
       console.log(
         self.userName,
@@ -197,6 +195,10 @@ export class WebRtcConnection {
     };
     peer.onsignalingstatechange = () => {
       console.log(self.userName, 'peer.onsignalingstatechange');
+    };
+    peer.onicecandidateerror = (err) => {
+      console.log(err);
+      this.leave(id, true);
     };
 
     if (!this.peers[id]) {
@@ -217,21 +219,31 @@ export class WebRtcConnection {
       pc = await this.createPeer(fromId, false);
     }
     if (data.sdp) {
-      const decryptSdp = JSON.parse(await decryptData(data.sdp, this.key));
-      await pc.setRemoteDescription(decryptSdp);
-      if (pc.remoteDescription.type == 'offer') {
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
+      try {
+        const decryptSdp = JSON.parse(await decryptData(data.sdp, this.key));
+        await pc.setRemoteDescription(decryptSdp);
+        if (pc.remoteDescription.type == 'offer') {
+          const answer = await pc.createAnswer();
+          await pc.setLocalDescription(answer);
 
-        const data = JSON.stringify(pc.localDescription);
-        const sdp = await encryptData(data, this.key);
-        this.socket.send('exchange', {to: fromId, sdp});
+          const data = JSON.stringify(pc.localDescription);
+          const sdp = await encryptData(data, this.key);
+          this.socket.send('exchange', {to: fromId, sdp});
+        }
+      } catch (ex) {
+        this.leave(fromId, true);
+        console.log('exchange sdp error', this.userName, ex);
       }
     } else if (data.candidate) {
-      const decryptCandidate = JSON.parse(
-        await decryptData(data.candidate, this.key),
-      );
-      await pc.addIceCandidate(decryptCandidate);
+      try {
+        const decryptCandidate = JSON.parse(
+          await decryptData(data.candidate, this.key),
+        );
+        await pc.addIceCandidate(decryptCandidate);
+      } catch (ex) {
+        this.leave(fromId, true);
+        console.log('exchange candidate error', this.userName, ex);
+      }
     }
   }
 }

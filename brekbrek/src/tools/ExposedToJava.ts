@@ -1,9 +1,9 @@
 import config from '@config';
+import {generateKey, log} from '@utils';
 import {NativeModules} from 'react-native';
 import RNBeep from 'react-native-a-beep';
 import {SocketClient} from './SocketClient';
 import {WebRtcConnection} from './WebRtcConnection';
-import {log, encryptData, generateKey, decryptData} from '@utils';
 const ChannelModule = NativeModules.ChannelModule;
 
 export class ExposedToJava {
@@ -15,6 +15,7 @@ export class ExposedToJava {
   static currentUser;
   static isBusy: boolean;
   static key;
+  static currentSpeaker;
 
   public static onPeerConnectionChange: (
     status: 'connected' | 'disconnected',
@@ -50,23 +51,35 @@ export class ExposedToJava {
       }
       switch (message.command) {
         case 'start':
+          this.currentSpeaker = id;
           this.isBusy = true;
           ChannelModule.startPlay();
           RNBeep.beep();
           break;
         case 'end':
+          this.currentSpeaker = null;
           this.isBusy = false;
           ChannelModule.stopPlay();
           RNBeep.beep();
           break;
         case 'data':
+          this.currentSpeaker = id;
           ChannelModule.stream(message.data);
           break;
       }
     };
     this.webRtcConnection.onConnectionChange = (status, peerId) => {
+      if (status == 'disconnected' && this.webRtcConnection) {
+        this.webRtcConnection.leave(peerId, false);
+      }
       if (this.onPeerConnectionChange) {
         this.onPeerConnectionChange(status, peerId);
+      }
+      if (peerId == this.currentSpeaker) {
+        if (this.onData) {
+          this.onData(peerId, {command: 'end'});
+        }
+        ChannelModule.stopPlay();
       }
     };
   }
@@ -91,12 +104,16 @@ export class ExposedToJava {
       if (this.webRtcConnection) {
         this.webRtcConnection.close();
       }
+      ChannelModule.stopRecord();
+      ChannelModule.stopPlay();
       this.connected = false;
     };
     this.socketClient.onCloseEvent = () => {
       if (this.webRtcConnection) {
         this.webRtcConnection.close();
       }
+      ChannelModule.stopRecord();
+      ChannelModule.stopPlay();
       this.connected = false;
     };
     if (result == WebSocket.OPEN || !this.webRtcConnection) {
@@ -130,7 +147,6 @@ export class ExposedToJava {
       // await ExposedToJava.stopVoice();
       ExposedToJava.stopVoice();
     } else if (msg == 'data') {
-      // console.log(size);
       await ExposedToJava.webRtcConnection.sendData({
         command: 'data',
         data: data,

@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -64,6 +65,8 @@ public class ChannelModule extends ReactContextBaseJavaModule {
         if (mServiceIntent != null) {
             reactContext.stopService(mServiceIntent);
         }
+        Recorder.stop();
+        Player.stop();
     }
 
     @ReactMethod
@@ -87,10 +90,12 @@ public class ChannelModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void stream(ReadableArray arr) {
-        byte[] array = readableArrayToByteArray(arr);
-        Log.d("play data", String.valueOf(array.length));
-        Player.stream(array);
+    public void stream(String baseData) {
+        try {
+            Player.stream(Base64.decode(baseData, Base64.DEFAULT));
+        } catch (Exception ex) {
+
+        }
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
@@ -115,7 +120,7 @@ public class ChannelModule extends ReactContextBaseJavaModule {
                 WritableNativeArray params = new WritableNativeArray();
                 params.pushString(msg);
                 if (data != null) {
-                    params.pushArray(byteArrayToBoolReadableArray(data, size));
+                    params.pushString(Base64.encodeToString(Arrays.copyOf(data, size), Base64.DEFAULT));
                     params.pushInt(size);
                 }
                 catalystInstance.callFunction("JavaScriptVisibleToJava", "getCommand", params);

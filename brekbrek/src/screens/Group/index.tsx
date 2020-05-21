@@ -19,6 +19,7 @@ import Share, {Options} from 'react-native-share';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import NetInfo from '@react-native-community/netinfo';
 
 const {width} = Dimensions.get('window');
 
@@ -48,16 +49,23 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
       speakerOn: true,
     };
   }
-
+  netConnectionListener;
   async componentDidMount() {
+    this.netConnectionListener = NetInfo.addEventListener((state) => {
+      console.log('Connection type', state.type);
+      console.log('Is connected?', state.isConnected);
+      console.log(state);
+    });
     const granted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     );
 
     if (!granted) {
-      const result = await PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
-      if(!result){
-        this.props.navigation.navigate("Home");
+      const result = await PermissionsAndroid.requestPermission(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      );
+      if (!result) {
+        this.props.navigation.navigate('Home');
       }
     }
     if (!this.props.User.current) {
@@ -109,6 +117,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
   componentWillUnmount() {
     ExposedToJava.close();
+    this.netConnectionListener();
   }
   render() {
     const users = (this.props.Group.current && this.props.Group.current.Users
