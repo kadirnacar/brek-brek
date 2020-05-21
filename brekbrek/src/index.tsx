@@ -1,20 +1,19 @@
-import {AppNavigation} from '@navigation';
-import {UserActionTypes, GroupActions} from '@reducers';
-import {LocalStorage} from '@store';
-import React, {Component} from 'react';
-import {Platform, View, Linking, BackHandler} from 'react-native';
-import SafeAreaView, {SafeAreaProvider} from 'react-native-safe-area-view';
+import { AppNavigation } from '@navigation';
+import { UserActionTypes } from '@reducers';
+import { LocalStorage } from '@store';
+import React, { Component } from 'react';
+import { BackHandler, Linking, Platform, View } from 'react-native';
+import SafeAreaView, { SafeAreaProvider } from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {Provider} from 'react-redux';
-import store from './tools/store';
-import {AsyncAlert} from './tools/AsyncAlert';
 import VersionCheck from 'react-native-version-check';
-import {UserService} from './services/UserService';
-import config from '@config';
-import {GroupService} from './services/GroupService';
-import {AppService} from './services/AppService';
-import { ExposedToJava } from './tools/ExposedToJava';
 import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
+import { Provider } from 'react-redux';
+import { AppService } from './services/AppService';
+import { GroupService } from './services/GroupService';
+import { UserService } from './services/UserService';
+import { AsyncAlert } from './tools/AsyncAlert';
+import { ExposedToJava } from './tools/ExposedToJava';
+import store from './tools/store';
 
 
 const exposedToJava = new ExposedToJava();
@@ -74,10 +73,10 @@ export default class App extends Component<any, AppState> {
       ) {
         await AsyncAlert('Lütfen uygulamayı güncelleyiniz.');
         if (Platform.OS == 'ios' && latestversion.appStoreUrl) {
-          Linking.openURL(latestversion.appStoreUrl);
+          await Linking.openURL(latestversion.appStoreUrl);
         }
         if (Platform.OS == 'android' && latestversion.playStoreUrl) {
-          Linking.openURL(latestversion.playStoreUrl);
+          await Linking.openURL(latestversion.playStoreUrl);
         }
         BackHandler.exitApp();
       }

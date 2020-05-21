@@ -65,19 +65,22 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         // phoneNumber should store caller/called number
 
         if (event === 'Disconnected') {
-          await ExposedToJava.hasCall = false;
+          ExposedToJava.hasCall = false;
           // Do something call got disconnected
         } else if (event === 'Connected') {
+          ExposedToJava.hasCall = true;
           await ExposedToJava.stopVoice();
           await ChannelModule.stopPlay();
           // Do something call got connected
           // This clause will only be executed for iOS
         } else if (event === 'Incoming') {
+          ExposedToJava.hasCall = true;
           await ExposedToJava.stopVoice();
           await ChannelModule.stopPlay();
 
           // Do something call got incoming
         } else if (event === 'Dialing') {
+          ExposedToJava.hasCall = true;
           await ExposedToJava.stopVoice();
           await ChannelModule.stopPlay();
 
