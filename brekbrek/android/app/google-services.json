@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "509688249766",
+    "firebase_url": "https://kadirnacarbb.firebaseio.com",
+    "project_id": "kadirnacarbb",
+    "storage_bucket": "kadirnacarbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509688249766:android:2a0c80ed814025dd02e367",
+        "android_client_info": {
+          "package_name": "com.kadirnacar.brekbrek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509688249766-ibsi6va5npvmt9q71g5g9bjl6315l22p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kadirnacar.brekbrek",
+            "certificate_hash": "1637440e71e847f2d341361f7fd39b55c507abb6"
+          }
+        },
+        {
+          "client_id": "509688249766-kmesn34bn2cb4aqt8k3t0grfnpn1pccv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXKajbKBF45ROMbO1_Ot9cXU5uup7Ci54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509688249766-kmesn34bn2cb4aqt8k3t0grfnpn1pccv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

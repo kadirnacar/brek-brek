@@ -37,6 +37,7 @@ export class AuthRouter {
         user.Email = postUser.Email;
         user.Type = "Facebook";
         user.Uid = postUser.Uid;
+        user.FcmToken = postUser.FcmToken;
         user.Groups = {};
         user = await UserService.save(user);
       }
@@ -83,6 +84,7 @@ export class AuthRouter {
         user.Email = postUser.Email;
         user.Type = "Google";
         user.Uid = postUser.Uid;
+        user.FcmToken = postUser.FcmToken;
         user.Groups = {};
         user = await UserService.save(user);
       }

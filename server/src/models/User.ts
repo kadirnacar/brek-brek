@@ -20,6 +20,9 @@ export class User extends BaseModel {
   @NullColumn()
   Uid?: string;
 
+  @NullColumn()
+  FcmToken?: string;
+
   @NullColumn({ default: "User" })
   Type?: "Admin" | "User" | "Facebook" | "Google" | "Anonymous" = "User";
 

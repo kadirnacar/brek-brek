@@ -5,6 +5,7 @@ export interface IUser {
   DeletedDate?: Date;
   Deleted?: boolean;
   DisplayName?: string;
+  FcmToken?: string;
   Email?: string;
   Uid?: string;
   Type?: 'User' | 'Facebook' | 'Google';

@@ -8,13 +8,13 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk';
-import { log } from '@utils';
+import {log} from '@utils';
 GoogleSignin.configure({
   webClientId: config.googleWebClientId,
   forceCodeForRefreshToken: true,
 });
 export class UserService extends ServiceBase {
-  public static async loginWithGoogle() {
+  public static async loginWithGoogle(fcmToken) {
     try {
       const user = await GoogleSignin.signIn();
       let result: Result<any>;
@@ -22,6 +22,7 @@ export class UserService extends ServiceBase {
         const appUser: IUser = {
           DisplayName: user.user.name,
           Email: user.user.email,
+          FcmToken: fcmToken,
           Type: 'Google',
           Uid: user.user.id,
         };
@@ -43,7 +44,7 @@ export class UserService extends ServiceBase {
       return new Result<IUser>(null, ex.message);
     }
   }
-  public static async loginWithFacebook() {
+  public static async loginWithFacebook(fcmToken) {
     try {
       let result: Result<any>;
       const loginResult = await LoginManager.logInWithPermissions([
@@ -73,6 +74,7 @@ export class UserService extends ServiceBase {
         const appUser: IUser = {
           DisplayName: loginInfoResult.name,
           Email: loginInfoResult.email,
+          FcmToken: fcmToken,
           Type: 'Facebook',
           Uid: loginInfoResult.id,
         };

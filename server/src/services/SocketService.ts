@@ -1,10 +1,20 @@
-import { Message } from "@models";
+import * as admin from "firebase-admin";
 import * as http from "http";
 import * as https from "https";
-import * as shortid from "shortid";
 import * as WebSocket from "websocket";
-import { logger } from "./LoggerService";
+import * as serviceAccount from "../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json";
 import { parseToken } from "../middlewares/checkJwt";
+import { logger } from "./LoggerService";
+import { Services } from "@services";
+
+admin.initializeApp({
+  credential: admin.credential.cert({
+    clientEmail: serviceAccount.client_email,
+    privateKey: serviceAccount.private_key,
+    projectId: serviceAccount.project_id,
+  }),
+  databaseURL: "https://kadirnacarbb.firebaseio.com",
+});
 
 export class SocketService {
   static wsServer: WebSocket.server;
@@ -82,7 +92,7 @@ export class SocketService {
     SocketService.clients[groupId][userId] = connection;
   }
 
-  private static onMessage(groupId, userId, data: WebSocket.IMessage) {
+  private static async onMessage(groupId, userId, data: WebSocket.IMessage) {
     console.log(data);
     const command = JSON.parse(data.utf8Data);
 
@@ -108,6 +118,31 @@ export class SocketService {
             sdp: command.data.sdp,
           })
         );
+        break;
+      case "poke":
+        const user = await Services.User.getById(command.data.userId);
+        if (user && user.FcmToken) {
+          const messaging = admin.messaging();
+          let payload = {
+            title: "Kanal Daveti",
+            body: command.data.message,
+          };
+          const msg: admin.messaging.Message = {
+            notification: payload,
+            token: user.FcmToken,
+          };
+
+          messaging
+            .send(msg)
+            // .sendAll(messages)
+            .then(function (response) {
+              console.log("Successfully sent message:", response);
+            })
+            .catch(function (error) {
+              console.log("Error sending message:", error);
+            });
+        }
+
         break;
     }
   }

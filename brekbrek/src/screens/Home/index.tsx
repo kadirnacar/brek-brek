@@ -1,22 +1,21 @@
 import {FormModal, LoaderSpinner} from '@components';
-import {IGroup, IUserGroup} from '@models';
 import {NavigationProp} from '@react-navigation/native';
 import {GroupActions, UserActions} from '@reducers';
 import {ApplicationState} from '@store';
+import {colors} from '@tools';
 import React, {Component} from 'react';
 import {
+  ScrollView,
   Text,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
   View,
-  ScrollView,
 } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {colors} from '@tools';
 
 interface HomeScreenState {
   showAddGroup?: boolean;
@@ -95,7 +94,9 @@ export class HomeScreenComp extends Component<Props, HomeScreenState> {
   render() {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.bodyBackground}}>
-        <LoaderSpinner showLoader={this.props.Group.isRequest || this.props.User.isRequest} />
+        <LoaderSpinner
+          showLoader={this.props.Group.isRequest || this.props.User.isRequest}
+        />
         {!this.state.actionsRow ? (
           <View
             style={{

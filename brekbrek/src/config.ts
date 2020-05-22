@@ -4,7 +4,7 @@ const config = {
   securityKey: 'g539zXhYZ7ejh',
   restUrl: 'http://azure.kadirnacar.com:3001',
   wsUrl: 'ws://azure.kadirnacar.com:3001',
-  googleWebClientId: '934667032540-bi6d47ebh1lothqj07fm028h8to5hooc.apps.googleusercontent.com',
+  googleWebClientId: '509688249766-kmesn34bn2cb4aqt8k3t0grfnpn1pccv.apps.googleusercontent.com',
 };
 
 export default config;

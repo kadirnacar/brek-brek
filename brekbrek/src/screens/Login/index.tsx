@@ -1,19 +1,19 @@
 import {BackImage, LoaderSpinner} from '@components';
+import messaging from '@react-native-firebase/messaging';
 import {NavigationProp} from '@react-navigation/native';
 import {UserActions} from '@reducers';
 import {ApplicationState} from '@store';
 import {colors, styles} from '@tools';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import React, {Component} from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
@@ -21,6 +21,7 @@ interface LoginState {
   username?: string;
   password?: string;
   isRequest?: boolean;
+  fcmToken?: string;
 }
 
 interface LoginProps {
@@ -39,11 +40,16 @@ export class LoginScreenComp extends Component<Props, LoginState> {
   }
   async componentDidMount() {
     await this.props.UserActions.clear();
+    const fcmToken = await messaging().getToken();
+    this.setState({fcmToken: fcmToken});
+    console.log('fcmToken', fcmToken);
   }
 
   async handleGoogleLogin() {
     this.setState({isRequest: true});
-    const result = await this.props.UserActions.loginWithGoogle();
+    const result = await this.props.UserActions.loginWithGoogle(
+      this.state.fcmToken,
+    );
     if (!result || !result['success']) {
       Alert.alert(
         !result['message']
@@ -66,7 +72,9 @@ export class LoginScreenComp extends Component<Props, LoginState> {
   }
   async handleFacebookLogin() {
     this.setState({isRequest: true});
-    const result = await this.props.UserActions.loginWithFacebook();
+    const result = await this.props.UserActions.loginWithFacebook(
+      this.state.fcmToken,
+    );
     if (!result || !result['success']) {
       Alert.alert(
         !result['message']

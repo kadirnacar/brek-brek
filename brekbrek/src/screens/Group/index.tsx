@@ -54,65 +54,65 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
   netConnectionListener;
   callDetector: CallDetectorManager;
-  startListenerTapped() {
-    this.callDetector = new CallDetectorManager(
-      async (event, phoneNumber) => {
-        // For iOS event will be either "Connected",
-        // "Disconnected","Dialing" and "Incoming"
+  // startListenerTapped() {
+  //   this.callDetector = new CallDetectorManager(
+  //     async (event, phoneNumber) => {
+  //       // For iOS event will be either "Connected",
+  //       // "Disconnected","Dialing" and "Incoming"
 
-        // For Android event will be either "Offhook",
-        // "Disconnected", "Incoming" or "Missed"
-        // phoneNumber should store caller/called number
+  //       // For Android event will be either "Offhook",
+  //       // "Disconnected", "Incoming" or "Missed"
+  //       // phoneNumber should store caller/called number
 
-        if (event === 'Disconnected') {
-          ExposedToJava.hasCall = false;
-          // Do something call got disconnected
-        } else if (event === 'Connected') {
-          ExposedToJava.hasCall = true;
-          await ExposedToJava.stopVoice();
-          await ChannelModule.stopPlay();
-          // Do something call got connected
-          // This clause will only be executed for iOS
-        } else if (event === 'Incoming') {
-          ExposedToJava.hasCall = true;
-          await ExposedToJava.stopVoice();
-          await ChannelModule.stopPlay();
+  //       if (event === 'Disconnected') {
+  //         ExposedToJava.hasCall = false;
+  //         // Do something call got disconnected
+  //       } else if (event === 'Connected') {
+  //         ExposedToJava.hasCall = true;
+  //         await ExposedToJava.stopVoice();
+  //         await ChannelModule.stopPlay();
+  //         // Do something call got connected
+  //         // This clause will only be executed for iOS
+  //       } else if (event === 'Incoming') {
+  //         ExposedToJava.hasCall = true;
+  //         await ExposedToJava.stopVoice();
+  //         await ChannelModule.stopPlay();
 
-          // Do something call got incoming
-        } else if (event === 'Dialing') {
-          ExposedToJava.hasCall = true;
-          await ExposedToJava.stopVoice();
-          await ChannelModule.stopPlay();
+  //         // Do something call got incoming
+  //       } else if (event === 'Dialing') {
+  //         ExposedToJava.hasCall = true;
+  //         await ExposedToJava.stopVoice();
+  //         await ChannelModule.stopPlay();
 
-          // Do something call got dialing
-          // This clause will only be executed for iOS
-        } else if (event === 'Offhook') {
-          //Device call state: Off-hook.
-          // At least one call exists that is dialing,
-          // active, or on hold,
-          // and no calls are ringing or waiting.
-          // This clause will only be executed for Android
-        } else if (event === 'Missed') {
-          ExposedToJava.hasCall = false;
-          // Do something call got missed
-          // This clause will only be executed for Android
-        }
-      },
-      false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
-      () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
-      {
-        title: 'Phone State Permission',
-        message:
-          'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
-      }, // a custom permission request message to explain to your user, why you need the permission [recommended] - this is the default one
-    );
-  }
+  //         // Do something call got dialing
+  //         // This clause will only be executed for iOS
+  //       } else if (event === 'Offhook') {
+  //         //Device call state: Off-hook.
+  //         // At least one call exists that is dialing,
+  //         // active, or on hold,
+  //         // and no calls are ringing or waiting.
+  //         // This clause will only be executed for Android
+  //       } else if (event === 'Missed') {
+  //         ExposedToJava.hasCall = false;
+  //         // Do something call got missed
+  //         // This clause will only be executed for Android
+  //       }
+  //     },
+  //     false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
+  //     () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
+  //     {
+  //       title: 'Phone State Permission',
+  //       message:
+  //         'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
+  //     }, // a custom permission request message to explain to your user, why you need the permission [recommended] - this is the default one
+  //   );
+  // }
 
-  stopListenerTapped() {
-    this.callDetector && this.callDetector.dispose();
-  }
+  // stopListenerTapped() {
+  //   this.callDetector && this.callDetector.dispose();
+  // }
   async componentDidMount() {
-    this.startListenerTapped();
+    // this.startListenerTapped();
     this.netConnectionListener = NetInfo.addEventListener((state) => {
       // console.log('Connection type', state.type);
       // console.log('Is connected?', state.isConnected);
@@ -178,7 +178,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
     await Share.open(options);
   }
   componentWillUnmount() {
-    this.stopListenerTapped();
+    // this.stopListenerTapped();
     ExposedToJava.close();
     this.netConnectionListener();
   }
@@ -189,7 +189,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
         )
       : []
     )
-      .map((id) => this.props.Group.current.Users[id])
+      .map((id) => {
+        return {id, ...this.props.Group.current.Users[id]};
+      })
       .sort((a, b) => {
         if (a.status < b.status) {
           return -1;
@@ -292,6 +294,36 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
                     }}>
                     {item.DisplayName}
                   </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      ExposedToJava.poke(
+                        `${this.props.User.current.DisplayName} sizi ${this.props.Group.current.Name} kanalına çağırıyor.`,
+                        item.id,
+                      );
+                    }}
+                    style={{
+                      borderColor: colors.activeBorderColor,
+                      backgroundColor: colors.color2,
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 30,
+                      width: 40,
+                      height: 40,
+                      marginRight: 10,
+                      position: 'absolute',
+                      right: 0,
+                    }}>
+                    <FontAwesome5Icon
+                      name="bullhorn"
+                      size={20}
+                      color={
+                        item.status == UserStatus.Offline || !item.status
+                          ? colors.headerTextColor
+                          : colors.activeBorderColor
+                      }
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             );

@@ -21,12 +21,12 @@ export const actionCreators = {
     });
     return result;
   },
-  loginWithGoogle: () => async (dispatch, getState) => {
+  loginWithGoogle: (fcmToken) => async (dispatch, getState) => {
     let isSuccess: boolean = false;
     let message: string = null;
     await batch(async () => {
       dispatch({type: Actions.RequestUserItem});
-      var result = await UserService.loginWithGoogle();
+      var result = await UserService.loginWithGoogle(fcmToken);
       const user = result.value ? result.value : null;
       if (user)
         dispatch({
@@ -55,12 +55,12 @@ export const actionCreators = {
     });
     return {success: isSuccess, message: message};
   },
-  loginWithFacebook: () => async (dispatch, getState) => {
+  loginWithFacebook: (fcmToken) => async (dispatch, getState) => {
     let isSuccess: boolean = false;
     let message: string = null;
     await batch(async () => {
       await dispatch({type: Actions.RequestUserItem});
-      var result = await UserService.loginWithFacebook();
+      var result = await UserService.loginWithFacebook(fcmToken);
       const user = result && result.value ? result.value : null;
       if (user)
         await dispatch({

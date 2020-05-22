@@ -37,6 +37,11 @@ export class ExposedToJava {
     }
     this.connected = false;
   }
+  public static poke(message, userId) {
+    if (this.socketClient) {
+      this.socketClient.send('poke', {userId, message});
+    }
+  }
   private static async initWebRtc(groupId, userId, userName?) {
     this.webRtcConnection = new WebRtcConnection(
       this.socketClient,
