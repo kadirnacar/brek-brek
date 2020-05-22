@@ -40,6 +40,9 @@ export class AuthRouter {
         user.FcmToken = postUser.FcmToken;
         user.Groups = {};
         user = await UserService.save(user);
+      } else {
+        user.FcmToken = postUser.FcmToken;
+        user = await UserService.save(user);
       }
 
       const token = jwt.sign(
@@ -86,6 +89,9 @@ export class AuthRouter {
         user.Uid = postUser.Uid;
         user.FcmToken = postUser.FcmToken;
         user.Groups = {};
+        user = await UserService.save(user);
+      } else {
+        user.FcmToken = postUser.FcmToken;
         user = await UserService.save(user);
       }
 
