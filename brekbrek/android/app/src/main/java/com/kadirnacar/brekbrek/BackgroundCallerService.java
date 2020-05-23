@@ -36,9 +36,9 @@ public class BackgroundCallerService extends Service {
                     NotificationManager.IMPORTANCE_DEFAULT);
 
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("")
-                    .setContentText("").build();
+            Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                    .setContentTitle("BrekBrek")
+                    .setContentText("Kanal Aktif").build();
 
             startForeground(1, notification);
         }
