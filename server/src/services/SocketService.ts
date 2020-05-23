@@ -126,6 +126,7 @@ export class SocketService {
           let payload = {
             title: "Kanal Daveti",
             body: command.data.message,
+            "sound": "default"
           };
           const msg: admin.messaging.Message = {
             notification: payload,
