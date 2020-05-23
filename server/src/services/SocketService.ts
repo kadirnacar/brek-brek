@@ -133,11 +133,16 @@ export class SocketService {
             .send(msg)
             // .sendAll(messages)
             .then(function (response) {
+              logger.info("Successfully sent notify:" + response);
               console.log("Successfully sent message:", response);
             })
             .catch(function (error) {
+              logger.error("Error sending notify:" + error);
+
               console.log("Error sending message:", error);
             });
+        } else {
+          logger.error("user not found notify:" + command.data.userId);
         }
 
         break;
