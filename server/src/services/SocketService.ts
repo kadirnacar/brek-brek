@@ -124,13 +124,11 @@ export class SocketService {
             body: command.data.message,
             sound: "default",
           };
-          const msg: admin.messaging.Message = {
-            notification: payload,
-            token: user.FcmToken,
-          };
 
           messaging
-            .send(msg)
+            .sendToDevice(user.FcmToken, {
+              notification: payload,
+            })
             // .sendAll(messages)
             .then(function (response) {
               logger.info("Successfully sent notify:" + response);
