@@ -25,11 +25,11 @@ export class ExposedToJava {
   ) => void;
   public static onData: (userId, data) => void;
 
-  public static close() {
+  public static async close() {
     ChannelModule.stopService();
 
     if (this.webRtcConnection) {
-      this.webRtcConnection.close();
+      await this.webRtcConnection.close();
       this.webRtcConnection = null;
     }
     if (this.socketClient) {
@@ -61,7 +61,7 @@ export class ExposedToJava {
           if (!this.hasCall) {
             this.currentSpeaker = id;
             this.isBusy = true;
-            await ChannelModule.stopPlay();
+            // await ChannelModule.stopPlay();
             await ChannelModule.startPlay();
             RNBeep.beep();
           }
@@ -74,17 +74,16 @@ export class ExposedToJava {
           RNBeep.beep();
           break;
         case 'data':
-          //this.currentSpeaker = id;
-          if (this.currentSpeaker) {
-            ChannelModule.stream(message.data);
-          } else if (!this.isBusy) {
-            if (this.onData) {
-              this.onData(id, {command: 'start'});
-            }
-            await ChannelModule.stopPlay();
-            await ChannelModule.startPlay();
-            this.currentSpeaker = id;
-          }
+          // if (this.currentSpeaker) {
+          ChannelModule.stream(message.data);
+          // } else if (!this.isBusy) {
+          //   if (this.onData) {
+          //     this.onData(id, {command: 'start'});
+          //   }
+          //   await ChannelModule.stopPlay();
+          //   await ChannelModule.startPlay();
+          //   this.currentSpeaker = id;
+          // }
           break;
       }
     };
@@ -125,7 +124,7 @@ export class ExposedToJava {
     };
     this.socketClient.onErrorEvent = async (e) => {
       if (this.webRtcConnection) {
-        this.webRtcConnection.close();
+        await this.webRtcConnection.close();
       }
       await ChannelModule.stopRecord();
       await ChannelModule.stopPlay();
@@ -136,7 +135,7 @@ export class ExposedToJava {
     };
     this.socketClient.onCloseEvent = async () => {
       if (this.webRtcConnection) {
-        this.webRtcConnection.close();
+        await this.webRtcConnection.close();
       }
       await ChannelModule.stopRecord();
       await ChannelModule.stopPlay();
@@ -170,10 +169,8 @@ export class ExposedToJava {
 
   async getCommand(msg, data, size) {
     if (msg == 'start') {
-      // await ExposedToJava.startVoice();
       await ExposedToJava.startVoice();
     } else if (msg == 'stop') {
-      // await ExposedToJava.stopVoice();
       await ExposedToJava.stopVoice();
     } else if (msg == 'data') {
       await ExposedToJava.webRtcConnection.sendData({

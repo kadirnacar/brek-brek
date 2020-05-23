@@ -32,7 +32,7 @@ export class WebRtcConnection {
   public onConnectionChange: (
     status: 'connected' | 'disconnected',
     userId: string,
-  ) => void;
+  ) => Promise<void>;
 
   private async onSocketMessage(event: WebSocketMessageEvent) {
     const data = JSON.parse(event.data);
@@ -41,19 +41,20 @@ export class WebRtcConnection {
         // for (const key in this.peers) {
         for (var i = 0; i < data.peers.length; i++) {
           const peer = data.peers[i];
-          if (peer in this.peers) this.leave(peer, false);
+          if (peer in this.peers) await this.leave(peer, false);
           if (peer != this.userId) {
             await this.createPeer(peer, true);
           }
         }
         break;
       case 'exchange':
+        console.log(data);
         await this.exchange(data);
         break;
       case 'leave':
         //await this.leave(data.userId, true);
         if (data.userId == this.userId) {
-          this.connect();
+          await this.connect();
         }
         break;
     }
@@ -73,7 +74,7 @@ export class WebRtcConnection {
     }
   }
 
-  public leave(userId, trigger) {
+  public async leave(userId, trigger) {
     if (userId in this.peers) {
       const pc = this.peers[userId];
       if (pc && pc.pc) {
@@ -85,14 +86,14 @@ export class WebRtcConnection {
       delete this.peers[userId];
 
       if (trigger && this.onConnectionChange && userId != this.userId) {
-        this.onConnectionChange('disconnected', userId);
+        await this.onConnectionChange('disconnected', userId);
       }
     }
   }
 
-  public close() {
+  public async close() {
     for (const key in this.peers) {
-      this.leave(key, false);
+      await this.leave(key, false);
     }
   }
 
@@ -150,7 +151,7 @@ export class WebRtcConnection {
 
   private async createPeer(id, isOffer) {
     if (id in this.peers) {
-      this.leave(id, false);
+      await this.leave(id, false);
     }
     const self = this;
     const peer: RTCPeerConnection = new RTCPeerConnection(this.configuration);
@@ -167,25 +168,25 @@ export class WebRtcConnection {
       }
     };
 
-    peer.oniceconnectionstatechange = (event) => {
+    peer.oniceconnectionstatechange = async (event) => {
       if (
         event.target.iceConnectionState === 'connected' ||
         event.target.iceConnectionState === 'disconnected'
       ) {
         if (self.onConnectionChange) {
-          self.onConnectionChange(event.target.iceConnectionState, id);
+          await self.onConnectionChange(event.target.iceConnectionState, id);
         }
       } else if (event.target.iceConnectionState === 'closed') {
         if (self.onConnectionChange && id != self.userId) {
-          self.onConnectionChange('disconnected', id);
+          await self.onConnectionChange('disconnected', id);
         }
-        self.leave(id, true);
+        await self.leave(id, true);
       } else if (event.target.iceConnectionState === 'failed') {
         if (self.onConnectionChange && id != self.userId) {
-          self.onConnectionChange('disconnected', id);
+          await self.onConnectionChange('disconnected', id);
         }
-        self.leave(id, true);
-        self.createPeer(id, true);
+        await self.leave(id, true);
+        await self.createPeer(id, true);
       }
       console.log(
         self.userName,
@@ -196,9 +197,9 @@ export class WebRtcConnection {
     peer.onsignalingstatechange = () => {
       console.log(self.userName, 'peer.onsignalingstatechange');
     };
-    peer.onicecandidateerror = (err) => {
+    peer.onicecandidateerror = async (err) => {
       console.log(err);
-      this.leave(id, true);
+      await this.leave(id, true);
     };
 
     if (!this.peers[id]) {
@@ -218,7 +219,17 @@ export class WebRtcConnection {
     } else {
       pc = await this.createPeer(fromId, false);
     }
-    if (data.sdp) {
+    if (data.candidate) {
+      try {
+        const decryptCandidate = JSON.parse(
+          await decryptData(data.candidate, this.key),
+        );
+        await pc.addIceCandidate(decryptCandidate);
+      } catch (ex) {
+        await this.leave(fromId, true);
+        console.log('exchange candidate error', this.userName, ex);
+      }
+    } else if (data.sdp) {
       try {
         const decryptSdp = JSON.parse(await decryptData(data.sdp, this.key));
         await pc.setRemoteDescription(decryptSdp);
@@ -231,18 +242,8 @@ export class WebRtcConnection {
           this.socket.send('exchange', {to: fromId, sdp});
         }
       } catch (ex) {
-        this.leave(fromId, true);
+        await this.leave(fromId, true);
         console.log('exchange sdp error', this.userName, ex);
-      }
-    } else if (data.candidate) {
-      try {
-        const decryptCandidate = JSON.parse(
-          await decryptData(data.candidate, this.key),
-        );
-        await pc.addIceCandidate(decryptCandidate);
-      } catch (ex) {
-        this.leave(fromId, true);
-        console.log('exchange candidate error', this.userName, ex);
       }
     }
   }

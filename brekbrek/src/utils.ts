@@ -8,7 +8,7 @@ const defaultConfig = {
   transportOptions: {
     dateFormat: 'iso',
     loggerName: 'brekbrek-logs',
-    // loggerPath: RNFS.DownloadDirectoryPath,
+    loggerPath: RNFS.DownloadDirectoryPath,
   },
   levels: {
     trace: 0,

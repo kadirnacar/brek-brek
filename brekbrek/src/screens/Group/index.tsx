@@ -177,9 +177,9 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
 
     await Share.open(options);
   }
-  componentWillUnmount() {
+  async componentWillUnmount() {
     // this.stopListenerTapped();
-    ExposedToJava.close();
+    await ExposedToJava.close();
     this.netConnectionListener();
   }
   render() {
