@@ -8,7 +8,7 @@ import { logger } from "./LoggerService";
 import { Services } from "@services";
 var serviceAccount = require("../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json");
 admin.initializeApp({
-  credential: admin.credential.cert(d),
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://kadirnacarbb.firebaseio.com",
 });
 
