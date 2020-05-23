@@ -2,17 +2,13 @@ import * as admin from "firebase-admin";
 import * as http from "http";
 import * as https from "https";
 import * as WebSocket from "websocket";
-import * as serviceAccount from "../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json";
+// import * as serviceAccount from "../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json";
 import { parseToken } from "../middlewares/checkJwt";
 import { logger } from "./LoggerService";
 import { Services } from "@services";
-
+var serviceAccount = require("../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json");
 admin.initializeApp({
-  credential: admin.credential.cert({
-    clientEmail: serviceAccount.client_email,
-    privateKey: serviceAccount.private_key,
-    projectId: serviceAccount.project_id,
-  }),
+  credential: admin.credential.cert(d),
   databaseURL: "https://kadirnacarbb.firebaseio.com",
 });
 
@@ -126,7 +122,7 @@ export class SocketService {
           let payload = {
             title: "Kanal Daveti",
             body: command.data.message,
-            "sound": "default"
+            sound: "default",
           };
           const msg: admin.messaging.Message = {
             notification: payload,
