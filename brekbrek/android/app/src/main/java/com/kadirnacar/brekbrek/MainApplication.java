@@ -3,6 +3,7 @@ package com.kadirnacar.brekbrek;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.react.modules.network.OkHttpClientProvider;
 import com.kadirnacar.brekbrek.NativeModules.ChannelPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -49,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
+        OkHttpClientProvider.setOkHttpClientFactory(new CustomClientFactory());
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }
 

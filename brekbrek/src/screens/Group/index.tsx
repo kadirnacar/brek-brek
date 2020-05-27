@@ -166,7 +166,7 @@ export class GroupScreenComp extends Component<Props, GroupScreenState> {
   }
 
   async handleShare() {
-    const url = `http://brekbrek.kadirnacar.com/join/${this.props.Group.current.Id}`;
+    const url = `https://brekbrek.kadirnacar.com/join/${this.props.Group.current.Id}`;
     const title = 'BrekBrek Görüşme Daveti';
     const message = `${this.props.User.current.DisplayName}, sizi görüşmeye davet etti.`;
     const options: Options = {

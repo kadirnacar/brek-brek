@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
-import * as http from "http";
 import * as https from "https";
+import * as http from "http";
 import * as WebSocket from "websocket";
 // import * as serviceAccount from "../kadirnacarbb-firebase-adminsdk-fvech-50dfc3008a.json";
 import { parseToken } from "../middlewares/checkJwt";

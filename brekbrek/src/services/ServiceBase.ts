@@ -91,7 +91,7 @@ export abstract class ServiceBase {
 
       result = new Result<T>(axiosResult, null);
     } catch (error) {
-      console.log(error);
+      console.log(error,opts);
       log.error(error);
       result = new Result<T>(
         null,
