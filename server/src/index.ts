@@ -1,5 +1,6 @@
 import { LoggerService, SocketService } from '@services';
-import * as http from 'http';
+import * as https from 'https';
+import * as fs from 'fs';
 import "reflect-metadata";
 import App from './server';
 
@@ -9,7 +10,10 @@ LoggerService.init();
 const port = process.env.PORT || 3001;
 App.set('port', port);
 
-const server = http.createServer(App);
+const server = https.createServer({
+    key: fs.readFileSync('./private.key'),
+    cert: fs.readFileSync('./certificate.crt'),
+},App);
 server.listen(port);
 SocketService.init(server);
 
