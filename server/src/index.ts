@@ -12,6 +12,8 @@ App.set("port", port);
 const server = https.createServer(
   {
     cert: fs.readFileSync("./certificate.crt"),
+    ca: fs.readFileSync("./ca_bundle.crt"),
+
     key: fs.readFileSync("./private.key"),
   },
   App
