@@ -1,16 +1,21 @@
-import { LoggerService, SocketService } from '@services';
-import * as http from 'http';
-import * as fs from 'fs';
+import { LoggerService, SocketService } from "@services";
+import * as https from "https";
+import * as fs from "fs";
 import "reflect-metadata";
-import App from './server';
+import App from "./server";
 
 LoggerService.init();
 
-
 const port = process.env.PORT || 3001;
-App.set('port', port);
+App.set("port", port);
 
-const server = http.createServer(App);
+const server = https.createServer(
+  {
+    cert: fs.readFileSync("./certificate.crt"),
+    key: fs.readFileSync("./private.key"),
+  },
+  App
+);
 server.listen(port);
 SocketService.init(server);
 
@@ -23,30 +28,29 @@ SocketService.init(server);
 // }
 
 const onError = (error) => {
-    LoggerService.logger.error(error);
-    console.log(error);
-    if (error.syscall !== 'listen') throw error;
-    let bind = (typeof port === 'string') ? 'Pipe ' + port : 'Port ' + port;
-    switch (error.code) {
-        case 'EACCES':
-            console.error(`${bind} requires elevated privileges`);
-            process.exit(1);
-            break;
-        case 'EADDRINUSE':
-            console.error(`${bind} is already in use`);
-            process.exit(1);
-            break;
-        default:
-            throw error;
-    }
-}
+  LoggerService.logger.error(error);
+  console.log(error);
+  if (error.syscall !== "listen") throw error;
+  let bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
 
 const onListening = () => {
-    let addr = server.address();
-    let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
-    LoggerService.logger.info(`Listening on ${bind}`);
-}
+  let addr = server.address();
+  let bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+  LoggerService.logger.info(`Listening on ${bind}`);
+};
 
-server.on('error', onError);
-server.on('listening', onListening);
-
+server.on("error", onError);
+server.on("listening", onListening);
