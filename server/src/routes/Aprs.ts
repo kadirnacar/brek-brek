@@ -15,10 +15,10 @@ export class AprsRouter extends BaseRouter<Aprs> {
 
   public async getList(req: Request, res: Response, next) {
     try {
-      const c = new Date(req.query["date"].toString());
+      const c = new Date(req.query["date"]?.toString());
       const data = await this.service.getList({
         order: { CreateDate: "DESC" },
-        where: { UpdateDate: { $gte: new Date(req.query["date"].toString()) } },
+        where: { UpdateDate: { $gte: c } },
       });
       if (data && data.length > 0) {
         res.status(200).send(data);
