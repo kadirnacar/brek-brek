@@ -48,6 +48,7 @@ export abstract class ServiceBase {
             await fetch(processQuery(opts.url, opts.data), {
               method: 'GET',
               headers,
+              body: null,
             })
           ).json();
 
@@ -84,6 +85,7 @@ export abstract class ServiceBase {
             await fetch(processQuery(opts.url, opts.data), {
               method: 'DELETE',
               headers,
+              body: null,
             })
           ).json();
           break;
@@ -91,7 +93,7 @@ export abstract class ServiceBase {
 
       result = new Result<T>(axiosResult, null);
     } catch (error) {
-      console.log(error,opts);
+      console.log(error, opts);
       log.error(error);
       result = new Result<T>(
         null,

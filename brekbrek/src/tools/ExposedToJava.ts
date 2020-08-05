@@ -62,12 +62,12 @@ export class ExposedToJava {
             this.currentSpeaker = id;
             this.isBusy = true;
             // await ChannelModule.stopPlay();
+            await ChannelModule.stopRecord();
             await ChannelModule.startPlay();
             RNBeep.beep();
           }
           break;
         case 'end':
-          console.log('data', this.isBusy);
           this.currentSpeaker = null;
           this.isBusy = false;
           await ChannelModule.stopPlay();
@@ -160,11 +160,9 @@ export class ExposedToJava {
   }
 
   public static async stopVoice() {
-    if (!this.isBusy) {
-      await this.webRtcConnection.sendData({command: 'end'});
-      await ChannelModule.stopRecord();
-      RNBeep.beep();
-    }
+    await this.webRtcConnection.sendData({command: 'end'});
+    await ChannelModule.stopRecord();
+    RNBeep.beep();
   }
 
   async getCommand(msg, data, size) {
