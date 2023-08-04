@@ -7,11 +7,9 @@ import {
 } from "typeorm";
 import { CoreRepository } from "../repository";
 
-//mongodb://brekbrek:39kna1983@azure.kadirnacar.com:27017
-//db.createUser({user:"brekbrek",pwd:"39kna1983",roles:[{role:"readWrite",db:"brekbrek"}]})
 const typeConfig: ConnectionOptions = {
   name: "configConnection",
-  url:"mongodb://brekbrek:39kna1983@azure.kadirnacar.com:27017/brekbrek",
+  url:"",
   type: "mongodb",
   useUnifiedTopology: true,
   synchronize: true,
